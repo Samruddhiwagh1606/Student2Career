@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Evaluations - Student2Career</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #FFF7ED;
+            color: #242124;
+        }
+
+        header {
+            background: #7A1F3D;
+            color: white;
+            padding: 20px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h2 {
+            margin: 0;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            background: #E76F51;
+            padding: 10px 18px;
+            border-radius: 8px;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .title {
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            margin-bottom: 20px;
+
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .card h3 {
+            color: #7A1F3D;
+            margin-top: 0;
+        }
+
+        .company {
+            color: #756F72;
+            margin-bottom: 20px;
+        }
+
+        .scores {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .score {
+            background: #FFF7ED;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .score strong {
+            color: #7A1F3D;
+        }
+
+        .comments {
+            margin-top: 20px;
+            padding: 15px;
+            background: #FFF7ED;
+            border-radius: 8px;
+        }
+
+        #message {
+            text-align: center;
+            padding: 30px;
+        }
+
+        @media(max-width: 700px) {
+
+            .scores {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h2>Student2Career</h2>
+
+    <a
+        href="dashboard.html"
+        class="back"
+    >
+        ← Dashboard
+    </a>
+
+</header>
+
+
+<main>
+
+
+    <div class="title">
+
+        <h1>My Evaluations</h1>
+
+        <p>
+            View your internship evaluation scores and faculty feedback.
+        </p>
+
+    </div>
+
+
+    <div id="message">
+        Loading evaluations...
+    </div>
+
+
+    <div id="evaluations"></div>
+
+
+</main>
+
+
+<script>
+
+
+const studentData =
+    localStorage.getItem("student");
+
+
+if (!studentData) {
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+const student =
+    JSON.parse(studentData);
+
+
+
+async function loadEvaluations() {
+
+    try {
+
+        const response =
+            await fetch(
+                `http://localhost:5000/api/evaluations/student/${student.student_id}`
+            );
+
+
+        const data =
+            await response.json();
+
+
+        const container =
+            document.getElementById(
+                "evaluations"
+            );
+
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        if (!response.ok || !data.success) {
+
+            message.textContent =
+                "Unable to load evaluations.";
+
+            return;
+
+        }
+
+
+        message.style.display =
+            "none";
+
+
+        const evaluations =
+            data.evaluations;
+
+
+        if (
+            !evaluations ||
+            evaluations.length === 0
+        ) {
+
+            container.innerHTML = `
+
+                <div class="card">
+
+                    <h3>No Evaluations Yet</h3>
+
+                    <p>
+                        Your evaluation will appear here
+                        after faculty submits it.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            evaluations.map(
+                evaluation => `
+
+                <div class="card">
+
+                    <h3>
+                        ${evaluation.internship_title}
+                    </h3>
+
+                    <div class="company">
+
+                        Company:
+                        <strong>
+                            ${evaluation.company_name}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="scores">
+
+
+                        <div class="score">
+
+                            <strong>
+                                Technical Skills
+                            </strong>
+
+                            <br>
+
+                            ${evaluation.technical_score}/5
+
+                        </div>
+
+
+                        <div class="score">
+
+                            <strong>
+                                Communication
+                            </strong>
+
+                            <br>
+
+                            ${evaluation.communication_score}/5
+
+                        </div>
+
+
+                        <div class="score">
+
+                            <strong>
+                                Teamwork
+                            </strong>
+
+                            <br>
+
+                            ${evaluation.teamwork_score}/5
+
+                        </div>
+
+
+                        <div class="score">
+
+                            <strong>
+                                Punctuality
+                            </strong>
+
+                            <br>
+
+                            ${evaluation.punctuality_score}/5
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="comments">
+
+                        <strong>
+                            Faculty Comments
+                        </strong>
+
+                        <br><br>
+
+                        ${
+                            evaluation.comments ||
+                            "No comments provided."
+                        }
+
+                    </div>
+
+
+                </div>
+
+            `
+            ).join("");
+
+    }
+
+
+    catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "message"
+        ).textContent =
+            "Unable to connect to Student2Career server.";
+
+    }
+
+}
+
+
+loadEvaluations();
+
+
+</script>
+
+
+</body>
+
+</html>

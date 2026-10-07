@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Internship Details | Student2Career</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="dashboard-body">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            <div class="brand-mark">S2C</div>
+            <span>Student2Career</span>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="dashboard.html" class="sidebar-link">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a href="#" class="sidebar-link">
+                <span>◎</span>
+                My Profile
+            </a>
+
+            <a href="#" class="sidebar-link">
+                <span>✦</span>
+                My Skills
+            </a>
+
+            <a href="internship.html" class="sidebar-link active">
+                <span>▣</span>
+                Internships
+            </a>
+
+            <a href="applications.html" class="sidebar-link">
+                <span>✓</span>
+                Applications
+            </a>
+
+            <a href="#" class="sidebar-link">
+                <span>◷</span>
+                Interviews
+            </a>
+
+        </nav>
+
+        <div class="sidebar-tip">
+            <div class="tip-icon">✦</div>
+
+            <strong>Career tip</strong>
+
+            <p>
+                Keep your skills updated to discover better opportunities.
+            </p>
+        </div>
+
+        <a href="#" class="sidebar-logout" id="logoutBtn">
+            ↪ &nbsp; Logout
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+        <!-- TOP BAR -->
+        <header class="dashboard-topbar">
+
+            <div class="breadcrumb">
+                Student Portal / Internships / Details
+            </div>
+
+            <div class="topbar-right">
+
+                <div class="notification">
+                    ♡
+                    <span>0</span>
+                </div>
+
+                <div class="student-mini-profile">
+
+                    <div class="student-avatar">
+                        A
+                    </div>
+
+                    <div>
+                        <strong>Aarav Sharma</strong>
+                        <small>Student</small>
+                    </div>
+
+                    <span>⌄</span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- BACK BUTTON -->
+        <div class="details-back">
+            <a href="internship.html">
+                ← Back to internships
+            </a>
+        </div>
+
+
+        <!-- LOADING -->
+        <div id="loadingMessage" class="details-loading">
+            Loading internship details...
+        </div>
+
+
+        <!-- ERROR -->
+        <div id="errorMessage" class="details-error" style="display:none;">
+            Unable to load internship details.
+        </div>
+
+
+        <!-- DETAILS -->
+        <section id="internshipDetails" class="internship-details" style="display:none;">
+
+            <div class="details-header">
+
+                <div class="details-company-logo" id="companyLogo">
+                    S
+                </div>
+
+                <div class="details-title-area">
+
+                    <span class="details-domain" id="internshipDomain">
+                        SOFTWARE DEVELOPMENT
+                    </span>
+
+                    <h1 id="internshipTitle">
+                        Software Developer Intern
+                    </h1>
+
+                    <p id="companyName">
+                        Company Name
+                    </p>
+
+                </div>
+
+                <span class="details-approved">
+                    ✓ College Approved
+                </span>
+
+            </div>
+
+
+            <!-- QUICK INFORMATION -->
+            <div class="details-info-grid">
+
+                <div class="details-info-card">
+                    <span>📍</span>
+                    <div>
+                        <small>Location</small>
+                        <strong id="internshipLocation">—</strong>
+                    </div>
+                </div>
+
+                <div class="details-info-card">
+                    <span>💰</span>
+                    <div>
+                        <small>Stipend</small>
+                        <strong id="internshipStipend">—</strong>
+                    </div>
+                </div>
+
+                <div class="details-info-card">
+                    <span>◷</span>
+                    <div>
+                        <small>Duration</small>
+                        <strong id="internshipDuration">—</strong>
+                    </div>
+                </div>
+
+                <div class="details-info-card">
+                    <span>⏰</span>
+                    <div>
+                        <small>Application Deadline</small>
+                        <strong id="internshipDeadline">—</strong>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- DESCRIPTION + APPLY -->
+            <div class="details-content-grid">
+
+                <div class="details-main-content">
+
+                    <div class="details-section">
+
+                        <h2>About this internship</h2>
+
+                        <p id="internshipDescription">
+                            Loading description...
+                        </p>
+
+                    </div>
+
+
+                    <div class="details-section">
+
+                        <h2>Internship Timeline</h2>
+
+                        <div class="timeline-row">
+
+                            <div>
+                                <small>Start Date</small>
+                                <strong id="internshipStartDate">—</strong>
+                            </div>
+
+                            <div>
+                                <small>End Date</small>
+                                <strong id="internshipEndDate">—</strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="details-section">
+
+                        <h2>Company Information</h2>
+
+                        <div class="company-details">
+
+                            <div>
+                                <small>Company</small>
+                                <strong id="companyNameBottom">—</strong>
+                            </div>
+
+                            <div>
+                                <small>Contact Person</small>
+                                <strong id="contactPerson">—</strong>
+                            </div>
+
+                            <div>
+                                <small>Contact Email</small>
+                                <strong id="contactEmail">—</strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- APPLY CARD -->
+                <aside class="apply-card">
+
+                    <div class="apply-card-top">
+                        <span>Ready to apply?</span>
+                    </div>
+
+                    <h2>Start your application</h2>
+
+                    <p>
+                        Submit your application and let the college review your profile.
+                    </p>
+
+                    <button
+                        type="button"
+                        class="primary-btn apply-now-btn"
+                        id="applyBtn"
+                    >
+                        Apply Now →
+                    </button>
+
+                    <p class="apply-note">
+                        You can track your application status from the Applications section.
+                    </p>
+
+                </aside>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script src="js/internship-details.js"></script>
+
+</body>
+</html>

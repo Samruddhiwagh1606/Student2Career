@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Applications | Student2Career</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+    <style>
+
+        .student-page-wrapper {
+            padding: 35px 45px;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-header .eyebrow {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #8b1e3f;
+            margin-bottom: 8px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            font-size: 34px;
+            color: #211b1d;
+        }
+
+        .page-header p {
+            color: #75696b;
+            margin-top: 8px;
+        }
+
+        .application-card {
+            background: white;
+            border: 1px solid #eee6e2;
+            border-radius: 18px;
+            padding: 26px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 28px rgba(50,35,35,0.05);
+        }
+
+        .application-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .application-top h2 {
+            margin: 0;
+            font-size: 23px;
+        }
+
+        .company-name {
+            color: #75696b;
+            margin-top: 6px;
+        }
+
+        .domain {
+            color: #8b1e3f;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 7px;
+        }
+
+        .status {
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+            height: fit-content;
+        }
+
+        .pending {
+            background: #fff3dc;
+            color: #9a6415;
+        }
+
+        .shortlisted {
+            background: #e9f5ec;
+            color: #39734a;
+        }
+
+        .accepted {
+            background: #dff1e5;
+            color: #24613a;
+        }
+
+        .rejected {
+            background: #fbe7e7;
+            color: #a33b3b;
+        }
+
+        .withdrawn {
+            background: #eeeeee;
+            color: #666;
+        }
+
+        .application-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #eee7e3;
+        }
+
+        .info-box span {
+            display: block;
+            font-size: 12px;
+            color: #8b8181;
+            margin-bottom: 5px;
+        }
+
+        .info-box strong {
+            font-size: 14px;
+            color: #30282a;
+        }
+
+        .timeline {
+            display: flex;
+            align-items: center;
+            margin-top: 28px;
+            overflow-x: auto;
+        }
+
+        .timeline-step {
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .timeline-dot {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eee;
+            color: #777;
+            font-weight: 700;
+        }
+
+        .timeline-step.active .timeline-dot {
+            background: #8b1e3f;
+            color: white;
+        }
+
+        .timeline-step strong {
+            display: block;
+            font-size: 12px;
+            margin-top: 7px;
+        }
+
+        .timeline-step small {
+            color: #888;
+        }
+
+        .timeline-line {
+            height: 2px;
+            width: 60px;
+            background: #ddd;
+        }
+
+        .timeline-line.active {
+            background: #8b1e3f;
+        }
+
+        .application-actions {
+            margin-top: 24px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .withdraw-btn {
+            border: none;
+            background: #8b1e3f;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .withdraw-btn:hover {
+            background: #a5244d;
+        }
+
+        .withdraw-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .empty-state {
+            background: white;
+            border: 1px solid #eee6e2;
+            border-radius: 18px;
+            padding: 50px;
+            text-align: center;
+            color: #75696b;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message {
+            background: #e9f5ec;
+            color: #39734a;
+        }
+
+        .error-message {
+            background: #fbe7e7;
+            color: #a33b3b;
+        }
+
+        @media(max-width:800px) {
+
+            .student-page-wrapper {
+                padding: 25px;
+            }
+
+            .application-info {
+                grid-template-columns: 1fr;
+            }
+
+            .application-top {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+    <div class="sidebar-brand">
+
+        <span class="brand-mark">
+            S2C
+        </span>
+
+        <span class="brand-name">
+            Student2Career
+        </span>
+
+    </div>
+
+
+    <nav class="sidebar-nav">
+
+        <a
+            href="dashboard.html"
+            class="sidebar-link"
+        >
+            <span class="nav-icon">⌂</span>
+            Dashboard
+        </a>
+
+
+        <a
+            href="#"
+            class="sidebar-link"
+        >
+            <span class="nav-icon">◎</span>
+            My Profile
+        </a>
+
+
+        <a
+            href="#"
+            class="sidebar-link"
+        >
+            <span class="nav-icon">✦</span>
+            My Skills
+        </a>
+
+
+        <a
+            href="internship.html"
+            class="sidebar-link"
+        >
+            <span class="nav-icon">▣</span>
+            Internships
+        </a>
+
+
+        <a
+            href="applications.html"
+            class="sidebar-link active"
+        >
+            <span class="nav-icon">✓</span>
+            Applications
+        </a>
+
+
+        <a
+            href="student-interviews.html"
+            class="sidebar-link"
+        >
+            <span class="nav-icon">◷</span>
+            Interviews
+        </a>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+        <div class="career-tip">
+
+            <span class="tip-icon">✦</span>
+
+            <strong>Career tip</strong>
+
+            <p>
+                Keep your applications updated
+                and prepare for interviews.
+            </p>
+
+        </div>
+
+
+        <button
+            class="logout-btn"
+            onclick="logoutStudent()"
+        >
+            <span>↪</span>
+            Logout
+        </button>
+
+    </div>
+
+</aside>
+
+
+<!-- MAIN -->
+
+<main class="dashboard-main">
+
+    <div class="student-page-wrapper">
+
+        <div class="page-header">
+
+            <div class="eyebrow">
+                APPLICATION TRACKER
+            </div>
+
+            <h1>
+                My Applications
+            </h1>
+
+            <p>
+                Track your internship applications,
+                status and progress.
+            </p>
+
+        </div>
+
+
+        <div
+            id="successMessage"
+            class="message success-message"
+        ></div>
+
+
+        <div
+            id="errorMessage"
+            class="message error-message"
+        ></div>
+
+
+        <div id="applicationsContainer">
+
+            <div class="empty-state">
+                Loading applications...
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const API_URL =
+    "http://localhost:5000/api";
+
+
+function getStudent() {
+
+    const student =
+        localStorage.getItem("student");
+
+    if (!student) {
+
+        alert("Please login as a student.");
+
+        window.location.href =
+            "index.html";
+
+        return null;
+
+    }
+
+    return JSON.parse(student);
+
+}
+
+
+function logoutStudent() {
+
+    localStorage.removeItem("user");
+    localStorage.removeItem("student");
+    localStorage.removeItem("faculty");
+    localStorage.removeItem("admin");
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+function formatDate(dateString) {
+
+    if (!dateString) {
+        return "—";
+    }
+
+    const date =
+        new Date(dateString);
+
+    return date.toLocaleDateString(
+        "en-IN",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+function getStatusClass(status) {
+
+    return status
+        .toLowerCase()
+        .replace(/\s+/g, "-");
+
+}
+
+
+function getTimeline(status) {
+
+    const statuses = [
+        "pending",
+        "shortlisted",
+        "accepted"
+    ];
+
+    const current =
+        status.toLowerCase();
+
+
+    if (current === "rejected") {
+
+        return `
+            <div class="timeline">
+
+                <div class="timeline-step active">
+
+                    <div class="timeline-dot">
+                        ✓
+                    </div>
+
+                    <strong>Applied</strong>
+
+                </div>
+
+                <div class="timeline-line active"></div>
+
+                <div class="timeline-step active">
+
+                    <div class="timeline-dot">
+                        ×
+                    </div>
+
+                    <strong>Rejected</strong>
+
+                </div>
+
+            </div>
+        `;
+
+    }
+
+
+    if (current === "withdrawn") {
+
+        return `
+            <div class="timeline">
+
+                <div class="timeline-step active">
+
+                    <div class="timeline-dot">
+                        ✓
+                    </div>
+
+                    <strong>Applied</strong>
+
+                </div>
+
+                <div class="timeline-line active"></div>
+
+                <div class="timeline-step active">
+
+                    <div class="timeline-dot">
+                        ×
+                    </div>
+
+                    <strong>Withdrawn</strong>
+
+                </div>
+
+            </div>
+        `;
+
+    }
+
+
+    const currentIndex =
+        statuses.indexOf(current);
+
+
+    return `
+        <div class="timeline">
+
+            <div class="timeline-step active">
+
+                <div class="timeline-dot">
+                    ✓
+                </div>
+
+                <strong>Applied</strong>
+
+            </div>
+
+
+            <div
+                class="timeline-line
+                ${currentIndex >= 1 ? "active" : ""}"
+            ></div>
+
+
+            <div
+                class="timeline-step
+                ${currentIndex >= 1 ? "active" : ""}"
+            >
+
+                <div class="timeline-dot">
+                    ${currentIndex >= 1 ? "✓" : "2"}
+                </div>
+
+                <strong>
+                    Shortlisted
+                </strong>
+
+            </div>
+
+
+            <div
+                class="timeline-line
+                ${currentIndex >= 2 ? "active" : ""}"
+            ></div>
+
+
+            <div
+                class="timeline-step
+                ${currentIndex >= 2 ? "active" : ""}"
+            >
+
+                <div class="timeline-dot">
+                    ${currentIndex >= 2 ? "✓" : "3"}
+                </div>
+
+                <strong>
+                    Accepted
+                </strong>
+
+            </div>
+
+        </div>
+    `;
+
+}
+
+
+async function loadApplications() {
+
+    const student =
+        getStudent();
+
+    if (!student) {
+        return;
+    }
+
+
+    const container =
+        document.getElementById(
+            "applicationsContainer"
+        );
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/applications/student/${student.student_id}`
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load applications."
+            );
+
+        }
+
+
+        const applications =
+            data.applications || [];
+
+
+        if (applications.length === 0) {
+
+            container.innerHTML = `
+                <div class="empty-state">
+
+                    <h2>
+                        No applications yet
+                    </h2>
+
+                    <p>
+                        Browse internships and
+                        apply for your first opportunity.
+                    </p>
+
+                    <br>
+
+                    <a
+                        href="internship.html"
+                        class="application-submit-btn"
+                    >
+                        Browse Internships
+                    </a>
+
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            applications
+                .map(application =>
+                    createApplicationCard(
+                        application
+                    )
+                )
+                .join("");
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        container.innerHTML = `
+            <div class="empty-state">
+
+                <h2>
+                    Unable to load applications
+                </h2>
+
+                <p>
+                    ${error.message}
+                </p>
+
+            </div>
+        `;
+
+    }
+
+}
+
+
+function createApplicationCard(application) {
+
+    const status =
+        application.status.toLowerCase();
+
+
+    const canWithdraw =
+        status === "pending" ||
+        status === "shortlisted";
+
+
+    return `
+
+        <div
+            class="application-card"
+            id="application-${application.application_id}"
+        >
+
+            <div class="application-top">
+
+                <div>
+
+                    <div class="domain">
+                        ${application.domain || "Internship"}
+                    </div>
+
+                    <h2>
+                        ${application.title}
+                    </h2>
+
+                    <div class="company-name">
+                        ${application.company_name}
+                        ${application.location
+                            ? " · " + application.location
+                            : ""}
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="status ${getStatusClass(status)}"
+                >
+                    ${status.toUpperCase()}
+                </div>
+
+            </div>
+
+
+            <div class="application-info">
+
+                <div class="info-box">
+
+                    <span>
+                        Applied On
+                    </span>
+
+                    <strong>
+                        ${formatDate(
+                            application.applied_at
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span>
+                        Internship Period
+                    </span>
+
+                    <strong>
+                        ${formatDate(
+                            application.start_date
+                        )}
+                        -
+                        ${formatDate(
+                            application.end_date
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span>
+                        Application Deadline
+                    </span>
+
+                    <strong>
+                        ${formatDate(
+                            application.application_deadline
+                        )}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            ${getTimeline(status)}
+
+
+            ${
+                canWithdraw
+                ?
+                `
+                <div class="application-actions">
+
+                    <button
+                        class="withdraw-btn"
+                        onclick="
+                            withdrawApplication(
+                                ${application.application_id}
+                            )
+                        "
+                    >
+                        Withdraw Application
+                    </button>
+
+                </div>
+                `
+                :
+                ""
+            }
+
+        </div>
+
+    `;
+
+}
+
+
+async function withdrawApplication(
+    applicationId
+) {
+
+    const student =
+        getStudent();
+
+    if (!student) {
+        return;
+    }
+
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to withdraw this application?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/applications/${applicationId}/withdraw`,
+                {
+                    method: "PATCH",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        student_id:
+                            student.student_id
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to withdraw application."
+            );
+
+        }
+
+
+        showMessage(
+            "successMessage",
+            data.message
+        );
+
+
+        loadApplications();
+
+
+    } catch (error) {
+
+        showMessage(
+            "errorMessage",
+            error.message
+        );
+
+    }
+
+}
+
+
+function showMessage(
+    elementId,
+    message
+) {
+
+    const element =
+        document.getElementById(
+            elementId
+        );
+
+    element.textContent =
+        message;
+
+    element.style.display =
+        "block";
+
+
+    setTimeout(() => {
+
+        element.style.display =
+            "none";
+
+    }, 4000);
+
+}
+
+
+loadApplications();
+
+</script>
+
+
+</body>
+
+</html>

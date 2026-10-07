@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | Student2Career</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+
+        /* Admin dashboard specific styling only */
+
+        .admin-dashboard-page {
+            min-height: 100vh;
+            background: var(--warm-white);
+        }
+
+
+        .admin-dashboard-header {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+
+            padding: 18px 42px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+
+        .admin-dashboard-brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--wine);
+        }
+
+
+        .admin-header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+
+        .admin-role {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+
+        .admin-logout {
+            border: 1px solid var(--border);
+            background: var(--white);
+            color: var(--charcoal);
+
+            padding: 9px 14px;
+            border-radius: 8px;
+
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+
+        .admin-logout:hover {
+            background: var(--wine);
+            color: var(--white);
+            border-color: var(--wine);
+        }
+
+
+        .admin-dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+
+            padding: 45px 42px 70px;
+        }
+
+
+        .admin-welcome {
+            margin-bottom: 30px;
+        }
+
+
+        .admin-welcome-label {
+            color: var(--wine);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+
+        .admin-welcome h1 {
+            margin: 8px 0;
+
+            font-family: "Playfair Display", serif;
+            font-size: 38px;
+
+            color: var(--charcoal);
+        }
+
+
+        .admin-welcome p {
+            margin: 0;
+
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+
+        .admin-stats {
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+
+        .admin-stat-card {
+            background: var(--white);
+
+            border: 1px solid var(--border);
+            border-radius: 14px;
+
+            padding: 22px;
+        }
+
+
+        .admin-stat-label {
+            color: var(--muted);
+
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+
+        .admin-stat-value {
+            margin-top: 10px;
+
+            font-size: 28px;
+            font-weight: 700;
+
+            color: var(--charcoal);
+        }
+
+
+        .admin-section-title {
+            margin-bottom: 16px;
+        }
+
+
+        .admin-section-title h2 {
+            margin: 0;
+
+            font-size: 19px;
+            color: var(--charcoal);
+        }
+
+
+        .admin-section-title p {
+            margin: 5px 0 0;
+
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+
+        .admin-actions {
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 16px;
+        }
+
+
+        .admin-action-card {
+            background: var(--white);
+
+            border: 1px solid var(--border);
+            border-radius: 14px;
+
+            padding: 24px;
+        }
+
+
+        .admin-action-icon {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 10px;
+
+            background: #F6E7EC;
+            color: var(--wine);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 17px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .admin-action-card h3 {
+            margin: 0 0 8px;
+
+            font-size: 15px;
+            color: var(--charcoal);
+        }
+
+
+        .admin-action-card p {
+            margin: 0;
+
+            min-height: 42px;
+
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+
+        .admin-action-btn {
+            display: inline-block;
+
+            margin-top: 18px;
+
+            padding: 10px 15px;
+
+            background: var(--wine);
+            color: var(--white);
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+
+        .admin-action-btn:hover {
+            background: var(--wine-dark);
+        }
+
+
+        @media (max-width: 900px) {
+
+            .admin-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .admin-dashboard-header {
+                padding: 16px 20px;
+            }
+
+            .admin-dashboard-container {
+                padding: 30px 20px 50px;
+            }
+
+            .admin-stats,
+            .admin-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-role {
+                display: none;
+            }
+
+            .admin-welcome h1 {
+                font-size: 30px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="admin-dashboard-page">
+
+
+    <!-- HEADER -->
+
+    <header class="admin-dashboard-header">
+
+
+        <div class="admin-dashboard-brand">
+            Student2Career
+        </div>
+
+
+        <div class="admin-header-right">
+
+            <span class="admin-role">
+                College Administration
+            </span>
+
+
+            <button
+                class="admin-logout"
+                onclick="logoutAdmin()">
+
+                Logout
+
+            </button>
+
+        </div>
+
+
+    </header>
+
+
+
+    <!-- MAIN -->
+
+    <main class="admin-dashboard-container">
+
+
+        <!-- WELCOME -->
+
+        <section class="admin-welcome">
+
+            <div class="admin-welcome-label">
+                Administration Portal
+            </div>
+
+            <h1>
+                College Administration Dashboard
+            </h1>
+
+            <p>
+                Manage users, internship approvals, companies and system reports.
+            </p>
+
+        </section>
+
+
+
+        <!-- STATISTICS -->
+
+        <section class="admin-stats">
+
+
+            <div class="admin-stat-card">
+
+                <div class="admin-stat-label">
+                    TOTAL STUDENTS
+                </div>
+
+                <div
+                    class="admin-stat-value"
+                    id="studentCount">
+
+                    0
+
+                </div>
+
+            </div>
+
+
+            <div class="admin-stat-card">
+
+                <div class="admin-stat-label">
+                    FACULTY
+                </div>
+
+                <div
+                    class="admin-stat-value"
+                    id="facultyCount">
+
+                    0
+
+                </div>
+
+            </div>
+
+
+            <div class="admin-stat-card">
+
+                <div class="admin-stat-label">
+                    INTERNSHIPS
+                </div>
+
+                <div
+                    class="admin-stat-value"
+                    id="internshipCount">
+
+                    0
+
+                </div>
+
+            </div>
+
+
+            <div class="admin-stat-card">
+
+                <div class="admin-stat-label">
+                    PENDING APPROVALS
+                </div>
+
+                <div
+                    class="admin-stat-value"
+                    id="pendingCount">
+
+                    0
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ADMIN ACTIVITIES -->
+
+        <section>
+
+
+            <div class="admin-section-title">
+
+                <h2>
+                    Administration Activities
+                </h2>
+
+                <p>
+                    Manage the major internship management functions.
+                </p>
+
+            </div>
+
+
+
+            <div class="admin-actions">
+
+
+                <!-- INTERNSHIP APPROVAL -->
+
+                <div class="admin-action-card">
+
+                    <div class="admin-action-icon">
+                        🏢
+                    </div>
+
+                    <h3>
+                        Internship Approvals
+                    </h3>
+
+                    <p>
+                        Review internship postings submitted by faculty
+                        and approve or reject them.
+                    </p>
+
+                    <a
+                        href="admin-internships.html"
+                        class="admin-action-btn">
+
+                        Manage Internships
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- STUDENT MANAGEMENT -->
+
+                <div class="admin-action-card">
+
+                    <div class="admin-action-icon">
+                        👨‍🎓
+                    </div>
+
+                    <h3>
+                        Student Management
+                    </h3>
+
+                    <p>
+                        View registered students and monitor
+                        their internship activities.
+                    </p>
+
+                    <a
+                        href="admin-students.html"
+                        class="admin-action-btn">
+
+                        Manage Students
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- FACULTY MANAGEMENT -->
+
+                <div class="admin-action-card">
+
+                    <div class="admin-action-icon">
+                        👨‍🏫
+                    </div>
+
+                    <h3>
+                        Faculty Management
+                    </h3>
+
+                    <p>
+                        Manage faculty members involved in
+                        internship coordination.
+                    </p>
+
+                    <a
+                        href="admin-faculty.html"
+                        class="admin-action-btn">
+
+                        Manage Faculty
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- REPORTS -->
+
+                <div class="admin-action-card">
+
+                    <div class="admin-action-icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        Reports & Analytics
+                    </h3>
+
+                    <p>
+                        View internship, application and
+                        placement statistics.
+                    </p>
+
+                    <a
+                        href="admin-reports.html"
+                        class="admin-action-btn">
+
+                        View Reports
+
+                    </a>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+
+<script>
+
+
+/* =========================================
+   LOGIN PROTECTION
+========================================= */
+
+const adminData = localStorage.getItem("admin");
+
+
+if (!adminData) {
+
+    window.location.href = "index.html";
+
+}
+
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+function logoutAdmin() {
+
+    localStorage.removeItem("admin");
+    localStorage.removeItem("user");
+
+    window.location.href = "index.html";
+
+}
+
+
+</script>
+
+
+</body>
+</html>

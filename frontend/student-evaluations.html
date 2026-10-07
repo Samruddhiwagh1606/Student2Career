@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Evaluations | Student2Career</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+    <style>
+
+        .student-page-wrapper {
+            padding: 35px 45px;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-header .eyebrow {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #8b1e3f;
+        }
+
+        .page-header h1 {
+            margin: 8px 0;
+            font-size: 34px;
+        }
+
+        .page-header p {
+            color: #75696b;
+        }
+
+        .evaluation-card {
+            background: white;
+            border: 1px solid #eee6e2;
+            border-radius: 18px;
+            padding: 28px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 28px rgba(50,35,35,0.05);
+        }
+
+        .evaluation-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .evaluation-header h2 {
+            margin: 0;
+        }
+
+        .company {
+            color: #75696b;
+            margin-top: 7px;
+        }
+
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .score-box {
+            background: #faf6f2;
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .score-box span {
+            display: block;
+            color: #75696b;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .score {
+            font-size: 26px;
+            font-weight: 700;
+            color: #8b1e3f;
+        }
+
+        .comments {
+            margin-top: 22px;
+            padding: 18px;
+            border-top: 1px solid #eee7e3;
+        }
+
+        .comments strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .empty-state {
+            background: white;
+            border: 1px solid #eee6e2;
+            border-radius: 18px;
+            padding: 50px;
+            text-align: center;
+            color: #75696b;
+        }
+
+        @media(max-width:800px) {
+
+            .student-page-wrapper {
+                padding: 25px;
+            }
+
+            .score-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<aside class="sidebar">
+
+    <div class="sidebar-brand">
+
+        <span class="brand-mark">
+            S2C
+        </span>
+
+        <span class="brand-name">
+            Student2Career
+        </span>
+
+    </div>
+
+
+    <nav class="sidebar-nav">
+
+        <a
+            href="dashboard.html"
+            class="sidebar-link"
+        >
+
+            <span class="nav-icon">⌂</span>
+
+            Dashboard
+
+        </a>
+
+
+        <a
+            href="internship.html"
+            class="sidebar-link"
+        >
+
+            <span class="nav-icon">▣</span>
+
+            Internships
+
+        </a>
+
+
+        <a
+            href="applications.html"
+            class="sidebar-link"
+        >
+
+            <span class="nav-icon">✓</span>
+
+            Applications
+
+        </a>
+
+
+        <a
+            href="student-interviews.html"
+            class="sidebar-link"
+        >
+
+            <span class="nav-icon">◷</span>
+
+            Interviews
+
+        </a>
+
+
+        <a
+            href="student-evaluations.html"
+            class="sidebar-link active"
+        >
+
+            <span class="nav-icon">★</span>
+
+            Evaluations
+
+        </a>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+        <button
+            class="logout-btn"
+            onclick="logoutStudent()"
+        >
+
+            <span>↪</span>
+
+            Logout
+
+        </button>
+
+    </div>
+
+</aside>
+
+
+<main class="dashboard-main">
+
+
+    <div class="student-page-wrapper">
+
+
+        <div class="page-header">
+
+            <div class="eyebrow">
+                PERFORMANCE FEEDBACK
+            </div>
+
+
+            <h1>
+                My Evaluations
+            </h1>
+
+
+            <p>
+                View your evaluation scores,
+                ratings and faculty feedback.
+            </p>
+
+        </div>
+
+
+        <div id="evaluationsContainer">
+
+            <div class="empty-state">
+                Loading evaluations...
+            </div>
+
+        </div>
+
+
+    </div>
+
+</main>
+
+
+<script>
+
+
+const API_URL =
+    "http://localhost:5000/api";
+
+
+
+function getStudent() {
+
+    const student =
+        localStorage.getItem("student");
+
+
+    if (!student) {
+
+        window.location.href =
+            "index.html";
+
+        return null;
+
+    }
+
+
+    return JSON.parse(student);
+
+}
+
+
+
+function logoutStudent() {
+
+    localStorage.clear();
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+
+async function loadEvaluations() {
+
+    const student =
+        getStudent();
+
+
+    if (!student) {
+        return;
+    }
+
+
+    const container =
+        document.getElementById(
+            "evaluationsContainer"
+        );
+
+
+    try {
+
+
+        const response =
+            await fetch(
+                `${API_URL}/evaluations/student/${student.student_id}`
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load evaluations."
+            );
+
+        }
+
+
+        const evaluations =
+            data.evaluations || [];
+
+
+        if (evaluations.length === 0) {
+
+            container.innerHTML = `
+
+                <div class="empty-state">
+
+                    <h2>
+                        No evaluations yet
+                    </h2>
+
+                    <p>
+                        Faculty evaluations will
+                        appear here after your application
+                        is reviewed.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+
+            evaluations
+
+                .map(evaluation => {
+
+
+                    const average =
+
+                        (
+
+                            Number(
+                                evaluation.technical_score
+                            ) +
+
+                            Number(
+                                evaluation.communication_score
+                            ) +
+
+                            Number(
+                                evaluation.teamwork_score
+                            ) +
+
+                            Number(
+                                evaluation.punctuality_score
+                            )
+
+                        ) / 4;
+
+
+                    return `
+
+                        <div class="evaluation-card">
+
+
+                            <div class="evaluation-header">
+
+
+                                <div>
+
+
+                                    <h2>
+
+                                        ${evaluation.internship_title}
+
+                                    </h2>
+
+
+                                    <div class="company">
+
+                                        ${evaluation.company_name}
+
+                                    </div>
+
+
+                                </div>
+
+
+                                <strong>
+
+                                    ${average.toFixed(1)} / 5
+
+                                </strong>
+
+
+                            </div>
+
+
+                            <div class="score-grid">
+
+
+                                <div class="score-box">
+
+                                    <span>
+                                        Technical
+                                    </span>
+
+                                    <div class="score">
+
+                                        ${evaluation.technical_score}/5
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="score-box">
+
+                                    <span>
+                                        Communication
+                                    </span>
+
+                                    <div class="score">
+
+                                        ${evaluation.communication_score}/5
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="score-box">
+
+                                    <span>
+                                        Teamwork
+                                    </span>
+
+                                    <div class="score">
+
+                                        ${evaluation.teamwork_score}/5
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="score-box">
+
+                                    <span>
+                                        Punctuality
+                                    </span>
+
+                                    <div class="score">
+
+                                        ${evaluation.punctuality_score}/5
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="comments">
+
+                                <strong>
+                                    Faculty Comments
+                                </strong>
+
+
+                                <span>
+
+                                    ${
+                                        evaluation.comments ||
+                                        "No comments provided."
+                                    }
+
+                                </span>
+
+                            </div>
+
+
+                        </div>
+
+                    `;
+
+                })
+
+                .join("");
+
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+
+        container.innerHTML = `
+
+            <div class="empty-state">
+
+                <h2>
+                    Unable to load evaluations
+                </h2>
+
+                <p>
+                    ${error.message}
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+loadEvaluations();
+
+
+</script>
+
+
+</body>
+
+</html>

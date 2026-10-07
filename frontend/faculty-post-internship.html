@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Post Internship | Student2Career</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+
+        body {
+            margin: 0;
+            background: #f8f7f4;
+            font-family: Arial, sans-serif;
+        }
+
+        .page-header {
+            background: white;
+            border-bottom: 1px solid #e5e1d8;
+            padding: 18px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: #222;
+            font-weight: 600;
+        }
+
+        .page-container {
+            max-width: 950px;
+            margin: auto;
+            padding: 40px 20px;
+        }
+
+        .form-card {
+            background: white;
+            border: 1px solid #e5e1d8;
+            border-radius: 18px;
+            padding: 35px;
+        }
+
+        .form-card h1 {
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .form-card > p {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        /* FACULTY VERIFICATION BOX */
+
+        .verification-box {
+            background: #f3f7f3;
+            border: 1px solid #cfdccd;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .verification-box h3 {
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .verification-box p {
+            margin-bottom: 15px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .verification-label {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .verification-label input {
+            margin-top: 4px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        input,
+        textarea,
+        select {
+            padding: 12px;
+            border: 1px solid #d8d5ce;
+            border-radius: 8px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #222;
+        }
+
+        .submit-btn {
+            margin-top: 28px;
+            background: #222;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .success-message {
+            color: #237a35;
+        }
+
+        .error-message {
+            color: #b42318;
+        }
+
+        @media(max-width: 700px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .form-card {
+                padding: 22px;
+            }
+
+            .page-header {
+                padding: 18px 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="page-header">
+
+    <div class="brand">
+        Student2Career
+    </div>
+
+    <a
+        href="faculty-dashboard.html"
+        class="back-btn"
+    >
+        ← Faculty Dashboard
+    </a>
+
+</header>
+
+
+<main class="page-container">
+
+
+    <div class="form-card">
+
+        <h1>Post Internship</h1>
+
+        <p>
+            Create an internship opportunity for students.
+            As a faculty member, you are responsible for checking
+            the academic relevance and suitability of the opportunity
+            before submitting it for institutional approval.
+        </p>
+
+
+        <!-- =====================================
+             FACULTY VERIFICATION
+        ====================================== -->
+
+        <div class="verification-box">
+
+            <h3>✓ Faculty Academic Verification</h3>
+
+            <p>
+                Please verify that the internship is relevant to the
+                student's academic domain, provides genuine learning
+                opportunities, and contains accurate information.
+            </p>
+
+            <label class="verification-label">
+
+                <input
+                    type="checkbox"
+                    id="facultyVerification"
+                    required
+                >
+
+                <span>
+                    I have reviewed this internship and confirm that
+                    it is academically relevant and suitable for
+                    students.
+                </span>
+
+            </label>
+
+        </div>
+
+
+        <!-- =====================================
+             INTERNSHIP FORM
+        ====================================== -->
+
+        <form id="internshipForm">
+
+
+            <div class="form-grid">
+
+
+                <!-- COMPANY -->
+
+                <div class="form-group full">
+
+                    <label for="company">
+                        Company
+                    </label>
+
+                    <select
+                        id="company"
+                        required
+                    >
+
+                        <option value="">
+                            Select Company
+                        </option>
+
+                        <option value="1">
+                            TechNova Solutions
+                        </option>
+
+                        <option value="2">
+                            FinEdge Technologies
+                        </option>
+
+                        <option value="3">
+                            CloudNest Labs
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- TITLE -->
+
+                <div class="form-group full">
+
+                    <label for="title">
+                        Internship Title
+                    </label>
+
+                    <input
+                        type="text"
+                        id="title"
+                        placeholder="Example: Java Backend Developer Intern"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- DOMAIN -->
+
+                <div class="form-group">
+
+                    <label for="domain">
+                        Domain
+                    </label>
+
+                    <select
+                        id="domain"
+                        required
+                    >
+
+                        <option value="">
+                            Select Domain
+                        </option>
+
+                        <option value="Software Development">
+                            Software Development
+                        </option>
+
+                        <option value="Backend Development">
+                            Backend Development
+                        </option>
+
+                        <option value="Frontend Development">
+                            Frontend Development
+                        </option>
+
+                        <option value="Data Analytics">
+                            Data Analytics
+                        </option>
+
+                        <option value="Artificial Intelligence">
+                            Artificial Intelligence
+                        </option>
+
+                        <option value="Cyber Security">
+                            Cyber Security
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- DURATION -->
+
+                <div class="form-group">
+
+                    <label for="duration">
+                        Duration (Weeks)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="duration"
+                        min="4"
+                        max="26"
+                        placeholder="4 - 26"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- STIPEND -->
+
+                <div class="form-group">
+
+                    <label for="stipend">
+                        Stipend (₹ / month)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="stipend"
+                        min="0"
+                        placeholder="20000"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- APPLICATION DEADLINE -->
+
+                <div class="form-group">
+
+                    <label for="deadline">
+                        Application Deadline
+                    </label>
+
+                    <input
+                        type="date"
+                        id="deadline"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- START DATE -->
+
+                <div class="form-group">
+
+                    <label for="startDate">
+                        Internship Start Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="startDate"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- END DATE -->
+
+                <div class="form-group">
+
+                    <label for="endDate">
+                        Internship End Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="endDate"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="form-group full">
+
+                    <label for="description">
+                        Internship Description
+                    </label>
+
+                    <textarea
+                        id="description"
+                        placeholder="Describe responsibilities, technical requirements and learning opportunities..."
+                        required
+                    ></textarea>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- SUBMIT -->
+
+            <button
+                type="submit"
+                class="submit-btn"
+            >
+                Verify & Submit Internship
+            </button>
+
+
+            <div id="message"></div>
+
+
+        </form>
+
+
+    </div>
+
+
+</main>
+
+
+<script>
+
+
+// ==========================================
+// CHECK FACULTY LOGIN
+// ==========================================
+
+const facultyData =
+    localStorage.getItem("faculty");
+
+
+if (!facultyData) {
+
+    window.location.href = "index.html";
+
+}
+
+
+// ==========================================
+// FORM SUBMISSION
+// ==========================================
+
+document
+    .getElementById("internshipForm")
+    .addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const message =
+                document.getElementById("message");
+
+
+            // ==================================
+            // FACULTY DATA
+            // ==================================
+
+            const faculty =
+                JSON.parse(facultyData);
+
+
+            // ==================================
+            // FACULTY VERIFICATION
+            // ==================================
+
+            const verified =
+                document.getElementById(
+                    "facultyVerification"
+                ).checked;
+
+
+            if (!verified) {
+
+                message.className =
+                    "error-message";
+
+                message.textContent =
+                    "Please confirm faculty academic verification.";
+
+                return;
+
+            }
+
+
+            // ==================================
+            // GET FORM DATA
+            // ==================================
+
+            const companyId =
+                document.getElementById("company").value;
+
+            const title =
+                document.getElementById("title").value.trim();
+
+            const domain =
+                document.getElementById("domain").value;
+
+            const duration =
+                Number(
+                    document.getElementById("duration").value
+                );
+
+            const stipend =
+                Number(
+                    document.getElementById("stipend").value
+                );
+
+            const deadline =
+                document.getElementById("deadline").value;
+
+            const startDate =
+                document.getElementById("startDate").value;
+
+            const endDate =
+                document.getElementById("endDate").value;
+
+            const description =
+                document
+                    .getElementById("description")
+                    .value
+                    .trim();
+
+
+            // ==================================
+            // VALIDATION
+            // ==================================
+
+            if (duration < 4 || duration > 26) {
+
+                message.className =
+                    "error-message";
+
+                message.textContent =
+                    "Duration must be between 4 and 26 weeks.";
+
+                return;
+
+            }
+
+
+            if (
+                new Date(startDate) >=
+                new Date(endDate)
+            ) {
+
+                message.className =
+                    "error-message";
+
+                message.textContent =
+                    "End date must be after start date.";
+
+                return;
+
+            }
+
+
+            if (
+                new Date(deadline) >=
+                new Date(startDate)
+            ) {
+
+                message.className =
+                    "error-message";
+
+                message.textContent =
+                    "Application deadline must be before internship start date.";
+
+                return;
+
+            }
+
+
+            // ==================================
+            // SUBMITTING
+            // ==================================
+
+            message.className = "";
+
+            message.textContent =
+                "Submitting verified internship...";
+
+
+            try {
+
+
+                const response =
+                    await fetch(
+                        "http://localhost:5000/api/internships",
+                        {
+
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                company_id:
+                                    Number(companyId),
+
+                                posted_by:
+                                    faculty.faculty_id,
+
+                                title:
+                                    title,
+
+                                description:
+                                    description,
+
+                                domain:
+                                    domain,
+
+                                duration_weeks:
+                                    duration,
+
+                                stipend:
+                                    stipend,
+
+                                start_date:
+                                    startDate,
+
+                                end_date:
+                                    endDate,
+
+                                application_deadline:
+                                    deadline,
+
+                                faculty_verified:
+                                    true
+
+                            })
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                // ==================================
+                // ERROR
+                // ==================================
+
+                if (!response.ok) {
+
+                    message.className =
+                        "error-message";
+
+                    message.textContent =
+                        data.message ||
+                        "Unable to submit internship.";
+
+                    return;
+
+                }
+
+
+                // ==================================
+                // SUCCESS
+                // ==================================
+
+                message.className =
+                    "success-message";
+
+                message.innerHTML =
+                    `
+                    ✓ Internship successfully submitted.
+
+                    <br><br>
+
+                    <strong>Faculty Verification:</strong>
+                    Completed
+
+                    <br>
+
+                    <strong>Current Status:</strong>
+                    Faculty Verified
+
+                    <br>
+
+                    <strong>Next Step:</strong>
+                    Admin will perform institutional approval
+                    before the internship becomes visible to students.
+                    `;
+
+
+                // Reset form
+
+                document
+                    .getElementById("internshipForm")
+                    .reset();
+
+
+            }
+
+            catch(error) {
+
+                console.error(
+                    "POST INTERNSHIP ERROR:",
+                    error
+                );
+
+
+                message.className =
+                    "error-message";
+
+                message.textContent =
+                    "Cannot connect to Student2Career server.";
+
+            }
+
+        }
+    );
+
+
+</script>
+
+
+</body>
+
+</html>

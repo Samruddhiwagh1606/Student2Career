@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Feedback | Student2Career</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+    <style>
+
+        /* =====================================================
+           PAGE
+        ===================================================== */
+
+        .feedback-page {
+            padding: 40px 45px;
+            max-width: 1100px;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .eyebrow {
+            color: #7A1F3D;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+        }
+
+        .page-header h1 {
+            margin: 8px 0;
+            font-size: 34px;
+        }
+
+        .page-header p {
+            color: #756F72;
+        }
+
+
+        /* =====================================================
+           FEEDBACK CARD
+        ===================================================== */
+
+        .feedback-card {
+            background: #ffffff;
+            border: 1px solid #E8E0DC;
+            border-radius: 18px;
+            padding: 28px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 28px rgba(50, 35, 35, 0.05);
+        }
+
+        .internship-header {
+            border-bottom: 1px solid #EEE5E0;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+
+        .internship-header h2 {
+            color: #5B1730;
+            margin: 0 0 7px;
+        }
+
+        .company {
+            color: #756F72;
+        }
+
+
+        /* =====================================================
+           RATING GRID
+        ===================================================== */
+
+        .rating-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .rating-box {
+            background: #FFF8F3;
+            border: 1px solid #EEE1DB;
+            border-radius: 12px;
+            padding: 18px;
+        }
+
+        .rating-label {
+            display: block;
+            font-weight: 700;
+            color: #5B1730;
+            margin-bottom: 12px;
+        }
+
+
+        /* =====================================================
+           STAR SYSTEM
+        ===================================================== */
+
+        .stars {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .star-btn {
+            appearance: none;
+            -webkit-appearance: none;
+
+            border: 0 !important;
+            outline: none !important;
+
+            background: transparent !important;
+
+            padding: 0 !important;
+            margin: 0 !important;
+
+            width: 38px;
+            height: 38px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 30px;
+            line-height: 1;
+
+            color: #D8C7C2;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.15s ease,
+                color 0.15s ease;
+        }
+
+        .star-btn:hover {
+            transform: scale(1.15);
+            color: #C66A4B;
+        }
+
+        .star-btn.selected {
+            color: #C66A4B !important;
+        }
+
+        .star-btn:focus {
+            outline: 2px solid #C66A4B !important;
+            outline-offset: 2px;
+            border-radius: 5px;
+        }
+
+        .rating-text {
+            margin-top: 8px;
+            color: #756F72;
+            font-size: 12px;
+            min-height: 18px;
+        }
+
+
+        /* =====================================================
+           COMMENTS
+        ===================================================== */
+
+        .comments-section {
+            margin-top: 22px;
+        }
+
+        .comments-label {
+            display: block;
+            font-weight: 700;
+            color: #5B1730;
+            margin-bottom: 9px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 130px;
+            resize: vertical;
+            padding: 13px;
+            border: 1px solid #D9CECA;
+            border-radius: 10px;
+            font-family: inherit;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        textarea:focus {
+            border-color: #7A1F3D;
+        }
+
+
+        /* =====================================================
+           SUBMIT BUTTON
+        ===================================================== */
+
+        .submit-btn {
+            margin-top: 20px;
+
+            background: #7A1F3D;
+            color: #ffffff;
+
+            border: none;
+            padding: 13px 22px;
+
+            border-radius: 9px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition:
+                background 0.2s ease,
+                transform 0.15s ease;
+        }
+
+        .submit-btn:hover {
+            background: #5B1730;
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+
+        /* =====================================================
+           SUBMITTED
+        ===================================================== */
+
+        .submitted {
+            background: #F5E6EC;
+            color: #7A1F3D;
+            padding: 12px 15px;
+            border-radius: 9px;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+
+        /* =====================================================
+           EXISTING FEEDBACK
+        ===================================================== */
+
+        .existing-feedback {
+            background: #FFF8F3;
+            border: 1px solid #EEE1DB;
+            border-radius: 14px;
+            padding: 20px;
+            margin-top: 18px;
+        }
+
+        .existing-feedback h3 {
+            color: #5B1730;
+            margin: 0 0 15px;
+        }
+
+        .score-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .score-item {
+            padding: 12px;
+            background: #ffffff;
+            border-radius: 8px;
+        }
+
+        .score-item strong {
+            color: #5B1730;
+        }
+
+        .score-stars {
+            margin-top: 6px;
+            color: #C66A4B;
+            font-size: 19px;
+            letter-spacing: 2px;
+        }
+
+
+        /* =====================================================
+           EMPTY
+        ===================================================== */
+
+        .empty-state {
+            background: #ffffff;
+            border: 1px solid #E8E0DC;
+            border-radius: 18px;
+            padding: 50px;
+            text-align: center;
+            color: #756F72;
+        }
+
+
+        /* =====================================================
+           MESSAGE
+        ===================================================== */
+
+        .message {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+
+            background: #5B1730;
+            color: #ffffff;
+
+            padding: 13px 18px;
+
+            border-radius: 9px;
+
+            display: none;
+
+            z-index: 10000;
+
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.18);
+        }
+
+
+        /* =====================================================
+           LOADING
+        ===================================================== */
+
+        .loading {
+            text-align: center;
+            padding: 45px;
+            color: #756F72;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 750px) {
+
+            .feedback-page {
+                padding: 25px;
+            }
+
+            .rating-row,
+            .score-list {
+                grid-template-columns: 1fr;
+            }
+
+            .feedback-card {
+                padding: 20px;
+            }
+
+            .star-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 27px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar">
+
+    <div class="sidebar-brand">
+
+        <span class="brand-mark">
+            S2C
+        </span>
+
+        <span class="brand-name">
+            Student2Career
+        </span>
+
+    </div>
+
+
+    <nav class="sidebar-nav">
+
+        <a
+            href="dashboard.html"
+            class="sidebar-link"
+        >
+            <span class="nav-icon">⌂</span>
+            Dashboard
+        </a>
+
+
+        <a
+            href="internship.html"
+            class="sidebar-link"
+        >
+            <span class="nav-icon">▣</span>
+            Internships
+        </a>
+
+
+        <a
+            href="applications.html"
+            class="sidebar-link"
+        >
+            <span class="nav-icon">✓</span>
+            Applications
+        </a>
+
+
+        <a
+            href="student-interviews.html"
+            class="sidebar-link"
+        >
+            <span class="nav-icon">◷</span>
+            Interviews
+        </a>
+
+
+        <a
+            href="student-evaluations.html"
+            class="sidebar-link"
+        >
+            <span class="nav-icon">★</span>
+            Evaluations
+        </a>
+
+
+        <a
+            href="student-feedback.html"
+            class="sidebar-link active"
+        >
+            <span class="nav-icon">♥</span>
+            Feedback
+        </a>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+        <button
+            class="logout-btn"
+            onclick="logoutStudent()"
+        >
+            <span>↪</span>
+            Logout
+        </button>
+
+    </div>
+
+</aside>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="dashboard-main">
+
+    <div class="feedback-page">
+
+
+        <div class="page-header">
+
+            <div class="eyebrow">
+                INTERNSHIP EXPERIENCE
+            </div>
+
+            <h1>
+                My Feedback
+            </h1>
+
+            <p>
+                Share your internship experience
+                and help improve future opportunities.
+            </p>
+
+        </div>
+
+
+        <div id="feedbackContainer">
+
+            <div class="loading">
+                Loading feedback...
+            </div>
+
+        </div>
+
+
+    </div>
+
+</main>
+
+
+
+<!-- =====================================================
+     MESSAGE
+===================================================== -->
+
+<div
+    id="message"
+    class="message"
+></div>
+
+
+
+<script>
+
+/* =====================================================
+   CONFIGURATION
+===================================================== */
+
+const API_URL =
+    "http://localhost:5000/api";
+
+
+let student = null;
+
+
+/*
+    Stores selected ratings like:
+
+    selectedRatings = {
+        1: {
+            culture: 5,
+            mentorship: 4,
+            technical: 5,
+            environment: 4,
+            overall: 5
+        }
+    }
+*/
+
+const selectedRatings = {};
+
+
+
+/* =====================================================
+   STUDENT
+===================================================== */
+
+function getStudent() {
+
+    const data =
+        localStorage.getItem("student");
+
+
+    if (!data) {
+
+        window.location.href =
+            "index.html";
+
+        return null;
+    }
+
+
+    try {
+
+        return JSON.parse(data);
+
+    } catch (error) {
+
+        console.error(
+            "Invalid student data:",
+            error
+        );
+
+        localStorage.removeItem("student");
+
+        window.location.href =
+            "index.html";
+
+        return null;
+    }
+
+}
+
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logoutStudent() {
+
+    localStorage.clear();
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+
+/* =====================================================
+   LOAD FEEDBACK
+===================================================== */
+
+async function loadFeedback() {
+
+    student =
+        getStudent();
+
+
+    if (!student) {
+        return;
+    }
+
+
+    const container =
+        document.getElementById(
+            "feedbackContainer"
+        );
+
+
+    container.innerHTML = `
+
+        <div class="loading">
+            Loading feedback...
+        </div>
+
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/feedback/student/${student.student_id}/eligible`
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load feedback."
+            );
+
+        }
+
+
+        const applications =
+            data.applications || [];
+
+
+        if (
+            applications.length === 0
+        ) {
+
+            container.innerHTML = `
+
+                <div class="empty-state">
+
+                    <h2>
+                        No feedback available
+                    </h2>
+
+                    <p style="margin-top:10px;">
+
+                        Feedback becomes available
+                        for accepted internship applications.
+
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        container.innerHTML =
+            applications
+                .map(renderApplication)
+                .join("");
+
+
+        /*
+            IMPORTANT:
+            Attach click listeners AFTER
+            the stars have been inserted
+            into the page.
+        */
+
+        attachStarListeners();
+
+
+    } catch (error) {
+
+        console.error(
+            "Load feedback error:",
+            error
+        );
+
+
+        container.innerHTML = `
+
+            <div class="empty-state">
+
+                <h2>
+                    Unable to load feedback
+                </h2>
+
+                <p style="margin-top:10px;">
+
+                    ${escapeHtml(
+                        error.message
+                    )}
+
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   RENDER APPLICATION
+===================================================== */
+
+function renderApplication(application) {
+
+    /*
+        If feedback already exists,
+        show submitted feedback instead
+        of the form.
+    */
+
+    if (
+        application.feedback_id
+    ) {
+
+        return renderExistingFeedback(
+            application
+        );
+
+    }
+
+
+    return `
+
+        <div
+            class="feedback-card"
+            id="card-${application.application_id}"
+        >
+
+            <div class="internship-header">
+
+                <h2>
+
+                    ${escapeHtml(
+                        application.internship_title
+                    )}
+
+                </h2>
+
+
+                <div class="company">
+
+                    ${escapeHtml(
+                        application.company_name
+                    )}
+
+                    ${
+                        application.domain
+                            ? " • " +
+                              escapeHtml(
+                                  application.domain
+                              )
+                            : ""
+                    }
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================================
+                 FOUR RATINGS
+            ========================================== -->
+
+            <div class="rating-row">
+
+
+                ${ratingControl(
+                    application.application_id,
+                    "culture",
+                    "Company Culture"
+                )}
+
+
+                ${ratingControl(
+                    application.application_id,
+                    "mentorship",
+                    "Mentorship Quality"
+                )}
+
+
+                ${ratingControl(
+                    application.application_id,
+                    "technical",
+                    "Technical Learning"
+                )}
+
+
+                ${ratingControl(
+                    application.application_id,
+                    "environment",
+                    "Work Environment"
+                )}
+
+
+            </div>
+
+
+
+            <!-- =========================================
+                 OVERALL
+            ========================================== -->
+
+            <div class="rating-box">
+
+                <span class="rating-label">
+                    Overall Experience
+                </span>
+
+
+                <div class="stars">
+
+                    ${createStars(
+                        application.application_id,
+                        "overall"
+                    )}
+
+                </div>
+
+
+                <div
+                    class="rating-text"
+                    id="text-${application.application_id}-overall"
+                >
+                    Select a rating from 1 to 5
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================================
+                 COMMENTS
+            ========================================== -->
+
+            <div class="comments-section">
+
+                <label
+                    class="comments-label"
+                    for="comments-${application.application_id}"
+                >
+                    Comments & Suggestions
+                </label>
+
+
+                <textarea
+                    id="comments-${application.application_id}"
+                    placeholder="Tell us about your experience, what you learned and what could be improved..."
+                ></textarea>
+
+            </div>
+
+
+
+            <!-- =========================================
+                 SUBMIT
+            ========================================== -->
+
+            <button
+                type="button"
+                class="submit-btn"
+                data-submit-application="${application.application_id}"
+            >
+                Submit Feedback
+            </button>
+
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* =====================================================
+   RATING CONTROL
+===================================================== */
+
+function ratingControl(
+    applicationId,
+    type,
+    label
+) {
+
+    return `
+
+        <div class="rating-box">
+
+            <span class="rating-label">
+                ${label}
+            </span>
+
+
+            <div class="stars">
+
+                ${createStars(
+                    applicationId,
+                    type
+                )}
+
+            </div>
+
+
+            <div
+                class="rating-text"
+                id="text-${applicationId}-${type}"
+            >
+                Select a rating from 1 to 5
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* =====================================================
+   CREATE STARS
+===================================================== */
+
+function createStars(
+    applicationId,
+    type
+) {
+
+    let html = "";
+
+
+    for (
+        let i = 1;
+        i <= 5;
+        i++
+    ) {
+
+        html += `
+
+            <button
+                type="button"
+                class="star-btn"
+                data-application-id="${applicationId}"
+                data-rating-type="${type}"
+                data-rating="${i}"
+                aria-label="${i} out of 5 stars"
+                title="${i} out of 5 stars"
+            >
+                ★
+            </button>
+
+        `;
+
+    }
+
+
+    return html;
+
+}
+
+
+
+/* =====================================================
+   ATTACH STAR CLICK LISTENERS
+===================================================== */
+
+function attachStarListeners() {
+
+    const stars =
+        document.querySelectorAll(
+            ".star-btn"
+        );
+
+
+    stars.forEach(
+        function(star) {
+
+            star.addEventListener(
+                "click",
+                function(event) {
+
+                    event.preventDefault();
+
+                    event.stopPropagation();
+
+
+                    const applicationId =
+                        Number(
+                            this.dataset.applicationId
+                        );
+
+
+                    const type =
+                        this.dataset.ratingType;
+
+
+                    const rating =
+                        Number(
+                            this.dataset.rating
+                        );
+
+
+                    setRating(
+                        applicationId,
+                        type,
+                        rating
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+
+    /* =================================================
+       SUBMIT BUTTON LISTENERS
+    ================================================= */
+
+    const submitButtons =
+        document.querySelectorAll(
+            "[data-submit-application]"
+        );
+
+
+    submitButtons.forEach(
+        function(button) {
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    const applicationId =
+                        Number(
+                            this.dataset.submitApplication
+                        );
+
+
+                    submitFeedback(
+                        applicationId
+                    );
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   SET RATING
+===================================================== */
+
+function setRating(
+    applicationId,
+    type,
+    rating
+) {
+
+    console.log(
+        "Rating selected:",
+        applicationId,
+        type,
+        rating
+    );
+
+
+    /*
+        Create object for this application
+        if it doesn't exist.
+    */
+
+    if (
+        !selectedRatings[applicationId]
+    ) {
+
+        selectedRatings[applicationId] = {};
+
+    }
+
+
+    /*
+        Save rating.
+    */
+
+    selectedRatings[
+        applicationId
+    ][type] = rating;
+
+
+
+    /*
+        Find all stars belonging
+        to this rating category.
+    */
+
+    const stars =
+        document.querySelectorAll(
+            `.star-btn[data-application-id="${applicationId}"][data-rating-type="${type}"]`
+        );
+
+
+
+    /*
+        Update every star.
+    */
+
+    stars.forEach(
+        function(star) {
+
+            const starRating =
+                Number(
+                    star.dataset.rating
+                );
+
+
+            if (
+                starRating <= rating
+            ) {
+
+                star.classList.add(
+                    "selected"
+                );
+
+            } else {
+
+                star.classList.remove(
+                    "selected"
+                );
+
+            }
+
+        }
+    );
+
+
+
+    /*
+        Update text.
+    */
+
+    const text =
+        document.getElementById(
+            `text-${applicationId}-${type}`
+        );
+
+
+    if (text) {
+
+        text.textContent =
+            `${rating} out of 5 stars`;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   SUBMIT FEEDBACK
+===================================================== */
+
+async function submitFeedback(
+    applicationId
+) {
+
+    const ratings =
+        selectedRatings[
+            applicationId
+        ] || {};
+
+
+    const requiredTypes = [
+
+        "culture",
+
+        "mentorship",
+
+        "technical",
+
+        "environment",
+
+        "overall"
+
+    ];
+
+
+
+    /*
+        Check all five ratings.
+    */
+
+    for (
+        const type of requiredTypes
+    ) {
+
+        if (
+            !ratings[type]
+        ) {
+
+            showMessage(
+                "Please provide all five ratings."
+            );
+
+            return;
+        }
+
+    }
+
+
+
+    /*
+        Get comments.
+    */
+
+    const commentsElement =
+        document.getElementById(
+            `comments-${applicationId}`
+        );
+
+
+    const comments =
+        commentsElement
+            ? commentsElement.value.trim()
+            : "";
+
+
+
+    /*
+        Find submit button.
+    */
+
+    const submitButton =
+        document.querySelector(
+            `[data-submit-application="${applicationId}"]`
+        );
+
+
+    if (submitButton) {
+
+        submitButton.disabled =
+            true;
+
+        submitButton.textContent =
+            "Submitting...";
+
+    }
+
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/feedback/student`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        student_id:
+                            student.student_id,
+
+                        application_id:
+                            applicationId,
+
+                        culture_rating:
+                            ratings.culture,
+
+                        mentorship_rating:
+                            ratings.mentorship,
+
+                        technical_learning_rating:
+                            ratings.technical,
+
+                        environment_rating:
+                            ratings.environment,
+
+                        overall_rating:
+                            ratings.overall,
+
+                        comments:
+                            comments
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.message ||
+                "Unable to submit feedback."
+            );
+
+        }
+
+
+        showMessage(
+            "✓ Feedback submitted successfully!"
+        );
+
+
+        /*
+            Reload page data.
+        */
+
+        await loadFeedback();
+
+
+    } catch (error) {
+
+        console.error(
+            "Submit feedback error:",
+            error
+        );
+
+
+        showMessage(
+            error.message
+        );
+
+
+        if (submitButton) {
+
+            submitButton.disabled =
+                false;
+
+            submitButton.textContent =
+                "Submit Feedback";
+
+        }
+
+    }
+
+}
+
+
+
+/* =====================================================
+   EXISTING FEEDBACK
+===================================================== */
+
+function renderExistingFeedback(
+    application
+) {
+
+    return `
+
+        <div class="feedback-card">
+
+            <div class="internship-header">
+
+                <h2>
+
+                    ${escapeHtml(
+                        application.internship_title
+                    )}
+
+                </h2>
+
+
+                <div class="company">
+
+                    ${escapeHtml(
+                        application.company_name
+                    )}
+
+                </div>
+
+            </div>
+
+
+            <div class="submitted">
+
+                ✓ Feedback already submitted
+
+            </div>
+
+
+            <div class="existing-feedback">
+
+                <h3>
+                    Your Rating
+                </h3>
+
+
+                <div class="score-list">
+
+                    ${scoreItem(
+                        "Company Culture",
+                        application.culture_rating
+                    )}
+
+
+                    ${scoreItem(
+                        "Mentorship",
+                        application.mentorship_rating
+                    )}
+
+
+                    ${scoreItem(
+                        "Technical Learning",
+                        application.technical_learning_rating
+                    )}
+
+
+                    ${scoreItem(
+                        "Work Environment",
+                        application.environment_rating
+                    )}
+
+
+                    ${scoreItem(
+                        "Overall Experience",
+                        application.overall_rating
+                    )}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* =====================================================
+   SCORE ITEM
+===================================================== */
+
+function scoreItem(
+    label,
+    score
+) {
+
+    const numericScore =
+        Number(score) || 0;
+
+
+    const filledStars =
+        "★".repeat(
+            numericScore
+        );
+
+
+    const emptyStars =
+        "☆".repeat(
+            Math.max(
+                0,
+                5 - numericScore
+            )
+        );
+
+
+    return `
+
+        <div class="score-item">
+
+            <strong>
+                ${escapeHtml(label)}
+            </strong>
+
+
+            <div class="score-stars">
+
+                ${filledStars}${emptyStars}
+
+                <span
+                    style="
+                        color:#756F72;
+                        font-size:12px;
+                        letter-spacing:0;
+                        margin-left:6px;
+                    "
+                >
+                    (${numericScore}/5)
+                </span>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function showMessage(
+    message
+) {
+
+    const element =
+        document.getElementById(
+            "message"
+        );
+
+
+    element.textContent =
+        message;
+
+
+    element.style.display =
+        "block";
+
+
+    setTimeout(
+        function() {
+
+            element.style.display =
+                "none";
+
+        },
+        3500
+    );
+
+}
+
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+
+    .replace(
+        /</g,
+        "&lt;"
+    )
+
+    .replace(
+        />/g,
+        "&gt;"
+    )
+
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+
+/* =====================================================
+   START APPLICATION
+===================================================== */
+
+loadFeedback();
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Faculty Evaluations | Student2Career</title>
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+    <style>
+
+        body {
+            margin: 0;
+            background: #faf9f7;
+            font-family: Arial, sans-serif;
+        }
+
+        .page-header {
+            background: white;
+            border-bottom: 1px solid #e8e0dc;
+            padding: 22px 50px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 25px;
+            font-weight: 700;
+            color: #7A1F3D;
+        }
+
+        .back-link {
+            color: #7A1F3D;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 25px;
+        }
+
+        .eyebrow {
+            color: #7A1F3D;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-family: Georgia, serif;
+            font-size: 48px;
+            margin: 10px 0;
+            color: #242124;
+        }
+
+        .subtitle {
+            color: #756F72;
+            margin-bottom: 30px;
+        }
+
+        .message {
+            display: none;
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .message.success {
+            display: block;
+            background: #edf7ef;
+            color: #35643c;
+        }
+
+        .message.error {
+            display: block;
+            background: #fff0f0;
+            color: #9b3333;
+        }
+
+        .empty {
+            background: white;
+            border: 1px solid #e8e0dc;
+            border-radius: 18px;
+            padding: 55px;
+            text-align: center;
+            color: #756F72;
+        }
+
+        .evaluation-card {
+            background: white;
+            border: 1px solid #e8e0dc;
+            border-radius: 18px;
+            padding: 28px;
+            margin-bottom: 22px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.04);
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .student-name {
+            font-size: 23px;
+            font-weight: 700;
+            color: #242124;
+        }
+
+        .internship {
+            margin-top: 5px;
+            color: #7A1F3D;
+            font-weight: 600;
+        }
+
+        .company {
+            margin-top: 4px;
+            color: #756F72;
+        }
+
+        .status {
+            padding: 7px 13px;
+            border-radius: 20px;
+            background: #f7e6ec;
+            color: #7A1F3D;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .scores {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-top: 25px;
+        }
+
+        .score {
+            background: #faf7f5;
+            border-radius: 12px;
+            padding: 17px;
+            text-align: center;
+        }
+
+        .score-label {
+            font-size: 12px;
+            color: #756F72;
+            margin-bottom: 8px;
+        }
+
+        .score-value {
+            font-size: 25px;
+            font-weight: 700;
+            color: #7A1F3D;
+        }
+
+        .comments {
+            margin-top: 18px;
+            padding: 17px;
+            background: #faf7f5;
+            border-radius: 12px;
+        }
+
+        .comments-label {
+            font-size: 12px;
+            color: #756F72;
+            margin-bottom: 7px;
+        }
+
+        .comments-text {
+            color: #242124;
+            line-height: 1.5;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 18px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .primary {
+            background: #7A1F3D;
+            color: white;
+        }
+
+        .secondary {
+            background: #f2ece9;
+            color: #242124;
+        }
+
+        .danger {
+            background: #f9dddd;
+            color: #9b3333;
+        }
+
+        .form-panel {
+            display: none;
+            margin-top: 22px;
+            padding: 24px;
+            background: #faf7f5;
+            border-radius: 14px;
+        }
+
+        .form-panel.active {
+            display: block;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #242124;
+        }
+
+        select,
+        textarea {
+            padding: 12px;
+            border: 1px solid #e8e0dc;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            background: white;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        @media (max-width: 750px) {
+
+            .page-header {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 38px;
+            }
+
+            .scores {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="page-header">
+
+    <div class="brand">
+        Student2Career
+    </div>
+
+    <a
+        href="faculty-dashboard.html"
+        class="back-link">
+
+        ← Faculty Dashboard
+
+    </a>
+
+</header>
+
+
+<main class="container">
+
+    <div class="eyebrow">
+        Faculty Portal
+    </div>
+
+    <h1>
+        Student Evaluations
+    </h1>
+
+    <p class="subtitle">
+        Evaluate student performance using technical and soft-skill criteria.
+    </p>
+
+
+    <div
+        id="message"
+        class="message">
+    </div>
+
+
+    <div id="createSection">
+
+    <div class="evaluation-card">
+
+        <h2>
+            Create Student Evaluation
+        </h2>
+
+        <p style="color:#756F72;">
+            Create an evaluation for an accepted or shortlisted student.
+        </p>
+
+        <div class="form-grid">
+
+            <div class="form-group full">
+
+                <label>
+                    Application ID
+                </label>
+
+                <input
+                    type="number"
+                    id="applicationId"
+                    placeholder="Example: 1"
+                    min="1"
+                    required
+                    style="
+                        padding:12px;
+                        border:1px solid #e8e0dc;
+                        border-radius:8px;
+                    "
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Technical Score
+                </label>
+
+                <select id="createTechnical">
+
+                    <option value="">Select score</option>
+                    <option value="1">1 / 5</option>
+                    <option value="2">2 / 5</option>
+                    <option value="3">3 / 5</option>
+                    <option value="4">4 / 5</option>
+                    <option value="5">5 / 5</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Communication Score
+                </label>
+
+                <select id="createCommunication">
+
+                    <option value="">Select score</option>
+                    <option value="1">1 / 5</option>
+                    <option value="2">2 / 5</option>
+                    <option value="3">3 / 5</option>
+                    <option value="4">4 / 5</option>
+                    <option value="5">5 / 5</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Teamwork Score
+                </label>
+
+                <select id="createTeamwork">
+
+                    <option value="">Select score</option>
+                    <option value="1">1 / 5</option>
+                    <option value="2">2 / 5</option>
+                    <option value="3">3 / 5</option>
+                    <option value="4">4 / 5</option>
+                    <option value="5">5 / 5</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Punctuality Score
+                </label>
+
+                <select id="createPunctuality">
+
+                    <option value="">Select score</option>
+                    <option value="1">1 / 5</option>
+                    <option value="2">2 / 5</option>
+                    <option value="3">3 / 5</option>
+                    <option value="4">4 / 5</option>
+                    <option value="5">5 / 5</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group full">
+
+                <label>
+                    Comments / Feedback
+                </label>
+
+                <textarea
+                    id="createComments"
+                    placeholder="Enter student evaluation feedback..."
+                ></textarea>
+
+            </div>
+
+        </div>
+
+
+        <div class="buttons">
+
+            <button
+                class="primary"
+                onclick="createEvaluation()">
+
+                Save Evaluation
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div id="evaluationList">
+</div>
+
+</main>
+
+
+<script>
+
+
+// =====================================================
+// FACULTY LOGIN
+// =====================================================
+
+const facultyData =
+    localStorage.getItem("faculty");
+
+
+if (!facultyData) {
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+const faculty =
+    JSON.parse(facultyData);
+
+
+
+    // =====================================================
+// CREATE EVALUATION
+// =====================================================
+
+async function createEvaluation() {
+
+    const applicationId =
+        Number(
+            document.getElementById(
+                "applicationId"
+            ).value
+        );
+
+
+    const technical =
+        Number(
+            document.getElementById(
+                "createTechnical"
+            ).value
+        );
+
+
+    const communication =
+        Number(
+            document.getElementById(
+                "createCommunication"
+            ).value
+        );
+
+
+    const teamwork =
+        Number(
+            document.getElementById(
+                "createTeamwork"
+            ).value
+        );
+
+
+    const punctuality =
+        Number(
+            document.getElementById(
+                "createPunctuality"
+            ).value
+        );
+
+
+    const comments =
+        document.getElementById(
+            "createComments"
+        ).value;
+
+
+    if (
+        !applicationId ||
+        !technical ||
+        !communication ||
+        !teamwork ||
+        !punctuality
+    ) {
+
+        showMessage(
+            "Please enter Application ID and all four scores.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                "http://localhost:5000/api/evaluations",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        application_id:
+                            applicationId,
+
+                        faculty_id:
+                            faculty.faculty_id,
+
+                        technical_score:
+                            technical,
+
+                        communication_score:
+                            communication,
+
+                        teamwork_score:
+                            teamwork,
+
+                        punctuality_score:
+                            punctuality,
+
+                        comments:
+                            comments
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to create evaluation."
+            );
+
+        }
+
+
+        showMessage(
+            "Evaluation created successfully!",
+            "success"
+        );
+
+
+        document
+            .getElementById(
+                "applicationId"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "createTechnical"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "createCommunication"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "createTeamwork"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "createPunctuality"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "createComments"
+            )
+            .value = "";
+
+
+        loadEvaluations();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+// =====================================================
+// LOAD EVALUATIONS
+// =====================================================
+
+async function loadEvaluations() {
+
+    const container =
+        document.getElementById(
+            "evaluationList"
+        );
+
+
+    try {
+
+        const response =
+            await fetch(
+                `http://localhost:5000/api/evaluations/faculty/${faculty.faculty_id}`
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load evaluations."
+            );
+
+        }
+
+
+        if (
+            !data.evaluations ||
+            data.evaluations.length === 0
+        ) {
+
+            container.innerHTML = `
+
+                <div class="empty">
+
+                    <h2>
+                        No evaluations yet
+                    </h2>
+
+                    <p>
+                        Create an evaluation from a shortlisted
+                        or accepted student.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            data.evaluations
+                .map(
+                    evaluation =>
+                        createEvaluationCard(
+                            evaluation
+                        )
+                )
+                .join("");
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+// =====================================================
+// CREATE CARD
+// =====================================================
+
+function createEvaluationCard(
+    evaluation
+) {
+
+    return `
+
+        <div class="evaluation-card">
+
+            <div class="top">
+
+                <div>
+
+                    <div class="student-name">
+
+                        ${escapeHtml(
+                            evaluation.student_name
+                        )}
+
+                    </div>
+
+                    <div class="internship">
+
+                        ${escapeHtml(
+                            evaluation.internship_title
+                        )}
+
+                    </div>
+
+                    <div class="company">
+
+                        ${escapeHtml(
+                            evaluation.company_name
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                <div class="status">
+
+                    ${escapeHtml(
+                        evaluation.application_status
+                    )}
+
+                </div>
+
+            </div>
+
+
+            <div class="scores">
+
+                <div class="score">
+
+                    <div class="score-label">
+                        Technical
+                    </div>
+
+                    <div class="score-value">
+                        ${evaluation.technical_score}/5
+                    </div>
+
+                </div>
+
+
+                <div class="score">
+
+                    <div class="score-label">
+                        Communication
+                    </div>
+
+                    <div class="score-value">
+                        ${evaluation.communication_score}/5
+                    </div>
+
+                </div>
+
+
+                <div class="score">
+
+                    <div class="score-label">
+                        Teamwork
+                    </div>
+
+                    <div class="score-value">
+                        ${evaluation.teamwork_score}/5
+                    </div>
+
+                </div>
+
+
+                <div class="score">
+
+                    <div class="score-label">
+                        Punctuality
+                    </div>
+
+                    <div class="score-value">
+                        ${evaluation.punctuality_score}/5
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="comments">
+
+                <div class="comments-label">
+                    Comments
+                </div>
+
+                <div class="comments-text">
+
+                    ${escapeHtml(
+                        evaluation.comments ||
+                        "No comments provided."
+                    )}
+
+                </div>
+
+            </div>
+
+
+            <div class="buttons">
+
+                <button
+                    class="secondary"
+                    onclick="openEdit(
+                        ${evaluation.evaluation_id},
+                        ${evaluation.technical_score},
+                        ${evaluation.communication_score},
+                        ${evaluation.teamwork_score},
+                        ${evaluation.punctuality_score},
+                        '${escapeAttribute(
+                            evaluation.comments || ""
+                        )}'
+                    )">
+
+                    Edit Evaluation
+
+                </button>
+
+
+                <button
+                    class="danger"
+                    onclick="deleteEvaluation(
+                        ${evaluation.evaluation_id}
+                    )">
+
+                    Delete Evaluation
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="edit-${evaluation.evaluation_id}"
+                class="form-panel">
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Technical Score
+                        </label>
+
+                        <select
+                            id="technical-${evaluation.evaluation_id}">
+
+                            ${scoreOptions(
+                                evaluation.technical_score
+                            )}
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Communication Score
+                        </label>
+
+                        <select
+                            id="communication-${evaluation.evaluation_id}">
+
+                            ${scoreOptions(
+                                evaluation.communication_score
+                            )}
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Teamwork Score
+                        </label>
+
+                        <select
+                            id="teamwork-${evaluation.evaluation_id}">
+
+                            ${scoreOptions(
+                                evaluation.teamwork_score
+                            )}
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Punctuality Score
+                        </label>
+
+                        <select
+                            id="punctuality-${evaluation.evaluation_id}">
+
+                            ${scoreOptions(
+                                evaluation.punctuality_score
+                            )}
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group full">
+
+                        <label>
+                            Comments
+                        </label>
+
+                        <textarea
+                            id="comments-${evaluation.evaluation_id}"
+                            placeholder="Enter feedback..."
+                        >${escapeHtml(
+                            evaluation.comments || ""
+                        )}</textarea>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="buttons">
+
+                    <button
+                        class="primary"
+                        onclick="saveEdit(
+                            ${evaluation.evaluation_id}
+                        )">
+
+                        Save Changes
+
+                    </button>
+
+
+                    <button
+                        class="secondary"
+                        onclick="closeEdit(
+                            ${evaluation.evaluation_id}
+                        )">
+
+                        Cancel
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+// =====================================================
+// SCORE OPTIONS
+// =====================================================
+
+function scoreOptions(selected) {
+
+    let html = "";
+
+    for (let i = 1; i <= 5; i++) {
+
+        html += `
+            <option
+                value="${i}"
+                ${Number(selected) === i ? "selected" : ""}>
+                ${i} / 5
+            </option>
+        `;
+
+    }
+
+    return html;
+
+}
+
+
+// =====================================================
+// OPEN EDIT
+// =====================================================
+
+function openEdit(
+    id
+) {
+
+    document
+        .getElementById(
+            `edit-${id}`
+        )
+        .classList.add("active");
+
+}
+
+
+// =====================================================
+// CLOSE EDIT
+// =====================================================
+
+function closeEdit(id) {
+
+    document
+        .getElementById(
+            `edit-${id}`
+        )
+        .classList.remove("active");
+
+}
+
+
+// =====================================================
+// SAVE EDIT
+// =====================================================
+
+async function saveEdit(id) {
+
+    const technical =
+        Number(
+            document.getElementById(
+                `technical-${id}`
+            ).value
+        );
+
+
+    const communication =
+        Number(
+            document.getElementById(
+                `communication-${id}`
+            ).value
+        );
+
+
+    const teamwork =
+        Number(
+            document.getElementById(
+                `teamwork-${id}`
+            ).value
+        );
+
+
+    const punctuality =
+        Number(
+            document.getElementById(
+                `punctuality-${id}`
+            ).value
+        );
+
+
+    const comments =
+        document.getElementById(
+            `comments-${id}`
+        ).value;
+
+
+    try {
+
+        const response =
+            await fetch(
+                `http://localhost:5000/api/evaluations/${id}`,
+                {
+
+                    method: "PATCH",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        faculty_id:
+                            faculty.faculty_id,
+
+                        technical_score:
+                            technical,
+
+                        communication_score:
+                            communication,
+
+                        teamwork_score:
+                            teamwork,
+
+                        punctuality_score:
+                            punctuality,
+
+                        comments:
+                            comments
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to update evaluation."
+            );
+
+        }
+
+
+        showMessage(
+            "Evaluation updated successfully.",
+            "success"
+        );
+
+
+        loadEvaluations();
+
+    } catch (error) {
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+// =====================================================
+// DELETE EVALUATION
+// =====================================================
+
+async function deleteEvaluation(id) {
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to remove this evaluation?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `http://localhost:5000/api/evaluations/${id}`,
+                {
+
+                    method: "DELETE",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        faculty_id:
+                            faculty.faculty_id
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to delete evaluation."
+            );
+
+        }
+
+
+        showMessage(
+            "Evaluation removed successfully.",
+            "success"
+        );
+
+
+        loadEvaluations();
+
+    } catch (error) {
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+// =====================================================
+// MESSAGE
+// =====================================================
+
+function showMessage(
+    message,
+    type
+) {
+
+    const element =
+        document.getElementById(
+            "message"
+        );
+
+
+    element.textContent =
+        message;
+
+
+    element.className =
+        `message ${type}`;
+
+
+    setTimeout(() => {
+
+        element.className =
+            "message";
+
+    }, 4000);
+
+}
+
+
+// =====================================================
+// SECURITY
+// =====================================================
+
+function escapeHtml(value) {
+
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+function escapeAttribute(value) {
+
+    return String(value || "")
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'");
+
+}
+
+
+// =====================================================
+// START
+// =====================================================
+
+loadEvaluations();
+
+</script>
+
+
+</body>
+
+</html>

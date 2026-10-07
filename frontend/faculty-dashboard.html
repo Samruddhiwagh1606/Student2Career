@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Faculty Dashboard | Student2Career</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+
+        /* Faculty dashboard specific styling only */
+
+        .faculty-dashboard-page {
+            min-height: 100vh;
+            background: var(--warm-white);
+        }
+
+
+        /* =========================================
+           HEADER
+        ========================================= */
+
+        .faculty-dashboard-header {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 18px 42px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+
+        .faculty-dashboard-brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--wine);
+        }
+
+
+        .faculty-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+
+        .faculty-profile-info {
+            text-align: right;
+        }
+
+
+        .faculty-profile-info strong {
+            display: block;
+            font-size: 13px;
+            color: var(--charcoal);
+        }
+
+
+        .faculty-profile-info small {
+            display: block;
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+
+        .faculty-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+
+            background: var(--wine);
+            color: var(--white);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+
+        .faculty-logout {
+            border: 1px solid var(--border);
+            background: var(--white);
+            color: var(--charcoal);
+
+            padding: 9px 14px;
+            border-radius: 8px;
+
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+
+        .faculty-logout:hover {
+            background: var(--wine);
+            color: var(--white);
+            border-color: var(--wine);
+        }
+
+
+        /* =========================================
+           CONTAINER
+        ========================================= */
+
+        .faculty-dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 45px 42px 70px;
+        }
+
+
+        .faculty-welcome {
+            margin-bottom: 30px;
+        }
+
+
+        .faculty-welcome-label {
+            color: var(--wine);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+
+        .faculty-welcome h1 {
+            margin: 8px 0;
+            font-family: "Playfair Display", serif;
+            font-size: 38px;
+            color: var(--charcoal);
+        }
+
+
+        .faculty-welcome p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+
+        /* =========================================
+           STATISTICS
+        ========================================= */
+
+        .faculty-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+
+        .faculty-stat-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px;
+        }
+
+
+        .faculty-stat-label {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+
+        .faculty-stat-value {
+            margin-top: 10px;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--charcoal);
+        }
+
+
+        /* =========================================
+           SECTION
+        ========================================= */
+
+        .faculty-section-title {
+            margin-bottom: 16px;
+        }
+
+
+        .faculty-section-title h2 {
+            margin: 0;
+            font-size: 19px;
+            color: var(--charcoal);
+        }
+
+
+        .faculty-section-title p {
+            margin: 5px 0 0;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+
+        /* =========================================
+           ACTIONS
+        ========================================= */
+
+        .faculty-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+
+        .faculty-action-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 24px;
+        }
+
+
+        .faculty-action-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+
+            background: #F6E7EC;
+            color: var(--wine);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 17px;
+            margin-bottom: 15px;
+        }
+
+
+        .faculty-action-card h3 {
+            margin: 0 0 8px;
+            font-size: 15px;
+            color: var(--charcoal);
+        }
+
+
+        .faculty-action-card p {
+            margin: 0;
+            min-height: 42px;
+
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+
+        .faculty-action-btn {
+            display: inline-block;
+
+            margin-top: 18px;
+            padding: 10px 15px;
+
+            background: var(--wine);
+            color: var(--white);
+
+            border-radius: 8px;
+            text-decoration: none;
+
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+
+        .faculty-action-btn:hover {
+            background: var(--wine-dark);
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 800px) {
+
+            .faculty-dashboard-header {
+                padding: 16px 20px;
+            }
+
+
+            .faculty-dashboard-container {
+                padding: 30px 20px 50px;
+            }
+
+
+            .faculty-stats,
+            .faculty-actions {
+                grid-template-columns: 1fr;
+            }
+
+
+            .faculty-profile-info {
+                display: none;
+            }
+
+
+            .faculty-welcome h1 {
+                font-size: 30px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="faculty-dashboard-page">
+
+
+    <!-- =========================================
+         HEADER
+    ========================================= -->
+
+    <header class="faculty-dashboard-header">
+
+        <div class="faculty-dashboard-brand">
+            Student2Career
+        </div>
+
+
+        <div class="faculty-profile">
+
+            <div class="faculty-profile-info">
+
+                <strong id="facultyName">
+                    Faculty
+                </strong>
+
+                <small id="facultyDepartment">
+                    Department
+                </small>
+
+            </div>
+
+
+            <div
+                class="faculty-avatar"
+                id="facultyInitial"
+            >
+                F
+            </div>
+
+
+            <button
+                class="faculty-logout"
+                onclick="logoutFaculty()"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================================
+         MAIN
+    ========================================= -->
+
+    <main class="faculty-dashboard-container">
+
+
+        <!-- =========================================
+             WELCOME
+        ========================================= -->
+
+        <section class="faculty-welcome">
+
+            <div class="faculty-welcome-label">
+                Faculty Portal
+            </div>
+
+            <h1>
+                Faculty Dashboard
+            </h1>
+
+            <p>
+                Manage internships, applications, interviews and student evaluations.
+            </p>
+
+        </section>
+
+
+
+        <!-- =========================================
+             STATISTICS
+        ========================================= -->
+
+        <section class="faculty-stats">
+
+
+            <div class="faculty-stat-card">
+
+                <div class="faculty-stat-label">
+                    INTERNSHIPS POSTED
+                </div>
+
+                <div
+                    class="faculty-stat-value"
+                    id="internshipCount"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="faculty-stat-card">
+
+                <div class="faculty-stat-label">
+                    APPLICATIONS RECEIVED
+                </div>
+
+                <div
+                    class="faculty-stat-value"
+                    id="applicationCount"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="faculty-stat-card">
+
+                <div class="faculty-stat-label">
+                    STUDENTS SHORTLISTED
+                </div>
+
+                <div
+                    class="faculty-stat-value"
+                    id="shortlistedCount"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =========================================
+             ACTIONS
+        ========================================= -->
+
+        <section>
+
+
+            <div class="faculty-section-title">
+
+                <h2>
+                    Faculty Activities
+                </h2>
+
+                <p>
+                    Manage your internship and student interaction activities.
+                </p>
+
+            </div>
+
+
+
+            <div class="faculty-actions">
+
+
+                <!-- =================================
+                     POST INTERNSHIP
+                ================================= -->
+
+                <div class="faculty-action-card">
+
+                    <div class="faculty-action-icon">
+                        📢
+                    </div>
+
+                    <h3>
+                        Post Internship
+                    </h3>
+
+                    <p>
+                        Create a new internship opportunity.
+                        The posting will go through faculty verification
+                        and then Admin approval.
+                    </p>
+
+                    <a
+                        href="faculty-post-internship.html"
+                        class="faculty-action-btn"
+                    >
+                        Post Internship
+                    </a>
+
+                </div>
+
+
+
+                <!-- =================================
+                     APPLICATIONS
+                ================================= -->
+
+                <div class="faculty-action-card">
+
+                    <div class="faculty-action-icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        View Applications
+                    </h3>
+
+                    <p>
+                        Review student applications and manage
+                        shortlisted, rejected and accepted candidates.
+                    </p>
+
+                    <a
+                        href="faculty-applications.html"
+                        class="faculty-action-btn"
+                    >
+                        View Applications
+                    </a>
+
+                </div>
+
+
+
+                <!-- =================================
+                     INTERVIEWS
+                ================================= -->
+
+                <div class="faculty-action-card">
+
+                    <div class="faculty-action-icon">
+                        🎤
+                    </div>
+
+                    <h3>
+                        Interviews
+                    </h3>
+
+                    <p>
+                        Schedule interviews and record interview
+                        results and feedback.
+                    </p>
+
+                    <a
+                        href="faculty-interviews.html"
+                        class="faculty-action-btn"
+                    >
+                        Manage Interviews
+                    </a>
+
+                </div>
+
+
+
+                <!-- =================================
+                     EVALUATIONS
+                ================================= -->
+
+                <div class="faculty-action-card">
+
+                    <div class="faculty-action-icon">
+                        ⭐
+                    </div>
+
+                    <h3>
+                        Student Evaluations
+                    </h3>
+
+                    <p>
+                        Evaluate students on technical and
+                        professional skills and provide feedback.
+                    </p>
+
+                    <a
+                        href="faculty-evaluations.html"
+                        class="faculty-action-btn"
+                    >
+                        Student Evaluations
+                    </a>
+
+                </div>
+
+
+
+                <!-- =================================
+                     REPORTS — ADDED
+                ================================= -->
+
+                <div class="faculty-action-card">
+
+                    <div class="faculty-action-icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        Reports & Analytics
+                    </h3>
+
+                    <p>
+                        View internship statistics, application
+                        status, interviews and student evaluation
+                        performance.
+                    </p>
+
+                    <a
+                        href="faculty-reports.html"
+                        class="faculty-action-btn"
+                    >
+                        View Reports
+                    </a>
+
+                </div>
+
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+
+<script>
+
+
+/* =========================================
+   GET FACULTY DATA
+========================================= */
+
+const facultyData =
+    localStorage.getItem("faculty");
+
+
+
+/* =========================================
+   LOGIN PROTECTION
+========================================= */
+
+if (!facultyData) {
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+
+/* =========================================
+   LOAD FACULTY INFORMATION
+========================================= */
+
+else {
+
+    const faculty =
+        JSON.parse(facultyData);
+
+
+    document.getElementById(
+        "facultyName"
+    ).textContent =
+        faculty.name || "Faculty";
+
+
+    document.getElementById(
+        "facultyDepartment"
+    ).textContent =
+        faculty.department || "Department";
+
+
+    document.getElementById(
+        "facultyInitial"
+    ).textContent =
+        (faculty.name || "Faculty")
+            .charAt(0)
+            .toUpperCase();
+
+}
+
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+function logoutFaculty() {
+
+    localStorage.removeItem("faculty");
+
+    localStorage.removeItem("user");
+
+    window.location.href =
+        "index.html";
+
+}
+
+</script>
+
+
+</body>
+
+</html>

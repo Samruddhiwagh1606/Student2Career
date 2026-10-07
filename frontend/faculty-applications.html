@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Faculty Applications | Student2Career</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+    <style>
+
+        .applications-page {
+            min-height: 100vh;
+            background: var(--warm-white);
+        }
+
+
+        .applications-header {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+
+            padding: 18px 42px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+
+        .applications-brand {
+            color: var(--wine);
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+
+        .back-btn {
+            text-decoration: none;
+            color: var(--wine);
+
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+
+        .applications-container {
+            max-width: 1200px;
+            margin: 0 auto;
+
+            padding: 42px;
+        }
+
+
+        .applications-heading {
+            margin-bottom: 28px;
+        }
+
+
+        .applications-heading span {
+            color: var(--wine);
+
+            font-size: 10px;
+            font-weight: 700;
+
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+
+        .applications-heading h1 {
+            margin: 8px 0;
+
+            font-family: "Playfair Display", serif;
+
+            font-size: 36px;
+            color: var(--charcoal);
+        }
+
+
+        .applications-heading p {
+            margin: 0;
+
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+
+        #message {
+            margin-bottom: 20px;
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+
+        .application-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+
+        .application-card {
+            background: var(--white);
+
+            border: 1px solid var(--border);
+            border-radius: 15px;
+
+            padding: 24px;
+        }
+
+
+        .application-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+
+            gap: 20px;
+        }
+
+
+        .student-info h2 {
+            margin: 0 0 6px;
+
+            font-size: 18px;
+            color: var(--charcoal);
+        }
+
+
+        .student-info .internship-title {
+            color: var(--wine);
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+
+        .student-details {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 12px;
+
+            margin-top: 20px;
+        }
+
+
+        .detail-box {
+            background: #FAF6F2;
+
+            border-radius: 10px;
+            padding: 13px;
+        }
+
+
+        .detail-box span {
+            display: block;
+
+            color: var(--muted);
+
+            font-size: 10px;
+            margin-bottom: 5px;
+        }
+
+
+        .detail-box strong {
+            color: var(--charcoal);
+            font-size: 12px;
+        }
+
+
+        .status-badge {
+            display: inline-block;
+
+            padding: 7px 12px;
+
+            border-radius: 20px;
+
+            background: #F6E7EC;
+            color: var(--wine);
+
+            font-size: 10px;
+            font-weight: 700;
+
+            text-transform: uppercase;
+        }
+
+
+        .application-text {
+            margin-top: 20px;
+
+            padding-top: 18px;
+
+            border-top: 1px solid var(--border);
+        }
+
+
+        .application-text h4 {
+            margin: 0 0 7px;
+
+            font-size: 12px;
+            color: var(--charcoal);
+        }
+
+
+        .application-text p {
+            margin: 0 0 16px;
+
+            color: var(--muted);
+
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+
+        .application-actions {
+            display: flex;
+
+            gap: 10px;
+
+            margin-top: 20px;
+        }
+
+
+        .application-actions button {
+            border: none;
+
+            padding: 10px 16px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+
+        .shortlist-btn {
+            background: var(--wine);
+            color: var(--white);
+        }
+
+
+        .accept-btn {
+            background: var(--green);
+            color: var(--white);
+        }
+
+
+        .reject-btn {
+            background: #F4E6E3;
+            color: #A13D32;
+        }
+
+
+        .application-actions button:hover {
+            opacity: 0.85;
+        }
+
+
+        .empty-state {
+            background: var(--white);
+
+            border: 1px dashed var(--border);
+
+            border-radius: 15px;
+
+            padding: 60px 20px;
+
+            text-align: center;
+
+            color: var(--muted);
+        }
+
+
+        @media (max-width: 750px) {
+
+            .applications-header {
+                padding: 16px 20px;
+            }
+
+
+            .applications-container {
+                padding: 30px 20px;
+            }
+
+
+            .applications-heading h1 {
+                font-size: 30px;
+            }
+
+
+            .student-details {
+                grid-template-columns: 1fr;
+            }
+
+
+            .application-top {
+                flex-direction: column;
+            }
+
+
+            .application-actions {
+                flex-wrap: wrap;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="applications-page">
+
+
+    <!-- HEADER -->
+
+    <header class="applications-header">
+
+        <div class="applications-brand">
+            Student2Career
+        </div>
+
+
+        <a
+            href="faculty-dashboard.html"
+            class="back-btn"
+        >
+            ← Faculty Dashboard
+        </a>
+
+    </header>
+
+
+
+    <!-- MAIN -->
+
+    <main class="applications-container">
+
+
+        <section class="applications-heading">
+
+            <span>
+                Faculty Portal
+            </span>
+
+            <h1>
+                Student Applications
+            </h1>
+
+            <p>
+                Review applications received for your internship postings.
+            </p>
+
+        </section>
+
+
+        <div id="message"></div>
+
+
+        <section
+            id="applicationList"
+            class="application-list"
+        ></section>
+
+
+    </main>
+
+</div>
+
+
+
+<script>
+
+
+// ==========================================
+// GET FACULTY LOGIN DATA
+// ==========================================
+
+const facultyData =
+    localStorage.getItem("faculty");
+
+
+if (!facultyData) {
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+const faculty =
+    JSON.parse(facultyData);
+
+
+// ==========================================
+// ELEMENTS
+// ==========================================
+
+const applicationList =
+    document.getElementById(
+        "applicationList"
+    );
+
+
+const message =
+    document.getElementById(
+        "message"
+    );
+
+
+// ==========================================
+// LOAD APPLICATIONS
+// ==========================================
+
+async function loadApplications() {
+
+    applicationList.innerHTML =
+        `
+        <div class="empty-state">
+            Loading applications...
+        </div>
+        `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                `http://localhost:5000/api/applications/faculty/${faculty.faculty_id}`
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load applications."
+            );
+
+        }
+
+
+        if (
+            !data.applications ||
+            data.applications.length === 0
+        ) {
+
+            applicationList.innerHTML =
+                `
+                <div class="empty-state">
+
+                    <h3>
+                        No applications yet
+                    </h3>
+
+                    <p>
+                        Applications for your internships
+                        will appear here.
+                    </p>
+
+                </div>
+                `;
+
+            return;
+
+        }
+
+
+        applicationList.innerHTML = "";
+
+
+        data.applications.forEach(
+            application => {
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "application-card";
+
+
+                const status =
+                    application.status;
+
+
+                card.innerHTML = `
+
+                    <div class="application-top">
+
+                        <div class="student-info">
+
+                            <h2>
+                                ${escapeHtml(
+                                    application.student_name
+                                )}
+                            </h2>
+
+                            <div class="internship-title">
+
+                                ${escapeHtml(
+                                    application.internship_title
+                                )}
+
+                                ·
+
+                                ${escapeHtml(
+                                    application.company_name
+                                )}
+
+                            </div>
+
+                        </div>
+
+
+                        <span class="status-badge">
+
+                            ${status}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="student-details">
+
+                        <div class="detail-box">
+
+                            <span>
+                                Department
+                            </span>
+
+                            <strong>
+                                ${escapeHtml(
+                                    application.student_department ||
+                                    "Not provided"
+                                )}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-box">
+
+                            <span>
+                                GPA
+                            </span>
+
+                            <strong>
+                                ${application.student_gpa || "N/A"}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="detail-box">
+
+                            <span>
+                                Applied On
+                            </span>
+
+                            <strong>
+                                ${formatDate(
+                                    application.applied_at
+                                )}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="application-text">
+
+                        <h4>
+                            Qualifications
+                        </h4>
+
+                        <p>
+                            ${escapeHtml(
+                                application.qualifications
+                            )}
+                        </p>
+
+
+                        <h4>
+                            Cover Letter
+                        </h4>
+
+                        <p>
+                            ${escapeHtml(
+                                application.cover_letter
+                            )}
+                        </p>
+
+                    </div>
+
+
+                    <div class="application-actions">
+
+                        ${
+                            status === "pending"
+                            ? `
+                                <button
+                                    class="shortlist-btn"
+                                    onclick="
+                                        updateStatus(
+                                            ${application.application_id},
+                                            'shortlisted'
+                                        )
+                                    "
+                                >
+                                    Shortlist
+                                </button>
+
+                                <button
+                                    class="reject-btn"
+                                    onclick="
+                                        updateStatus(
+                                            ${application.application_id},
+                                            'rejected'
+                                        )
+                                    "
+                                >
+                                    Reject
+                                </button>
+                            `
+                            : ""
+                        }
+
+
+                        ${
+                            status === "shortlisted"
+                            ? `
+                                <button
+                                    class="accept-btn"
+                                    onclick="
+                                        updateStatus(
+                                            ${application.application_id},
+                                            'accepted'
+                                        )
+                                    "
+                                >
+                                    Accept Student
+                                </button>
+
+                                <button
+                                    class="reject-btn"
+                                    onclick="
+                                        updateStatus(
+                                            ${application.application_id},
+                                            'rejected'
+                                        )
+                                    "
+                                >
+                                    Reject
+                                </button>
+                            `
+                            : ""
+                        }
+
+                    </div>
+
+                `;
+
+
+                applicationList.appendChild(
+                    card
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        applicationList.innerHTML =
+            `
+            <div class="empty-state">
+
+                Unable to load applications.
+
+                <br><br>
+
+                ${escapeHtml(
+                    error.message
+                )}
+
+            </div>
+            `;
+
+    }
+
+}
+
+
+
+// ==========================================
+// UPDATE APPLICATION STATUS
+// ==========================================
+
+async function updateStatus(
+    applicationId,
+    status
+) {
+
+    const actionText =
+        status === "shortlisted"
+            ? "shortlist"
+            : status === "accepted"
+                ? "accept"
+                : "reject";
+
+
+    const confirmed =
+        confirm(
+            `Are you sure you want to ${actionText} this application?`
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `http://localhost:5000/api/applications/faculty/${applicationId}/status`,
+                {
+
+                    method: "PATCH",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        faculty_id:
+                            faculty.faculty_id,
+
+                        status:
+                            status
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to update application."
+            );
+
+        }
+
+
+        message.textContent =
+            data.message;
+
+        message.style.color =
+            "var(--green)";
+
+
+        await loadApplications();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        message.textContent =
+            error.message;
+
+        message.style.color =
+            "#A13D32";
+
+    }
+
+}
+
+
+
+// ==========================================
+// HELPERS
+// ==========================================
+
+function formatDate(dateValue) {
+
+    if (!dateValue) {
+        return "N/A";
+    }
+
+
+    return new Date(
+        dateValue
+    ).toLocaleDateString(
+        "en-IN",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+
+function escapeHtml(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+        return "";
+    }
+
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+
+// ==========================================
+// START
+// ==========================================
+
+loadApplications();
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Admin Reports | Student2Career</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+    <style>
+
+        body {
+            background: #FFF7ED;
+            color: #242124;
+        }
+
+        .page {
+            max-width: 1250px;
+            margin: auto;
+            padding: 35px 25px 60px;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        h1 {
+            margin: 0;
+            color: #7A1F3D;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            color: #756F72;
+            margin-top: 7px;
+        }
+
+        .back {
+            text-decoration: none;
+            background: #7A1F3D;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 9px;
+            font-weight: 600;
+        }
+
+        /* SUMMARY */
+
+        .summary {
+            display: grid;
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+
+            border:
+                1px solid #E8E0DC;
+
+            border-radius: 15px;
+
+            padding: 20px;
+
+            box-shadow:
+                0 5px 18px
+                rgba(80, 40, 30, .06);
+        }
+
+        .card-label {
+            color: #756F72;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            color: #7A1F3D;
+            font-size: 30px;
+            font-weight: 800;
+        }
+
+        /* SECTION */
+
+        .section {
+            background: white;
+
+            border:
+                1px solid #E8E0DC;
+
+            border-radius: 15px;
+
+            padding: 22px;
+
+            margin-bottom: 25px;
+        }
+
+        .section h2 {
+            color: #7A1F3D;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        /* TABLE */
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #7A1F3D;
+            color: white;
+            padding: 13px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom:
+                1px solid #EEE7E3;
+        }
+
+        /* STATUS */
+
+        .status-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(5, 1fr);
+
+            gap: 15px;
+        }
+
+        .status-card {
+            background: #FFF7ED;
+
+            border-radius: 12px;
+
+            padding: 18px;
+
+            text-align: center;
+        }
+
+        .status-card strong {
+            display: block;
+
+            font-size: 27px;
+
+            color: #7A1F3D;
+
+            margin-bottom: 5px;
+        }
+
+        .status-card span {
+            color: #756F72;
+
+            font-size: 13px;
+
+            text-transform: capitalize;
+        }
+
+        /* REFRESH */
+
+        .refresh {
+            border: none;
+
+            background: #E76F51;
+
+            color: white;
+
+            padding: 11px 18px;
+
+            border-radius: 8px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        .actions {
+            display: flex;
+
+            gap: 10px;
+
+            align-items: center;
+        }
+
+        .loading {
+            text-align: center;
+
+            padding: 40px;
+
+            color: #756F72;
+        }
+
+        .error {
+            background: #F9E0DC;
+
+            color: #9E3024;
+
+            padding: 15px;
+
+            border-radius: 9px;
+
+            margin-bottom: 20px;
+
+            display: none;
+        }
+
+        @media(max-width:900px) {
+
+            .summary {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .status-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+        @media(max-width:600px) {
+
+            .top {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="page">
+
+
+    <!-- HEADER -->
+
+    <div class="top">
+
+        <div>
+
+            <h1>
+                Admin Reports
+            </h1>
+
+            <div class="subtitle">
+                Database-driven internship management analytics.
+            </div>
+
+        </div>
+
+
+        <div class="actions">
+
+            <button
+                class="refresh"
+                onclick="loadReports()"
+            >
+                ↻ Refresh
+            </button>
+
+            <a
+                href="admin-dashboard.html"
+                class="back"
+            >
+                ← Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="error"
+        class="error"
+    ></div>
+
+
+    <!-- SUMMARY -->
+
+    <div class="summary">
+
+
+        <div class="card">
+
+            <div class="card-label">
+                Total Students
+            </div>
+
+            <div
+                class="card-value"
+                id="students"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-label">
+                Total Faculty
+            </div>
+
+            <div
+                class="card-value"
+                id="faculty"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-label">
+                Companies
+            </div>
+
+            <div
+                class="card-value"
+                id="companies"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-label">
+                Internships
+            </div>
+
+            <div
+                class="card-value"
+                id="internships"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-label">
+                Applications
+            </div>
+
+            <div
+                class="card-value"
+                id="applications"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-label">
+                Accepted
+            </div>
+
+            <div
+                class="card-value"
+                id="accepted"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-label">
+                Interviews
+            </div>
+
+            <div
+                class="card-value"
+                id="interviews"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-label">
+                Evaluations
+            </div>
+
+            <div
+                class="card-value"
+                id="evaluations"
+            >
+                0
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- APPLICATION STATUS -->
+
+    <div class="section">
+
+        <h2>
+            Application Status
+        </h2>
+
+        <div
+            class="status-grid"
+            id="applicationStatus"
+        >
+
+            <div class="loading">
+                Loading...
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- DEPARTMENT -->
+
+    <div class="section">
+
+        <h2>
+            Students by Department
+        </h2>
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Department
+                        </th>
+
+                        <th>
+                            Students
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody
+                    id="departmentTable"
+                >
+
+                    <tr>
+
+                        <td
+                            colspan="2"
+                            class="loading"
+                        >
+                            Loading...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- COMPANY -->
+
+    <div class="section">
+
+        <h2>
+            Company-wise Internship Statistics
+        </h2>
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Company
+                        </th>
+
+                        <th>
+                            Internships
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody
+                    id="companyTable"
+                >
+
+                    <tr>
+
+                        <td
+                            colspan="2"
+                            class="loading"
+                        >
+                            Loading...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- INTERNSHIP STATUS -->
+
+    <div class="section">
+
+        <h2>
+            Internship Status
+        </h2>
+
+        <div
+            class="status-grid"
+            id="internshipStatus"
+        >
+
+            <div class="loading">
+                Loading...
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+const API =
+    "http://localhost:5000/api";
+
+
+// =====================================================
+// LOAD REPORTS
+// =====================================================
+
+async function loadReports() {
+
+    const errorBox =
+        document.getElementById("error");
+
+    errorBox.style.display =
+        "none";
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/admin/reports`
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load reports."
+            );
+
+        }
+
+
+        displaySummary(
+            data.summary
+        );
+
+
+        displayApplicationStatus(
+            data.applicationStatus
+        );
+
+
+        displayDepartments(
+            data.departmentStats
+        );
+
+
+        displayCompanies(
+            data.companyStats
+        );
+
+
+        displayInternshipStatus(
+            data.internshipStatus
+        );
+
+
+    } catch(error) {
+
+        console.error(error);
+
+        errorBox.textContent =
+            error.message;
+
+        errorBox.style.display =
+            "block";
+
+    }
+
+}
+
+
+// =====================================================
+// SUMMARY
+// =====================================================
+
+function displaySummary(summary) {
+
+    document.getElementById("students")
+        .textContent =
+        summary.students || 0;
+
+
+    document.getElementById("faculty")
+        .textContent =
+        summary.faculty || 0;
+
+
+    document.getElementById("companies")
+        .textContent =
+        summary.companies || 0;
+
+
+    document.getElementById("internships")
+        .textContent =
+        summary.internships || 0;
+
+
+    document.getElementById("applications")
+        .textContent =
+        summary.applications || 0;
+
+
+    document.getElementById("accepted")
+        .textContent =
+        summary.accepted || 0;
+
+
+    document.getElementById("interviews")
+        .textContent =
+        summary.interviews || 0;
+
+
+    document.getElementById("evaluations")
+        .textContent =
+        summary.evaluations || 0;
+
+}
+
+
+// =====================================================
+// APPLICATION STATUS
+// =====================================================
+
+function displayApplicationStatus(statusList) {
+
+    const container =
+        document.getElementById(
+            "applicationStatus"
+        );
+
+
+    if (
+        !statusList ||
+        !statusList.length
+    ) {
+
+        container.innerHTML = `
+            <div class="loading">
+                No applications yet.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        statusList.map(item => `
+
+            <div class="status-card">
+
+                <strong>
+                    ${item.total}
+                </strong>
+
+                <span>
+                    ${escapeHtml(item.status)}
+                </span>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+// =====================================================
+// DEPARTMENTS
+// =====================================================
+
+function displayDepartments(list) {
+
+    const table =
+        document.getElementById(
+            "departmentTable"
+        );
+
+
+    if (
+        !list ||
+        !list.length
+    ) {
+
+        table.innerHTML = `
+            <tr>
+                <td
+                    colspan="2"
+                    class="loading"
+                >
+                    No department data.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    table.innerHTML =
+        list.map(item => `
+
+            <tr>
+
+                <td>
+                    ${escapeHtml(
+                        item.department
+                    )}
+                </td>
+
+                <td>
+                    <strong>
+                        ${item.total_students}
+                    </strong>
+                </td>
+
+            </tr>
+
+        `).join("");
+
+}
+
+
+// =====================================================
+// COMPANIES
+// =====================================================
+
+function displayCompanies(list) {
+
+    const table =
+        document.getElementById(
+            "companyTable"
+        );
+
+
+    if (
+        !list ||
+        !list.length
+    ) {
+
+        table.innerHTML = `
+            <tr>
+                <td
+                    colspan="2"
+                    class="loading"
+                >
+                    No company data.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    table.innerHTML =
+        list.map(item => `
+
+            <tr>
+
+                <td>
+                    ${escapeHtml(
+                        item.company_name
+                    )}
+                </td>
+
+                <td>
+                    <strong>
+                        ${item.total_internships}
+                    </strong>
+                </td>
+
+            </tr>
+
+        `).join("");
+
+}
+
+
+// =====================================================
+// INTERNSHIP STATUS
+// =====================================================
+
+function displayInternshipStatus(list) {
+
+    const container =
+        document.getElementById(
+            "internshipStatus"
+        );
+
+
+    if (
+        !list ||
+        !list.length
+    ) {
+
+        container.innerHTML = `
+            <div class="loading">
+                No internship data.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        list.map(item => `
+
+            <div class="status-card">
+
+                <strong>
+                    ${item.total}
+                </strong>
+
+                <span>
+                    ${escapeHtml(
+                        item.status
+                    )}
+                </span>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+// =====================================================
+// ESCAPE HTML
+// =====================================================
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+// =====================================================
+// INITIAL LOAD
+// =====================================================
+
+loadReports();
+
+
+</script>
+
+</body>
+
+</html>

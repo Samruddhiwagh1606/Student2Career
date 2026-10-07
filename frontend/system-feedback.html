@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>System Feedback | Student2Career</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+
+body {
+    background:#FFF7ED;
+}
+
+.page {
+    max-width:700px;
+    margin:auto;
+    padding:50px 25px;
+}
+
+.box {
+    background:white;
+    border:1px solid #E8E0DC;
+    border-radius:18px;
+    padding:30px;
+}
+
+h1 {
+    color:#7A1F3D;
+}
+
+label {
+    display:block;
+    margin-top:18px;
+    margin-bottom:7px;
+    font-weight:700;
+    color:#5B1730;
+}
+
+select,
+textarea {
+    width:100%;
+    box-sizing:border-box;
+    padding:13px;
+    border:1px solid #D9CFCA;
+    border-radius:9px;
+    font-size:15px;
+}
+
+textarea {
+    min-height:150px;
+    resize:vertical;
+}
+
+button {
+    width:100%;
+    margin-top:22px;
+    padding:14px;
+    border:0;
+    border-radius:9px;
+    background:#7A1F3D;
+    color:white;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.message {
+    margin-top:18px;
+    padding:12px;
+    border-radius:8px;
+    display:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="page">
+
+    <div class="box">
+
+        <h1>System Feedback</h1>
+
+        <p>
+            Help us improve Student2Career.
+        </p>
+
+        <label>Feedback Type</label>
+
+        <select id="type">
+
+            <option value="suggestion">
+                Suggestion
+            </option>
+
+            <option value="bug">
+                Report a Bug
+            </option>
+
+            <option value="improvement">
+                Improvement
+            </option>
+
+        </select>
+
+
+        <label>Your Feedback</label>
+
+        <textarea
+            id="messageText"
+            placeholder="Write your suggestion or issue..."
+        ></textarea>
+
+
+        <button onclick="submitFeedback()">
+            Submit Feedback
+        </button>
+
+
+        <div id="message" class="message"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const API =
+    "http://localhost:5000/api";
+
+
+async function submitFeedback() {
+
+    const user =
+        JSON.parse(
+            localStorage.getItem("student") ||
+            localStorage.getItem("faculty") ||
+            localStorage.getItem("admin") ||
+            "null"
+        );
+
+
+    if (!user || !user.user_id) {
+
+        alert("Please login first.");
+
+        return;
+    }
+
+
+    const type =
+        document.getElementById("type").value;
+
+    const message =
+        document.getElementById("messageText")
+            .value.trim();
+
+
+    if (!message) {
+
+        showMessage(
+            "Please enter your feedback."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/system-feedback`,
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+                        user_id:user.user_id,
+                        feedback_type:type,
+                        message:message
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.message ||
+                "Unable to submit feedback."
+            );
+        }
+
+
+        document.getElementById(
+            "messageText"
+        ).value = "";
+
+
+        showMessage(
+            "✓ Feedback submitted successfully."
+        );
+
+
+    } catch(error) {
+
+        showMessage(error.message);
+
+    }
+
+}
+
+
+function showMessage(text) {
+
+    const box =
+        document.getElementById("message");
+
+    box.textContent = text;
+
+    box.style.display = "block";
+
+}
+
+</script>
+
+</body>
+
+</html>

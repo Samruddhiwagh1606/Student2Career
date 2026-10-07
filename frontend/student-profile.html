@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile | Student2Career</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+
+        .profile-wrapper {
+            padding: 40px 50px;
+            max-width: 1100px;
+        }
+
+        .profile-header {
+            margin-bottom: 30px;
+        }
+
+        .eyebrow {
+            color: #8b1e3f;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+        }
+
+        .profile-header h1 {
+            margin: 8px 0;
+            font-size: 34px;
+        }
+
+        .profile-header p {
+            color: #75696b;
+        }
+
+        .profile-card {
+            background: white;
+            border: 1px solid #eee6e2;
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 22px;
+            box-shadow: 0 8px 28px rgba(50,35,35,0.05);
+        }
+
+        .profile-card h2 {
+            margin-top: 0;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .field label {
+            display: block;
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .field input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px;
+            border: 1px solid #ddd2cc;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .resume-box {
+            padding: 20px;
+            border: 1px dashed #cdbbb2;
+            border-radius: 12px;
+            background: #faf6f2;
+        }
+
+        .resume-box input {
+            margin-top: 12px;
+        }
+
+        .primary-btn {
+            margin-top: 22px;
+            border: none;
+            background: #8b1e3f;
+            color: white;
+            padding: 13px 22px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .primary-btn:hover {
+            background: #a5244d;
+        }
+
+        .message {
+            display: none;
+            margin-top: 18px;
+            padding: 13px;
+            border-radius: 9px;
+        }
+
+        .success {
+            background: #e9f5ec;
+            color: #39734a;
+        }
+
+        .error {
+            background: #fbe7e7;
+            color: #a33b3b;
+        }
+
+        @media(max-width:800px) {
+
+            .profile-wrapper {
+                padding: 25px;
+            }
+
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<aside class="sidebar">
+
+    <div class="sidebar-brand">
+
+        <span class="brand-mark">S2C</span>
+
+        <span class="brand-name">
+            Student2Career
+        </span>
+
+    </div>
+
+
+    <nav class="sidebar-nav">
+
+        <a href="dashboard.html"
+           class="sidebar-link">
+
+            <span class="nav-icon">⌂</span>
+            Dashboard
+
+        </a>
+
+
+        <a href="student-profile.html"
+           class="sidebar-link active">
+
+            <span class="nav-icon">◎</span>
+            My Profile
+
+        </a>
+
+
+        <a href="internship.html"
+           class="sidebar-link">
+
+            <span class="nav-icon">▣</span>
+            Internships
+
+        </a>
+
+
+        <a href="applications.html"
+           class="sidebar-link">
+
+            <span class="nav-icon">✓</span>
+            Applications
+
+        </a>
+
+
+        <a href="student-interviews.html"
+           class="sidebar-link">
+
+            <span class="nav-icon">◷</span>
+            Interviews
+
+        </a>
+
+
+        <a href="student-evaluations.html"
+           class="sidebar-link">
+
+            <span class="nav-icon">★</span>
+            Evaluations
+
+        </a>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+        <button
+            class="logout-btn"
+            onclick="logoutStudent()"
+        >
+
+            <span>↪</span>
+            Logout
+
+        </button>
+
+    </div>
+
+</aside>
+
+
+<main class="dashboard-main">
+
+    <div class="profile-wrapper">
+
+        <div class="profile-header">
+
+            <div class="eyebrow">
+                STUDENT PROFILE
+            </div>
+
+            <h1>
+                My Profile
+            </h1>
+
+            <p>
+                Manage your personal information
+                and resume.
+            </p>
+
+        </div>
+
+
+        <div class="profile-card">
+
+            <h2>
+                Personal Information
+            </h2>
+
+
+            <div class="profile-grid">
+
+                <div class="field">
+
+                    <label>
+                        Full Name
+                    </label>
+
+                    <input
+                        id="name"
+                        type="text"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Email
+                    </label>
+
+                    <input
+                        id="email"
+                        type="email"
+                        disabled
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Phone
+                    </label>
+
+                    <input
+                        id="phone"
+                        type="text"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Department
+                    </label>
+
+                    <input
+                        id="department"
+                        type="text"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        GPA
+                    </label>
+
+                    <input
+                        id="gpa"
+                        type="number"
+                        min="0"
+                        max="4"
+                        step="0.01"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="primary-btn"
+                onclick="updateProfile()"
+            >
+                Update Profile
+            </button>
+
+
+            <div
+                id="profileMessage"
+                class="message"
+            ></div>
+
+        </div>
+
+
+        <div class="profile-card">
+
+            <h2>
+                Resume
+            </h2>
+
+            <div class="resume-box">
+
+                <strong>
+                    Upload / Update Resume
+                </strong>
+
+                <p>
+                    PDF only, maximum 5MB.
+                </p>
+
+                <input
+                    id="resume"
+                    type="file"
+                    accept=".pdf,application/pdf"
+                >
+
+                <br>
+
+                <button
+                    class="primary-btn"
+                    onclick="uploadResume()"
+                >
+                    Upload Resume
+                </button>
+
+            </div>
+
+
+            <div
+                id="resumeMessage"
+                class="message"
+            ></div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const API_URL =
+    "http://localhost:5000/api";
+
+
+function getStudent() {
+
+    const saved =
+        localStorage.getItem("student");
+
+    if (!saved) {
+
+        window.location.href =
+            "index.html";
+
+        return null;
+
+    }
+
+    return JSON.parse(saved);
+
+}
+
+
+function logoutStudent() {
+
+    localStorage.clear();
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+async function loadProfile() {
+
+    const student =
+        getStudent();
+
+    if (!student) return;
+
+
+    document.getElementById("name").value =
+        student.name || "";
+
+    document.getElementById("email").value =
+        student.email || "";
+
+    document.getElementById("phone").value =
+        student.phone || "";
+
+    document.getElementById("department").value =
+        student.department || "";
+
+    document.getElementById("gpa").value =
+        student.gpa || "";
+
+}
+
+
+async function updateProfile() {
+
+    const student =
+        getStudent();
+
+    const body = {
+
+        name:
+            document.getElementById("name").value,
+
+        phone:
+            document.getElementById("phone").value,
+
+        department:
+            document.getElementById("department").value,
+
+        gpa:
+            document.getElementById("gpa").value
+
+    };
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/students/${student.student_id}`,
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(body)
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to update profile."
+            );
+
+        }
+
+
+        showMessage(
+            "profileMessage",
+            data.message ||
+            "Profile updated successfully.",
+            true
+        );
+
+
+    } catch(error) {
+
+        showMessage(
+            "profileMessage",
+            error.message,
+            false
+        );
+
+    }
+
+}
+
+
+async function uploadResume() {
+
+    const student =
+        getStudent();
+
+    const file =
+        document.getElementById("resume").files[0];
+
+
+    if (!file) {
+
+        showMessage(
+            "resumeMessage",
+            "Please select a PDF resume.",
+            false
+        );
+
+        return;
+
+    }
+
+
+    if (
+        file.type !== "application/pdf"
+    ) {
+
+        showMessage(
+            "resumeMessage",
+            "Only PDF files are allowed.",
+            false
+        );
+
+        return;
+
+    }
+
+
+    if (
+        file.size > 5 * 1024 * 1024
+    ) {
+
+        showMessage(
+            "resumeMessage",
+            "Resume must be 5MB or smaller.",
+            false
+        );
+
+        return;
+
+    }
+
+
+    const formData =
+        new FormData();
+
+    formData.append(
+        "resume",
+        file
+    );
+
+    formData.append(
+        "student_id",
+        student.student_id
+    );
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/students/${student.student_id}/resume`,
+                {
+                    method: "PATCH",
+                    body: formData
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to upload resume."
+            );
+
+        }
+
+
+        showMessage(
+            "resumeMessage",
+            data.message ||
+            "Resume uploaded successfully.",
+            true
+        );
+
+
+    } catch(error) {
+
+        showMessage(
+            "resumeMessage",
+            error.message,
+            false
+        );
+
+    }
+
+}
+
+
+function showMessage(
+    id,
+    message,
+    success
+) {
+
+    const element =
+        document.getElementById(id);
+
+    element.textContent =
+        message;
+
+    element.className =
+        success
+            ? "message success"
+            : "message error";
+
+    element.style.display =
+        "block";
+
+}
+
+
+loadProfile();
+
+</script>
+
+
+</body>
+
+</html>q

@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Dashboard | Student2Career</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<!-- =========================================
+     SIDEBAR
+========================================= -->
+
+<aside class="sidebar">
+
+    <div class="sidebar-brand">
+
+        <span class="brand-mark">S2C</span>
+
+        <span class="brand-name">
+            Student2Career
+        </span>
+
+    </div>
+
+
+    <nav class="sidebar-nav">
+
+        <a href="dashboard.html" class="sidebar-link active">
+            <span class="nav-icon">⌂</span>
+            Dashboard
+        </a>
+
+      <a href="student-profile.html" class="sidebar-link">
+    <span class="nav-icon">◎</span>
+    My Profile
+</a>
+
+        <a href="#" class="sidebar-link">
+            <span class="nav-icon">✦</span>
+            My Skills
+        </a>
+
+       <a href="internship.html" class="sidebar-link">
+    <span class="nav-icon">▣</span>
+    Internships
+</a>
+
+       <a href="applications.html" class="sidebar-link">
+    <span class="nav-icon">✓</span>
+    Applications
+</a>
+
+       <a href="student-interviews.html" class="sidebar-link">
+    <span class="nav-icon">◷</span>
+    Interviews
+</a>
+
+<a href="student-evaluations.html" class="sidebar-link">
+    <span class="nav-icon">★</span>
+    Evaluations
+</a>
+
+<a href="student-feedback.html" class="sidebar-link">
+    <span class="nav-icon">♥</span>
+    Feedback
+</a>
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+        <div class="career-tip">
+
+            <span class="tip-icon">✦</span>
+
+            <strong>Career tip</strong>
+
+            <p>
+                Keep your skills updated to discover
+                better opportunities.
+            </p>
+
+        </div>
+
+
+        <button
+            class="logout-btn"
+            onclick="logoutStudent()"
+        >
+            <span>↪</span>
+            Logout
+        </button>
+
+    </div>
+
+</aside>
+
+
+
+<!-- =========================================
+     MAIN CONTENT
+========================================= -->
+
+<main class="dashboard-main">
+
+
+    <!-- TOP BAR -->
+
+    <header class="dashboard-topbar">
+
+        <div>
+
+            <div class="breadcrumb-text">
+                Student Portal / Dashboard
+            </div>
+
+        </div>
+
+
+        <div class="topbar-right">
+
+            <button class="notification-btn">
+                ♡
+                <span></span>
+            </button>
+
+
+            <div class="student-mini-profile">
+
+                <div class="mini-avatar" id="studentInitial">
+                    A
+                </div>
+
+                <div>
+
+                    <strong id="studentNameTop">
+                        Student
+                    </strong>
+
+                    <small>
+                        Student
+                    </small>
+
+                </div>
+
+                <span class="profile-arrow">
+                   ⌄
+                </span>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================================
+         WELCOME
+    ========================================= -->
+
+    <section class="dashboard-welcome">
+
+        <div>
+
+            <span class="welcome-label">
+                STUDENT DASHBOARD
+            </span>
+
+            <h1>
+                Good evening,
+                <span id="studentName">
+                    Student
+                </span> 👋
+            </h1>
+
+            <p>
+                Your next opportunity might be closer
+                than you think.
+            </p>
+
+        </div>
+
+
+    <button
+    class="dashboard-primary-btn"
+    onclick="window.location.href='internship.html'"
+>
+    Explore internships
+    <span>→</span>
+</button>
+
+    </section>
+
+
+
+    <!-- =========================================
+         STAT CARDS
+    ========================================= -->
+
+    <section class="stats-grid">
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-icon wine-icon">
+                    ✦
+                </span>
+
+                <span class="stat-label">
+                    PROFILE
+                </span>
+
+            </div>
+
+            <div class="stat-value">
+                80%
+            </div>
+
+            <div class="stat-bottom">
+                <span class="stat-positive">
+                    ↑ 20%
+                </span>
+
+                <span>
+                    profile complete
+                </span>
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-icon orange-icon">
+                    ◎
+                </span>
+
+                <span class="stat-label">
+                    SKILLS
+                </span>
+
+            </div>
+
+            <div class="stat-value">
+                12
+            </div>
+
+            <div class="stat-bottom">
+                <span>
+                    technical & soft skills
+                </span>
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-icon green-icon">
+                    ✓
+                </span>
+
+                <span class="stat-label">
+                    APPLICATIONS
+                </span>
+
+            </div>
+
+            <div class="stat-value">
+                4
+            </div>
+
+            <div class="stat-bottom">
+                <span class="stat-positive">
+                    2 shortlisted
+                </span>
+            </div>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-icon dark-icon">
+                    ◷
+                </span>
+
+                <span class="stat-label">
+                    INTERVIEWS
+                </span>
+
+            </div>
+
+            <div class="stat-value">
+                2
+            </div>
+
+            <div class="stat-bottom">
+                <span>
+                    upcoming
+                </span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         MAIN DASHBOARD GRID
+    ========================================= -->
+
+    <section class="dashboard-grid">
+
+
+        <!-- =====================================
+             RECOMMENDED INTERNSHIP
+        ====================================== -->
+
+        <div class="dashboard-panel recommended-panel">
+
+            <div class="panel-heading">
+
+                <div>
+
+                    <span class="panel-eyebrow">
+                        MATCHED FOR YOU
+                    </span>
+
+                    <h2>
+                        Recommended opportunities
+                    </h2>
+
+                </div>
+
+              <button
+    class="text-btn"
+    onclick="window.location.href='internship.html'"
+>
+    View all →
+</button>
+
+            </div>
+
+
+            <div class="recommended-card">
+
+                <div class="recommended-header">
+
+                    <div class="company-square">
+                        T
+                    </div>
+
+                    <div class="company-info">
+
+                        <span class="company-name">
+                            TechNova
+                        </span>
+
+                        <h3>
+                            Software Developer Intern
+                        </h3>
+
+                        <p>
+                            Pune · Hybrid · 3 months
+                        </p>
+
+                    </div>
+
+                    <button class="heart-btn">
+                        ♡
+                    </button>
+
+                </div>
+
+
+                <div class="match-row">
+
+                    <div>
+
+                        <span>
+                            Your skill match
+                        </span>
+
+                        <strong>
+                            87%
+                        </strong>
+
+                    </div>
+
+                    <div class="dashboard-match-bar">
+
+                        <div></div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="recommended-skills">
+
+                    <span class="dashboard-skill">
+                        ✓ Java
+                    </span>
+
+                    <span class="dashboard-skill">
+                        ✓ SQL
+                    </span>
+
+                    <span class="dashboard-skill">
+                        ✓ Git
+                    </span>
+
+                    <span class="dashboard-skill missing-skill">
+                        + Spring Boot
+                    </span>
+
+                </div>
+
+
+                <div class="recommended-footer">
+
+                    <div>
+
+                        <small>
+                            STIPEND
+                        </small>
+
+                        <strong>
+                            ₹20,000 / month
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <small>
+                            DEADLINE
+                        </small>
+
+                        <strong>
+                            18 Oct 2026
+                        </strong>
+
+                    </div>
+
+
+                   <button
+    class="text-btn"
+    onclick="window.location.href='applications.html'"
+>
+    View applications →
+</button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================
+             PROFILE CARD
+        ====================================== -->
+
+        <div class="dashboard-panel profile-panel">
+
+            <div class="panel-heading">
+
+                <div>
+
+                    <span class="panel-eyebrow">
+                        YOUR PROFILE
+                    </span>
+
+                    <h2>
+                        Career profile
+                    </h2>
+
+                </div>
+
+                <span class="profile-percent">
+                    80%
+                </span>
+
+            </div>
+
+
+            <div class="profile-progress">
+
+                <div class="profile-progress-fill"></div>
+
+            </div>
+
+
+            <p class="profile-message">
+                You're almost there. Complete your profile
+                to improve internship recommendations.
+            </p>
+
+
+            <div class="profile-checklist">
+
+                <div class="check-item done">
+                    <span>✓</span>
+                    Personal information
+                </div>
+
+                <div class="check-item done">
+                    <span>✓</span>
+                    Education details
+                </div>
+
+                <div class="check-item done">
+                    <span>✓</span>
+                    Skills
+                </div>
+
+                <div class="check-item">
+                    <span>+</span>
+                    Upload resume
+                </div>
+
+            </div>
+
+
+            <button
+                class="complete-profile-btn"
+                onclick="showComingSoon('Profile')"
+            >
+                Complete profile
+                <span>→</span>
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         APPLICATION TIMELINE
+    ========================================= -->
+
+    <section class="dashboard-panel application-panel">
+
+        <div class="panel-heading">
+
+            <div>
+
+                <span class="panel-eyebrow">
+                    APPLICATION TRACKER
+                </span>
+
+                <h2>
+                    Recent application
+                </h2>
+
+            </div>
+
+         <button
+    class="text-btn"
+    onclick="openApplications()"
+>
+    View applications →
+</button>
+
+        </div>
+
+
+        <div class="application-card">
+
+            <div class="application-company">
+
+                <div class="company-square small-company">
+                    T
+                </div>
+
+                <div>
+
+                    <strong>
+                        Software Developer Intern
+                    </strong>
+
+                    <span>
+                        TechNova · Applied 2 days ago
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="application-status">
+
+                <span class="status-badge">
+                    Shortlisted
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="application-timeline">
+
+            <div class="timeline-step completed">
+
+                <div class="timeline-dot">
+                    ✓
+                </div>
+
+                <div>
+                    <strong>Applied</strong>
+                    <small>14 Oct</small>
+                </div>
+
+            </div>
+
+
+            <div class="timeline-line completed-line"></div>
+
+
+            <div class="timeline-step completed">
+
+                <div class="timeline-dot">
+                    ✓
+                </div>
+
+                <div>
+                    <strong>Shortlisted</strong>
+                    <small>15 Oct</small>
+                </div>
+
+            </div>
+
+
+            <div class="timeline-line"></div>
+
+
+            <div class="timeline-step">
+
+                <div class="timeline-dot">
+                    3
+                </div>
+
+                <div>
+                    <strong>Interview</strong>
+                    <small>Pending</small>
+                </div>
+
+            </div>
+
+
+            <div class="timeline-line"></div>
+
+
+            <div class="timeline-step">
+
+                <div class="timeline-dot">
+                    4
+                </div>
+
+                <div>
+                    <strong>Decision</strong>
+                    <small>Pending</small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         QUICK SKILLS
+    ========================================= -->
+
+    <section class="skills-preview">
+
+        <div>
+
+            <span class="panel-eyebrow">
+                YOUR SKILL SET
+            </span>
+
+            <h2>
+                Skills that power your profile
+            </h2>
+
+        </div>
+
+
+        <div class="skills-preview-list">
+
+            <span>Java</span>
+            <span>SQL</span>
+            <span>Data Structures</span>
+            <span>Git</span>
+            <span>OOP</span>
+            <span>Problem Solving</span>
+
+            <button onclick="showComingSoon('Skills')">
+                + Manage skills
+            </button>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =========================================
+     DASHBOARD JS
+========================================= -->
+
+<script src="js/dashboard.js"></script>
+
+</body>
+
+</html>

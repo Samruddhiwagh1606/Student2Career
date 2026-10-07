@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Internships | Student2Career</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<!-- =========================================
+     SIDEBAR
+========================================= -->
+
+<aside class="sidebar">
+
+    <div class="sidebar-brand">
+
+        <span class="brand-mark">
+            S2C
+        </span>
+
+        <span class="brand-name">
+            Student2Career
+        </span>
+
+    </div>
+
+
+    <nav class="sidebar-nav">
+
+        <a
+            href="dashboard.html"
+            class="sidebar-link"
+        >
+            <span class="nav-icon">⌂</span>
+            Dashboard
+        </a>
+
+
+        <a
+            href="#"
+            class="sidebar-link"
+        >
+            <span class="nav-icon">◎</span>
+            My Profile
+        </a>
+
+
+        <a
+            href="#"
+            class="sidebar-link"
+        >
+            <span class="nav-icon">✦</span>
+            My Skills
+        </a>
+
+
+        <a
+            href="internship.html"
+            class="sidebar-link active"
+        >
+            <span class="nav-icon">▣</span>
+            Internships
+        </a>
+
+
+        <a
+            href="applications.html"
+            class="sidebar-link"
+        >
+            <span class="nav-icon">✓</span>
+            Applications
+        </a>
+
+
+        <a
+            href="#"
+            class="sidebar-link"
+        >
+            <span class="nav-icon">◷</span>
+            Interviews
+        </a>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+        <div class="career-tip">
+
+            <span class="tip-icon">
+                ✦
+            </span>
+
+            <strong>
+                Career tip
+            </strong>
+
+            <p>
+                Keep your skills updated to discover
+                better opportunities.
+            </p>
+
+        </div>
+
+
+        <button
+            class="logout-btn"
+            onclick="logoutStudent()"
+        >
+
+            <span>↪</span>
+
+            Logout
+
+        </button>
+
+    </div>
+
+</aside>
+
+
+
+<!-- =========================================
+     MAIN CONTENT
+========================================= -->
+
+<main class="dashboard-main">
+
+
+    <!-- TOP BAR -->
+
+    <header class="dashboard-topbar">
+
+        <div>
+
+            <div class="breadcrumb-text">
+                Student Portal / Internships
+            </div>
+
+        </div>
+
+
+        <div class="topbar-right">
+
+            <button class="notification-btn">
+                ♡
+                <span></span>
+            </button>
+
+
+            <div class="student-mini-profile">
+
+                <div
+                    class="mini-avatar"
+                    id="studentInitial"
+                >
+                    A
+                </div>
+
+
+                <div>
+
+                    <strong id="studentNameTop">
+                        Student
+                    </strong>
+
+                    <small>
+                        Student
+                    </small>
+
+                </div>
+
+
+                <span class="profile-arrow">
+                    ⌄
+                </span>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================================
+         INTERNSHIP HEADER
+    ========================================= -->
+
+    <section class="internship-page-header">
+
+        <div>
+
+            <span class="welcome-label">
+                COLLEGE INTERNSHIP PORTAL
+            </span>
+
+
+            <h1>
+                Find your next opportunity.
+            </h1>
+
+
+            <p>
+                Explore college-approved internships
+                that match your skills, interests and
+                career goals.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         SEARCH + FILTERS
+    ========================================= -->
+
+    <section class="internship-filters">
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search internships or companies..."
+            >
+
+        </div>
+
+
+        <select id="domainFilter">
+
+            <option value="">
+                All Domains
+            </option>
+
+            <option value="Software Development">
+                Software Development
+            </option>
+
+            <option value="Backend Development">
+                Backend Development
+            </option>
+
+            <option value="Data Analytics">
+                Data Analytics
+            </option>
+
+        </select>
+
+
+        <select id="locationFilter">
+
+            <option value="">
+                All Locations
+            </option>
+
+            <option value="Pune">
+                Pune
+            </option>
+
+            <option value="Mumbai">
+                Mumbai
+            </option>
+
+            <option value="Bangalore">
+                Bangalore
+            </option>
+
+        </select>
+
+    </section>
+
+
+
+    <!-- =========================================
+         RESULTS
+    ========================================= -->
+
+    <section class="internship-results-section">
+
+        <div class="internship-results-header">
+
+            <div>
+
+                <span class="panel-eyebrow">
+                    COLLEGE OPPORTUNITIES
+                </span>
+
+                <h2>
+                    Available Internships
+                </h2>
+
+                <p id="resultCount">
+                    Loading internships...
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="internshipGrid"
+            class="internship-grid"
+        >
+
+            <div class="loading-card">
+                Loading internships...
+            </div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<script src="js/internships.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Schedule Interview | Student2Career</title>
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+    <style>
+
+        body {
+            margin: 0;
+            background: #faf9f7;
+            font-family: Arial, sans-serif;
+        }
+
+        .page-header {
+            background: white;
+            border-bottom: 1px solid #e8e0dc;
+            padding: 20px 50px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 25px;
+            font-weight: 700;
+            color: #7A1F3D;
+        }
+
+        .back-link {
+            color: #7A1F3D;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e8e0dc;
+            border-radius: 18px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .eyebrow {
+            color: #7A1F3D;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-family: Georgia, serif;
+            font-size: 42px;
+            margin: 10px 0;
+        }
+
+        .subtitle {
+            color: #756F72;
+            margin-bottom: 30px;
+        }
+
+        .student-box {
+            background: #faf7f5;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .student-box strong {
+            display: block;
+            color: #7A1F3D;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .student-box span {
+            color: #756F72;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: 600;
+            color: #242124;
+        }
+
+        input {
+            padding: 13px;
+            border: 1px solid #e8e0dc;
+            border-radius: 8px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #7A1F3D;
+        }
+
+        .submit-btn {
+            margin-top: 25px;
+            background: #7A1F3D;
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #5B1730;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 14px;
+            border-radius: 8px;
+            display: none;
+            font-weight: 600;
+        }
+
+        .success {
+            display: block;
+            background: #edf7ef;
+            color: #35643c;
+        }
+
+        .error {
+            display: block;
+            background: #fff0f0;
+            color: #9b3333;
+        }
+
+        .note {
+            margin-top: 20px;
+            background: #fff7ed;
+            padding: 15px;
+            border-radius: 10px;
+            color: #756F72;
+            font-size: 14px;
+        }
+
+        @media(max-width: 700px) {
+
+            .page-header {
+                padding: 20px;
+            }
+
+            .container {
+                margin: 30px auto;
+            }
+
+            .card {
+                padding: 22px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="page-header">
+
+    <div class="brand">
+        Student2Career
+    </div>
+
+    <a href="faculty-applications.html"
+       class="back-link">
+        ← Applications
+    </a>
+
+</header>
+
+
+<main class="container">
+
+    <div class="card">
+
+        <div class="eyebrow">
+            Faculty Portal
+        </div>
+
+        <h1>
+            Schedule Interview
+        </h1>
+
+        <p class="subtitle">
+            Schedule an interview for a shortlisted or accepted student.
+        </p>
+
+
+        <div id="studentBox"
+             class="student-box">
+
+            Loading application...
+
+        </div>
+
+
+        <form id="interviewForm">
+
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label for="interviewDate">
+                        Interview Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="interviewDate"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="interviewTime">
+                        Interview Time
+                    </label>
+
+                    <input
+                        type="time"
+                        id="interviewTime"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label for="interviewerName">
+                        Interviewer Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="interviewerName"
+                        placeholder="e.g. Dr. Neha Kulkarni"
+                        required
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="submit-btn">
+
+                Schedule Interview
+
+            </button>
+
+
+        </form>
+
+
+        <div id="message"
+             class="message">
+        </div>
+
+
+        <div class="note">
+
+            <strong>Interview Rules:</strong>
+
+            <br><br>
+
+            • Interview must be scheduled at least
+            <strong>24 hours in advance.</strong>
+
+            <br>
+
+            • Interview cannot be scheduled after
+            the internship application deadline.
+
+            <br>
+
+            • Only shortlisted or accepted applications
+            can have interviews.
+
+        </div>
+
+
+    </div>
+
+</main>
+
+
+<script>
+
+
+// =====================================================
+// CHECK FACULTY LOGIN
+// =====================================================
+
+const facultyData =
+    localStorage.getItem("faculty");
+
+
+if (!facultyData) {
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+const faculty =
+    JSON.parse(facultyData);
+
+
+// =====================================================
+// GET APPLICATION ID FROM URL
+// Example:
+// faculty-schedule-interview.html?application_id=1
+// =====================================================
+
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+
+const applicationId =
+    Number(
+        params.get("application_id")
+    );
+
+
+if (!applicationId) {
+
+    showMessage(
+        "Application ID is missing.",
+        "error"
+    );
+
+}
+
+
+// =====================================================
+// LOAD APPLICATION DETAILS
+// =====================================================
+
+async function loadApplication() {
+
+    const box =
+        document.getElementById(
+            "studentBox"
+        );
+
+
+    try {
+
+        const response =
+            await fetch(
+                `http://localhost:5000/api/applications/faculty/${faculty.faculty_id}`
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load applications."
+            );
+
+        }
+
+
+        const application =
+            data.applications.find(
+                app =>
+                    Number(
+                        app.application_id
+                    ) === applicationId
+            );
+
+
+        if (!application) {
+
+            throw new Error(
+                "Application not found for this faculty."
+            );
+
+        }
+
+
+        if (
+            application.status !==
+                "shortlisted" &&
+            application.status !==
+                "accepted"
+        ) {
+
+            throw new Error(
+                "Interview can only be scheduled for shortlisted or accepted applications."
+            );
+
+        }
+
+
+        box.innerHTML = `
+
+            <strong>
+                ${escapeHtml(
+                    application.student_name
+                )}
+            </strong>
+
+            <span>
+                ${escapeHtml(
+                    application.internship_title
+                )}
+                ·
+                ${escapeHtml(
+                    application.company_name
+                )}
+            </span>
+
+            <br>
+
+            <span>
+                Status:
+                <strong style="display:inline;">
+                    ${escapeHtml(
+                        application.status
+                    )}
+                </strong>
+            </span>
+
+        `;
+
+
+    } catch (error) {
+
+        box.innerHTML = "";
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+// =====================================================
+// SUBMIT INTERVIEW
+// =====================================================
+
+document
+    .getElementById("interviewForm")
+    .addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const interviewDate =
+                document.getElementById(
+                    "interviewDate"
+                ).value;
+
+
+            const interviewTime =
+                document.getElementById(
+                    "interviewTime"
+                ).value;
+
+
+            const interviewerName =
+                document.getElementById(
+                    "interviewerName"
+                ).value.trim();
+
+
+            if (
+                !interviewDate ||
+                !interviewTime ||
+                !interviewerName
+            ) {
+
+                showMessage(
+                    "Please fill all fields.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:5000/api/interviews",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                application_id:
+                                    applicationId,
+
+                                faculty_id:
+                                    faculty.faculty_id,
+
+                                interview_date:
+                                    interviewDate,
+
+                                interview_time:
+                                    interviewTime,
+
+                                interviewer_name:
+                                    interviewerName
+
+                            })
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to schedule interview."
+                    );
+
+                }
+
+
+                showMessage(
+                    "Interview scheduled successfully!",
+                    "success"
+                );
+
+
+                document
+                    .getElementById(
+                        "interviewForm"
+                    )
+                    .reset();
+
+
+            } catch (error) {
+
+                showMessage(
+                    error.message,
+                    "error"
+                );
+
+            }
+
+        }
+    );
+
+
+// =====================================================
+// MESSAGE
+// =====================================================
+
+function showMessage(
+    message,
+    type
+) {
+
+    const element =
+        document.getElementById(
+            "message"
+        );
+
+
+    element.textContent =
+        message;
+
+
+    element.className =
+        `message ${type}`;
+
+}
+
+
+// =====================================================
+// SECURITY
+// =====================================================
+
+function escapeHtml(value) {
+
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+// =====================================================
+// START
+// =====================================================
+
+loadApplication();
+
+</script>
+
+
+</body>
+
+</html>
+
+
+

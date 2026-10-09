@@ -1,0 +1,358 @@
+/* =========================================
+   STUDENT2CAREER REUSABLE DESIGN SYSTEM
+   ========================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+:root {
+  /* BRAND COLOR PALETTE */
+  --wine: #7A1F3D;
+  --wine-dark: #5B1730;
+  --wine-light: #9B2D52;
+  --wine-subtle: rgba(122, 31, 61, 0.06);
+  --wine-hover: rgba(122, 31, 61, 0.12);
+
+  --terracotta: #E76F51;
+  --terracotta-light: #F4A261;
+  --terracotta-subtle: rgba(231, 111, 81, 0.08);
+
+  --cream: #FFF7ED;
+  --cream-dark: #FDEEDC;
+  --warm-white: #FAF9F7;
+  --white: #FFFFFF;
+
+  --charcoal: #242124;
+  --muted: #6B6568;
+  --muted-light: #9C9598;
+  --border: #E8E0DC;
+  --border-light: #F3ECE8;
+
+  --green: #407050;
+  --green-bg: #EEF5F0;
+  --yellow: #D97706;
+  --yellow-bg: #FEF3C7;
+  --red: #DC2626;
+  --red-bg: #FEE2E2;
+
+  /* TYPOGRAPHY SCALE */
+  --font-body: "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
+
+  /* SHADOW SYSTEM */
+  --shadow-xs: 0 1px 3px rgba(36, 33, 36, 0.05);
+  --shadow-sm: 0 4px 12px rgba(122, 31, 61, 0.04);
+  --shadow-md: 0 8px 24px rgba(122, 31, 61, 0.08);
+  --shadow-lg: 0 20px 50px rgba(62, 29, 39, 0.12);
+  --shadow-xl: 0 30px 70px rgba(62, 29, 39, 0.18);
+  --shadow-glow: 0 0 20px rgba(231, 111, 81, 0.25);
+
+  /* BORDER RADIUS SYSTEM */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  /* TRANSITIONS */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* =========================================
+   BASE RESET & GLOBAL STYLING
+   ========================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  min-height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--warm-white);
+  color: var(--charcoal);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color var(--transition-fast);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input, select, textarea {
+  font-family: inherit;
+}
+
+/* =========================================
+   TYPOGRAPHY HIERARCHY
+   ========================================= */
+
+h1, h2, h3, .heading-display {
+  font-family: var(--font-display);
+  color: var(--charcoal);
+  letter-spacing: -0.02em;
+}
+
+.heading-hero {
+  font-family: var(--font-display);
+  font-size: clamp(34px, 4.5vw, 54px);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+
+.heading-page {
+  font-family: var(--font-body);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--charcoal);
+}
+
+.subheading {
+  font-size: 15px;
+  color: var(--muted);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.text-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* =========================================
+   REUSABLE CONTAINER & LAYOUTS
+   ========================================= */
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--warm-white);
+}
+
+.page-body {
+  padding: 32px 40px 60px;
+  max-width: 1320px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+  .page-body {
+    padding: 24px 24px 48px;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-body {
+    padding: 16px 16px 40px;
+  }
+}
+
+/* =========================================
+   INTERACTION UTILITIES
+   ========================================= */
+
+.card-hover {
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+}
+
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(122, 31, 61, 0.15);
+}
+
+.input-field:focus {
+  border-color: var(--wine) !important;
+  box-shadow: 0 0 0 3px rgba(122, 31, 61, 0.12) !important;
+  background: #FFFFFF !important;
+}
+
+/* =========================================
+   ANIMATIONS & KEYFRAMES
+   ========================================= */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.05); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.35s var(--transition-smooth) forwards;
+}
+
+.animate-float {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-light);
+}
+
+/* =========================================
+   BUTTON STYLES & VARIANTS
+   ========================================= */
+
+.btn-primary {
+  background: var(--wine);
+  color: #FFFFFF;
+  border: 1px solid transparent;
+  box-shadow: 0 4px 14px rgba(122, 31, 61, 0.25);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--wine-dark);
+  box-shadow: 0 6px 18px rgba(122, 31, 61, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--terracotta);
+  color: #FFFFFF;
+  border: 1px solid transparent;
+  box-shadow: 0 4px 14px rgba(231, 111, 81, 0.22);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #D95D3F;
+  box-shadow: 0 6px 18px rgba(231, 111, 81, 0.32);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--wine);
+  border: 1.5px solid var(--wine);
+}
+
+.btn-outline:hover:not(:disabled) {
+  background: var(--wine-subtle);
+  transform: translateY(-1px);
+}
+
+.btn-dark {
+  background: var(--charcoal);
+  color: #FFFFFF;
+  border: 1px solid transparent;
+}
+
+.btn-dark:hover:not(:disabled) {
+  background: #151315;
+  transform: translateY(-1px);
+}
+
+.btn-danger {
+  background: var(--red);
+  color: #FFFFFF;
+  border: 1px solid transparent;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #B91C1C;
+  transform: translateY(-1px);
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(122, 31, 61, 0.18);
+}
+
+/* Responsive Login Layout */
+@media (max-width: 900px) {
+  .login-hero-panel {
+    display: none !important;
+  }
+}
+
+/* Responsive Landing Navbar */
+@media (max-width: 768px) {
+  .desktop-nav-links {
+    display: none !important;
+  }
+  .landing-mobile-menu-toggle {
+    display: flex !important;
+  }
+}
+
+
+/* Responsive Drawer Styles */
+@media (max-width: 1024px) {
+  .sidebar {
+    position: fixed !important;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-xl);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .mobile-menu-btn {
+    display: flex !important;
+  }
+  .mobile-close-btn {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 1025px) {
+  .mobile-menu-btn {
+    display: none !important;
+  }
+}
+
+

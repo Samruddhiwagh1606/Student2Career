@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { api } from "../../services/api";
 import { Button } from "../../components/common/Button";
@@ -12,13 +12,16 @@ import {
   Building2,
   CheckCircle2,
   AlertCircle,
+  Info,
 } from "lucide-react";
 
 export function ScheduleInterview() {
   const { faculty, user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const facultyId = faculty?.faculty_id || user?.profile?.faculty_id;
+  const preselectedId = location.state?.applicationId || new URLSearchParams(location.search).get("appId");
 
   const [applications, setApplications] = useState([]);
   const [loadingApps, setLoadingApps] = useState(true);
@@ -48,8 +51,11 @@ export function ScheduleInterview() {
           (a) => a.status === "shortlisted" || a.status === "accepted"
         );
         setApplications(eligible);
-        if (eligible.length > 0) {
-          setApplicationId(eligible[0].application_id);
+
+        if (preselectedId && eligible.some((a) => String(a.application_id) === String(preselectedId))) {
+          setApplicationId(String(preselectedId));
+        } else if (eligible.length > 0) {
+          setApplicationId(String(eligible[0].application_id));
         }
       } catch (err) {
         console.error("Failed to load applications for interview:", err);
@@ -59,7 +65,7 @@ export function ScheduleInterview() {
     }
 
     loadShortlistedApplications();
-  }, [facultyId]);
+  }, [facultyId, preselectedId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -154,6 +160,18 @@ export function ScheduleInterview() {
           </div>
         ) : (
           <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+            {preselectedId && applications.some((a) => String(a.application_id) === String(preselectedId)) ? (
+              <div style={{ padding: "10px 14px", borderRadius: "10px", background: "var(--cream)", border: "1px solid rgba(122, 31, 61, 0.2)", fontSize: "13px", color: "var(--wine)", display: "flex", alignItems: "center", gap: "8px", fontWeight: 600 }}>
+                <Info size={16} />
+                Candidate auto-selected from Applications Review. Set scheduled interview date & time.
+              </div>
+            ) : (
+              <div style={{ fontSize: "12.5px", color: "var(--muted)", display: "flex", alignItems: "center", gap: "6px" }}>
+                <Info size={14} />
+                Manual candidate selection: Choose an applicant from the verified shortlisted candidates pool below.
+              </div>
+            )}
+
             {/* Candidate Application Select */}
             <div>
               <label style={{ fontSize: "13px", fontWeight: 600, color: "var(--charcoal)", display: "block", marginBottom: "8px" }}>
@@ -187,6 +205,7 @@ export function ScheduleInterview() {
                 label="Interview Date *"
                 type="date"
                 icon={Calendar}
+                min={new Date(Date.now() + 86400000).toISOString().split("T")[0]}
                 value={interviewDate}
                 onChange={(e) => setInterviewDate(e.target.value)}
                 required

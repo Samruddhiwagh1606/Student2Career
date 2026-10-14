@@ -31,6 +31,7 @@ export function StudentDashboard() {
   const [applications, setApplications] = useState([]);
   const [recommendedInternships, setRecommendedInternships] = useState([]);
   const [interviews, setInterviews] = useState([]);
+  const [availableCount, setAvailableCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -55,6 +56,11 @@ export function StudentDashboard() {
         const recRes = await api.getRecommendedInternships(student.student_id).catch(() => ({ recommendations: [] }));
         const recs = recRes.recommendations || [];
         setRecommendedInternships(Array.isArray(recs) ? recs.slice(0, 3) : []);
+
+        // Fetch total available internships
+        const intRes = await api.getInternships().catch(() => ({ internships: [] }));
+        const intList = intRes?.internships || intRes || [];
+        setAvailableCount(Array.isArray(intList) ? intList.length : 0);
 
         // Fetch student interviews
         const intvRes = await api.getStudentInterviews(student.student_id).catch(() => ({ interviews: [] }));
@@ -81,9 +87,23 @@ export function StudentDashboard() {
 
   // Application metrics derived from real API response
   const totalApps = applications.length;
-  const shortlistedCount = applications.filter((a) => a.status === "shortlisted").length;
-  const acceptedCount = applications.filter((a) => a.status === "accepted").length;
+  const pendingCount = applications.filter((a) => (a.status || "").toLowerCase() === "pending").length;
+  const shortlistedCount = applications.filter((a) => (a.status || "").toLowerCase() === "shortlisted").length;
+  const acceptedCount = applications.filter((a) => (a.status || "").toLowerCase() === "accepted").length;
   const recentApp = applications.length > 0 ? applications[0] : null;
+
+  // Real profile completion percentage based on student profile fields
+  const profileFields = [
+    student?.name,
+    student?.email,
+    student?.roll_number,
+    student?.department,
+    student?.gpa,
+    student?.resume,
+    student?.phone,
+  ];
+  const completedFields = profileFields.filter(Boolean).length;
+  const profileCompletionPct = Math.round((completedFields / profileFields.length) * 100);
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "";
@@ -197,15 +217,31 @@ export function StudentDashboard() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-          gap: "20px",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: "16px",
         }}
       >
+        <StatCard
+          title="Profile Completion"
+          value={`${profileCompletionPct}%`}
+          icon={UserCheck}
+          badgeText={`${completedFields}/7 verified`}
+          badgeType={profileCompletionPct >= 80 ? "positive" : "warning"}
+          subtitle="Student credentials logged"
+          variant="cream"
+        />
         <StatCard
           title="Total Applications"
           value={totalApps}
           icon={FileText}
           subtitle="Applied opportunities"
+          variant="default"
+        />
+        <StatCard
+          title="Under Review"
+          value={pendingCount}
+          icon={Clock}
+          subtitle="Awaiting coordinator review"
           variant="default"
         />
         <StatCard
@@ -227,11 +263,11 @@ export function StudentDashboard() {
           variant="cream"
         />
         <StatCard
-          title="Academic Standing"
-          value={student?.gpa ? `${student.gpa}/4.0` : "N/A"}
-          icon={UserCheck}
-          subtitle="Verified by faculty"
-          variant="cream"
+          title="Campus Openings"
+          value={availableCount}
+          icon={Briefcase}
+          subtitle="Approved active listings"
+          variant="default"
         />
       </div>
 

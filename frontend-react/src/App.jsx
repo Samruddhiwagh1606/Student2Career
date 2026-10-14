@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { LandingPage } from "./pages/public/LandingPage";
 import { LoginPage } from "./pages/auth/LoginPage";
+import { CompanyPortal } from "./pages/company/CompanyPortal";
 
 // Student Portal Imports
 import { StudentLayout } from "./layouts/StudentLayout";
@@ -86,6 +87,17 @@ function ProtectedAdminRoute({ children }) {
   return children;
 }
 
+// Protected Route Wrapper for Company Portal Access
+function ProtectedCompanyRoute({ children }) {
+  const { user } = useAuth();
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+}
+
 export function App() {
   return (
     <AuthProvider>
@@ -96,6 +108,25 @@ export function App() {
 
           {/* Dedicated Auth Route */}
           <Route path="/login" element={<LoginPage />} />
+
+          {/* Company Private Recruitment Portals (Protected, Isolated) */}
+          <Route
+            path="/company/:companyId"
+            element={
+              <ProtectedCompanyRoute>
+                <CompanyPortal />
+              </ProtectedCompanyRoute>
+            }
+          />
+          <Route
+            path="/company"
+            element={
+              <ProtectedCompanyRoute>
+                <CompanyPortal />
+              </ProtectedCompanyRoute>
+            }
+          />
+          <Route path="/company/preview" element={<Navigate to="/company/1" replace />} />
 
           {/* Student Protected Routes */}
           <Route

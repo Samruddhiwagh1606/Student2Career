@@ -1,6 +1,7 @@
 import React from "react";
-import { Menu, Bell } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
+import { NotificationCenter } from "./NotificationCenter";
 
 export function Topbar({ onMenuToggle, title }) {
   const { student } = useAuth();
@@ -53,32 +54,7 @@ export function Topbar({ onMenuToggle, title }) {
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-        <button
-          style={{
-            position: "relative",
-            padding: "8px",
-            borderRadius: "50%",
-            background: "var(--warm-white)",
-            color: "var(--charcoal)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          title="Notifications"
-        >
-          <Bell size={18} />
-          <span
-            style={{
-              position: "absolute",
-              top: "6px",
-              right: "6px",
-              width: "8px",
-              height: "8px",
-              borderRadius: "50%",
-              background: "var(--terracotta)",
-            }}
-          />
-        </button>
+        <NotificationCenter role="student" />
 
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <div

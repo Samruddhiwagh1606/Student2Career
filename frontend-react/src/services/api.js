@@ -147,6 +147,11 @@ export const api = {
       method: "DELETE",
     }),
 
+  getCompanyDetails: (companyId) => request(`/companies/${companyId}`),
+
+  getCompanyEligibleApplications: (companyId) =>
+    request(`/company-feedback/company/${companyId}/eligible`),
+
   getFacultyDetails: (facultyId) => request(`/faculty/admin/${facultyId}`),
 
   // =====================================================

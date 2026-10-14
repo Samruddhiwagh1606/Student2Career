@@ -1,6 +1,7 @@
 import React from "react";
-import { Menu, Bell, ShieldCheck } from "lucide-react";
+import { Menu, ShieldCheck } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
+import { NotificationCenter } from "./NotificationCenter";
 
 export function FacultyTopbar({ onMenuToggle, title }) {
   const { faculty, user } = useAuth();
@@ -75,34 +76,7 @@ export function FacultyTopbar({ onMenuToggle, title }) {
           <span>Faculty Portal</span>
         </div>
 
-        <button
-          style={{
-            position: "relative",
-            padding: "8px",
-            borderRadius: "50%",
-            background: "var(--warm-white)",
-            color: "var(--charcoal)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            border: "none",
-            cursor: "pointer",
-          }}
-          title="Notifications"
-        >
-          <Bell size={18} />
-          <span
-            style={{
-              position: "absolute",
-              top: "6px",
-              right: "6px",
-              width: "8px",
-              height: "8px",
-              borderRadius: "50%",
-              background: "var(--terracotta)",
-            }}
-          />
-        </button>
+        <NotificationCenter role="faculty" />
 
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <div

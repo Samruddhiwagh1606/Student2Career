@@ -55,7 +55,7 @@ export function StudentExperience() {
               marginBottom: "32px",
             }}
           >
-            No more scattered emails or manual spreadsheets. Student2Career organizes your entire career search—from discovery to faculty approval—in one unified, modern workspace.
+            No more scattered emails or manual spreadsheets. College2Career organizes your entire career search—from discovery to faculty approval—in one unified, modern workspace.
           </p>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>

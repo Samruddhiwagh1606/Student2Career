@@ -151,7 +151,7 @@ export function FacultyDashboard() {
             Welcome back, Prof. {facultyName}! 🎓
           </h2>
 
-          <p style={{ fontSize: "14px", color: "#f5e50e", marginTop: "10px", opacity: 0.95, maxWidth: "580px", lineHeight: 1.6 }}>
+          <p style={{ fontSize: "14px", color: "rgba(255, 247, 237, 0.92)", marginTop: "10px", maxWidth: "580px", lineHeight: 1.6 }}>
             Review student applications, schedule interviews, evaluate academic suitability, and post new placement opportunities.
           </p>
         </div>
@@ -195,12 +195,12 @@ export function FacultyDashboard() {
         </div>
       </div>
 
-      {/* Primary Metrics Grid — ALL LIGHT / WARM SURFACES (NO BLACK CARDS) */}
+      {/* Primary Metrics Grid */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-          gap: "20px",
+          gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+          gap: "16px",
         }}
       >
         <StatCard
@@ -214,10 +214,24 @@ export function FacultyDashboard() {
           title="Applications Received"
           value={summary.applications}
           icon={FileText}
-          badgeText={`${summary.pending} pending`}
+          subtitle="Total submissions"
+          variant="default"
+        />
+        <StatCard
+          title="Awaiting Review"
+          value={summary.pending}
+          icon={Clock}
+          badgeText={summary.pending > 0 ? `${summary.pending} pending` : "Up to date"}
           badgeType={summary.pending > 0 ? "warning" : "positive"}
-          subtitle="Total student submissions"
+          subtitle="Requires attention"
           variant="accent"
+        />
+        <StatCard
+          title="Shortlisted"
+          value={summary.shortlisted}
+          icon={CheckCircle}
+          subtitle="Ready for interview"
+          variant="cream"
         />
         <StatCard
           title="Interviews Scheduled"

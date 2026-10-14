@@ -1,30 +1,50 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { api } from "../../services/api";
 import { Button } from "../../components/common/Button";
 import { Input } from "../../components/common/Input";
+import { Modal } from "../../components/common/Modal";
 import {
   Mail,
   Lock,
+  User,
+  Phone,
+  GraduationCap,
+  Award,
   AlertCircle,
   Briefcase,
   TrendingUp,
-  GraduationCap,
   CheckCircle2,
   Sparkles,
   ArrowRight,
+  Shield,
+  Building2,
 } from "lucide-react";
 
 export function LoginPage() {
+  const [activeTab, setActiveTab] = useState("login"); // "login" | "register"
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [forgotModalOpen, setForgotModalOpen] = useState(false);
   const { login, loading } = useAuth();
   const navigate = useNavigate();
+
+  // Registration state
+  const [regName, setRegName] = useState("");
+  const [regEmail, setRegEmail] = useState("");
+  const [regPassword, setRegPassword] = useState("");
+  const [regDept, setRegDept] = useState("");
+  const [regPhone, setRegPhone] = useState("");
+  const [regGpa, setRegGpa] = useState("");
+  const [regSubmitting, setRegSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
+    setSuccessMessage("");
 
     if (!email.trim() || !password) {
       setErrorMessage("Please enter both email and password.");
@@ -46,6 +66,62 @@ export function LoginPage() {
     } catch (err) {
       setErrorMessage(err.message || "Invalid email or password.");
     }
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    if (!regName.trim() || !regEmail.trim() || !regPassword || !regDept.trim()) {
+      setErrorMessage("Please fill all required registration fields.");
+      return;
+    }
+
+    if (regPassword.length < 8) {
+      setErrorMessage("Password must contain at least 8 characters.");
+      return;
+    }
+
+    try {
+      setRegSubmitting(true);
+      const payload = {
+        name: regName.trim(),
+        email: regEmail.trim(),
+        password: regPassword,
+        department: regDept.trim(),
+        phone: regPhone.trim() || null,
+        gpa: regGpa ? Number(regGpa) : null,
+      };
+
+      const res = await api.registerStudent(payload);
+      if (res.success || res.message) {
+        setSuccessMessage("Student account registered successfully! You can now sign in.");
+        setEmail(regEmail.trim());
+        setPassword(regPassword);
+        setActiveTab("login");
+        setRegName("");
+        setRegEmail("");
+        setRegPassword("");
+        setRegDept("");
+        setRegPhone("");
+        setRegGpa("");
+      } else {
+        throw new Error(res.message || "Registration failed.");
+      }
+    } catch (err) {
+      setErrorMessage(err.message || "Failed to register student account.");
+    } finally {
+      setRegSubmitting(false);
+    }
+  };
+
+  const handleDemoFill = (demoEmail, demoPassword) => {
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+    setErrorMessage("");
+    setSuccessMessage("");
+    setActiveTab("login");
   };
 
   return (
@@ -115,19 +191,20 @@ export function LoginPage() {
           >
             <div
               style={{
-                width: "24px",
-                height: "24px",
-                borderRadius: "6px",
-                background: "var(--terracotta)",
+                width: "28px",
+                height: "28px",
+                borderRadius: "8px",
+                background: "var(--wine)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontWeight: 800,
-                fontSize: "11px",
+                fontSize: "12px",
                 color: "#FFFFFF",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
               }}
             >
-              S2C
+              C2C
             </div>
             <span
               style={{
@@ -138,7 +215,7 @@ export function LoginPage() {
                 textTransform: "uppercase",
               }}
             >
-              Student2Career Platform
+              College2Career (C2C) Platform
             </span>
           </div>
 
@@ -333,7 +410,7 @@ export function LoginPage() {
           className="animate-fade-in"
         >
           {/* Header */}
-          <div style={{ marginBottom: "32px" }}>
+          <div style={{ marginBottom: "24px" }}>
             <div
               style={{
                 width: "48px",
@@ -346,27 +423,109 @@ export function LoginPage() {
                 justifyContent: "center",
                 fontWeight: 800,
                 fontSize: "18px",
-                marginBottom: "20px",
+                marginBottom: "16px",
                 boxShadow: "0 8px 20px rgba(122, 31, 61, 0.22)",
               }}
             >
-              S2C
+              C2C
             </div>
             <h2
               style={{
                 fontFamily: "var(--font-display)",
-                fontSize: "28px",
+                fontSize: "26px",
                 fontWeight: 700,
                 color: "var(--charcoal)",
-                marginBottom: "8px",
+                marginBottom: "6px",
               }}
             >
-              Welcome Back
+              {activeTab === "login" ? "Welcome Back" : "Student Registration"}
             </h2>
-            <p style={{ fontSize: "14px", color: "var(--muted)", lineHeight: 1.5 }}>
-              Sign in to manage your applications, interviews, and career profile.
+            <p style={{ fontSize: "13.5px", color: "var(--muted)", lineHeight: 1.5 }}>
+              {activeTab === "login"
+                ? "Sign in to manage your applications, interviews, and career profile."
+                : "Create your student account to discover verified internships."}
             </p>
           </div>
+
+          {/* Mode Switcher Tabs */}
+          <div
+            style={{
+              display: "flex",
+              gap: "6px",
+              background: "var(--cream)",
+              padding: "4px",
+              borderRadius: "12px",
+              marginBottom: "20px",
+              border: "1px solid var(--border-light)",
+            }}
+          >
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab("login");
+                setErrorMessage("");
+                setSuccessMessage("");
+              }}
+              style={{
+                flex: 1,
+                padding: "8px 12px",
+                borderRadius: "8px",
+                fontSize: "13px",
+                fontWeight: activeTab === "login" ? 700 : 500,
+                color: activeTab === "login" ? "#FFFFFF" : "var(--charcoal)",
+                background: activeTab === "login" ? "var(--wine)" : "transparent",
+                transition: "all var(--transition-fast)",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              Sign In
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab("register");
+                setErrorMessage("");
+                setSuccessMessage("");
+              }}
+              style={{
+                flex: 1,
+                padding: "8px 12px",
+                borderRadius: "8px",
+                fontSize: "13px",
+                fontWeight: activeTab === "register" ? 700 : 500,
+                color: activeTab === "register" ? "#FFFFFF" : "var(--charcoal)",
+                background: activeTab === "register" ? "var(--wine)" : "transparent",
+                transition: "all var(--transition-fast)",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              New Student? Register
+            </button>
+          </div>
+
+          {/* Success Alert */}
+          {successMessage && (
+            <div
+              style={{
+                padding: "12px 16px",
+                borderRadius: "10px",
+                background: "var(--green-bg)",
+                color: "var(--green)",
+                fontSize: "13px",
+                fontWeight: 600,
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                marginBottom: "20px",
+                border: "1px solid rgba(64, 112, 80, 0.2)",
+              }}
+            >
+              <CheckCircle2 size={16} />
+              {successMessage}
+            </div>
+          )}
 
           {/* Error Alert */}
           {errorMessage && (
@@ -390,55 +549,336 @@ export function LoginPage() {
             </div>
           )}
 
-          {/* Login Form */}
-          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-            <Input
-              label="Email Address"
-              type="email"
-              placeholder="student@college.edu"
-              icon={Mail}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+          {/* SIGN IN FORM */}
+          {activeTab === "login" && (
+            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+              <Input
+                label="Email Address"
+                type="email"
+                placeholder="student@college.edu"
+                icon={Mail}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
 
-            <Input
-              label="Password"
-              type="password"
-              placeholder="••••••••"
-              icon={Lock}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+              <Input
+                label="Password"
+                type="password"
+                placeholder="••••••••"
+                icon={Lock}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
 
-            <Button
-              type="submit"
-              variant="primary"
-              size="lg"
-              loading={loading}
-              icon={ArrowRight}
-              style={{ width: "100%", marginTop: "8px" }}
-            >
-              Sign In to Portal
-            </Button>
-          </form>
+              <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "-6px" }}>
+                <button
+                  type="button"
+                  onClick={() => setForgotModalOpen(true)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    padding: "2px 0",
+                    fontSize: "12.5px",
+                    color: "var(--wine)",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    textDecoration: "underline",
+                  }}
+                >
+                  Forgot Password?
+                </button>
+              </div>
 
-          {/* Demo Login Helpers / Quick Hint */}
+              <Button
+                type="submit"
+                variant="primary"
+                size="lg"
+                loading={loading}
+                icon={ArrowRight}
+                style={{ width: "100%", marginTop: "4px" }}
+              >
+                Sign In to Portal
+              </Button>
+            </form>
+          )}
+
+          {/* STUDENT REGISTRATION FORM */}
+          {activeTab === "register" && (
+            <form onSubmit={handleRegister} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              <Input
+                label="Full Name *"
+                type="text"
+                placeholder="e.g. Aarav Sharma"
+                icon={User}
+                value={regName}
+                onChange={(e) => setRegName(e.target.value)}
+                required
+              />
+
+              <Input
+                label="College Email Address *"
+                type="email"
+                placeholder="aarav@college.edu"
+                icon={Mail}
+                value={regEmail}
+                onChange={(e) => setRegEmail(e.target.value)}
+                required
+              />
+
+              <Input
+                label="Password (min 8 chars) *"
+                type="password"
+                placeholder="••••••••"
+                icon={Lock}
+                value={regPassword}
+                onChange={(e) => setRegPassword(e.target.value)}
+                required
+              />
+
+              <Input
+                label="Academic Department *"
+                type="text"
+                placeholder="e.g. Computer Science"
+                icon={GraduationCap}
+                value={regDept}
+                onChange={(e) => setRegDept(e.target.value)}
+                required
+              />
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                <Input
+                  label="Phone Number"
+                  type="tel"
+                  placeholder="10-digit number"
+                  icon={Phone}
+                  value={regPhone}
+                  onChange={(e) => setRegPhone(e.target.value)}
+                />
+
+                <Input
+                  label="Current GPA (0.0 - 4.0)"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  max="4"
+                  placeholder="e.g. 3.75"
+                  icon={Award}
+                  value={regGpa}
+                  onChange={(e) => setRegGpa(e.target.value)}
+                />
+              </div>
+
+              <Button
+                type="submit"
+                variant="primary"
+                size="lg"
+                loading={regSubmitting}
+                icon={ArrowRight}
+                style={{ width: "100%", marginTop: "4px" }}
+              >
+                Create Student Account
+              </Button>
+            </form>
+          )}
+
+          {/* Faculty Demo Helper Strip */}
           <div
             style={{
-              marginTop: "28px",
-              paddingTop: "20px",
-              borderTop: "1px solid var(--border)",
-              textAlign: "center",
+              marginTop: "24px",
+              padding: "14px",
+              background: "var(--cream)",
+              borderRadius: "14px",
+              border: "1px solid rgba(122, 31, 61, 0.12)",
             }}
           >
-            <p style={{ fontSize: "12px", color: "var(--muted)", lineHeight: 1.5 }}>
-              Student2Career — Official College Internship Management Portal
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
+              <span
+                style={{
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  color: "var(--wine)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.8px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "4px",
+                }}
+              >
+                <Sparkles size={12} /> Faculty Demo 1-Click Access:
+              </span>
+            </div>
+
+            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+              <button
+                type="button"
+                onClick={() => handleDemoFill("student1@gmail.com", "Student@123")}
+                style={{
+                  flex: "1 1 auto",
+                  padding: "6px 10px",
+                  fontSize: "11.5px",
+                  fontWeight: 600,
+                  background: "#FFFFFF",
+                  border: "1px solid var(--border)",
+                  borderRadius: "8px",
+                  color: "var(--charcoal)",
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "4px",
+                  transition: "all var(--transition-fast)",
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.borderColor = "var(--wine)")}
+                onMouseOut={(e) => (e.currentTarget.style.borderColor = "var(--border)")}
+                title="Fill student demo credentials"
+              >
+                <User size={12} style={{ color: "var(--wine)" }} /> Student
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleDemoFill("faculty1@gmail.com", "Faculty@123")}
+                style={{
+                  flex: "1 1 auto",
+                  padding: "6px 10px",
+                  fontSize: "11.5px",
+                  fontWeight: 600,
+                  background: "#FFFFFF",
+                  border: "1px solid var(--border)",
+                  borderRadius: "8px",
+                  color: "var(--charcoal)",
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "4px",
+                  transition: "all var(--transition-fast)",
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.borderColor = "var(--wine)")}
+                onMouseOut={(e) => (e.currentTarget.style.borderColor = "var(--border)")}
+                title="Fill faculty demo credentials"
+              >
+                <GraduationCap size={12} style={{ color: "var(--terracotta)" }} /> Faculty
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleDemoFill("admin@college2career.edu", "Admin@123")}
+                style={{
+                  flex: "1 1 auto",
+                  padding: "6px 10px",
+                  fontSize: "11.5px",
+                  fontWeight: 600,
+                  background: "#FFFFFF",
+                  border: "1px solid var(--border)",
+                  borderRadius: "8px",
+                  color: "var(--charcoal)",
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "4px",
+                  transition: "all var(--transition-fast)",
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.borderColor = "var(--wine)")}
+                onMouseOut={(e) => (e.currentTarget.style.borderColor = "var(--border)")}
+                title="Fill admin demo credentials"
+              >
+                <Shield size={12} style={{ color: "var(--wine)" }} /> Admin
+              </button>
+            </div>
+          </div>
+
+          {/* Institutional Footer */}
+          <div
+            style={{
+              marginTop: "20px",
+              paddingTop: "16px",
+              borderTop: "1px solid var(--border)",
+              textAlign: "center",
+              display: "flex",
+              flexDirection: "column",
+              gap: "6px",
+              alignItems: "center",
+            }}
+          >
+            <p style={{ fontSize: "11.5px", color: "var(--muted)", margin: 0 }}>
+              College2Career (C2C) — College Internship & Placement Management System
             </p>
+            <span style={{ fontSize: "11px", color: "var(--muted)", opacity: 0.8 }}>
+              Corporate recruiting partners are managed strictly through the Institutional Placement Cell
+            </span>
           </div>
         </div>
       </div>
+
+      {/* FORGOT PASSWORD INFORMATIONAL MODAL */}
+      <Modal
+        isOpen={forgotModalOpen}
+        onClose={() => setForgotModalOpen(false)}
+        title="Institutional Password Recovery Notice"
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "12px",
+              padding: "16px",
+              borderRadius: "12px",
+              background: "var(--cream)",
+              border: "1px solid rgba(122, 31, 61, 0.2)",
+            }}
+          >
+            <Shield size={24} style={{ color: "var(--wine)", flexShrink: 0, marginTop: "2px" }} />
+            <div>
+              <h4 style={{ fontSize: "15px", fontWeight: 700, color: "var(--wine)", margin: "0 0 6px 0" }}>
+                Self-Service Password Reset Unavailable
+              </h4>
+              <p style={{ fontSize: "13px", color: "var(--charcoal)", lineHeight: 1.5, margin: 0 }}>
+                Automated self-service password recovery is currently not supported by the institutional backend. College2Career credentials are secure institutional accounts governed by academic placement administration.
+              </p>
+            </div>
+          </div>
+
+          <div style={{ fontSize: "13px", color: "var(--charcoal)", lineHeight: 1.6 }}>
+            <strong>How to recover or reset your account:</strong>
+            <ul style={{ margin: "8px 0 0 0", paddingLeft: "20px" }}>
+              <li style={{ marginBottom: "6px" }}>
+                <strong>Students:</strong> Contact your designated Faculty Advisor or Department Placement Coordinator with your registered Student Roll Number.
+              </li>
+              <li style={{ marginBottom: "6px" }}>
+                <strong>Faculty Members:</strong> Contact the College Placement Cell Administration to verify credentials.
+              </li>
+              <li>
+                <strong>Administrators:</strong> Administrative credentials and account recoveries are managed directly via server database maintenance.
+              </li>
+            </ul>
+          </div>
+
+          <div
+            style={{
+              padding: "12px 14px",
+              borderRadius: "10px",
+              background: "var(--warm-white)",
+              border: "1px solid var(--border-light)",
+              fontSize: "12px",
+              color: "var(--muted)",
+              lineHeight: 1.5,
+            }}
+          >
+            <strong>Technical Note:</strong> A cryptographically secure self-service password recovery workflow (including time-limited reset tokens, transactional SMTP verification emails, and salted hash rotation) requires dedicated backend service implementation and is scheduled for a future release.
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "8px" }}>
+            <Button variant="primary" onClick={() => setForgotModalOpen(false)}>
+              Understood
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

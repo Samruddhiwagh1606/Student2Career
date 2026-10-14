@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { api } from "../../services/api";
 import { Button } from "../../components/common/Button";
 import { Input } from "../../components/common/Input";
@@ -15,6 +16,7 @@ import {
   User,
   AlertCircle,
   Briefcase,
+  ExternalLink,
 } from "lucide-react";
 
 export function AdminCompanies() {
@@ -258,7 +260,12 @@ export function AdminCompanies() {
                     </td>
                     <td style={{ padding: "14px 18px", fontWeight: 700, color: "var(--wine)" }}>{c.internship_count || 0}</td>
                     <td style={{ padding: "14px 18px", textAlign: "right" }}>
-                      <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px" }}>
+                      <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", alignItems: "center" }}>
+                        <Link to={`/company/${c.company_id}`} style={{ textDecoration: "none" }}>
+                          <Button size="sm" variant="secondary" icon={ExternalLink}>
+                            Open Recruiter Workspace
+                          </Button>
+                        </Link>
                         <Button size="sm" variant="outline" icon={Edit} onClick={() => handleOpenEdit(c)}>
                           Edit
                         </Button>

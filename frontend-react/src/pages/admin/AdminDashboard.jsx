@@ -132,7 +132,7 @@ export function AdminDashboard() {
             College2Career Master Console 🛡️
           </h2>
 
-          <p style={{ fontSize: "14.5px", color: "#fff022", marginTop: "10px", opacity: 0.92, maxWidth: "580px", lineHeight: 1.5 }}>
+          <p style={{ fontSize: "14.5px", color: "rgba(255, 247, 237, 0.92)", marginTop: "10px", maxWidth: "580px", lineHeight: 1.5 }}>
             Manage campus accounts, approve faculty-verified internship postings, review placement conversion rates, and maintain institution settings.
           </p>
         </div>
@@ -173,71 +173,200 @@ export function AdminDashboard() {
         </div>
       </div>
 
-      {/* Main Stat Cards */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: "20px",
-        }}
-      >
-        <StatCard title="Total Students" value={summary.students} icon={Users} subtitle="Registered candidates" variant="default" />
-        <StatCard title="Faculty Advisors" value={summary.faculty} icon={GraduationCap} subtitle="Active academic mentors" variant="accent" />
-        <StatCard title="Partner Companies" value={summary.companies} icon={Building2} subtitle="Recruiting organizations" variant="cream" />
-        <StatCard title="Total Internships" value={summary.internships} icon={Briefcase} subtitle="Verified & approved" variant="cream" />
-        <StatCard title="Total Applications" value={summary.applications} icon={FileText} badgeText={`${summary.accepted} offers`} badgeType="positive" subtitle="Student submissions" variant="accent" />
-      </div>
-
-      {/* Institutional Governance Banner */}
-      <div
-        style={{
-          background: "var(--warm-white)",
-          borderRadius: "20px",
-          padding: "26px 32px",
-          border: "1px solid var(--border)",
-          borderLeft: "5px solid var(--wine)",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: "20px",
-          boxShadow: "var(--shadow-sm)",
-        }}
-      >
-        <div>
-          <h3 style={{ fontSize: "19px", fontWeight: 700, color: "var(--charcoal)", margin: 0, fontFamily: "var(--font-display)" }}>
-            Institutional Governance & Account Registry
-          </h3>
-          <p style={{ fontSize: "13.5px", color: "var(--muted)", marginTop: "4px", margin: 0 }}>
-            {summary.students} enrolled students • {summary.faculty} verified faculty advisors • {summary.companies} partner recruiting entities
-          </p>
+      {/* 1. ACADEMIC & CORPORATE DIRECTORY SECTION */}
+      <div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "10px" }}>
+          <div>
+            <h3 style={{ fontSize: "18px", fontWeight: 700, color: "var(--charcoal)", margin: 0, fontFamily: "var(--font-display)" }}>
+              User & Institutional Registry
+            </h3>
+            <p style={{ fontSize: "13px", color: "var(--muted)", margin: "2px 0 0 0" }}>
+              Registered stakeholders and verified campus constituents
+            </p>
+          </div>
+          <div style={{ display: "flex", gap: "8px" }}>
+            <Button size="sm" variant="outline" onClick={() => navigate("/admin/students")}>
+              Students
+            </Button>
+            <Button size="sm" variant="outline" onClick={() => navigate("/admin/faculty")}>
+              Faculty
+            </Button>
+            <Button size="sm" variant="outline" onClick={() => navigate("/admin/companies")}>
+              Companies
+            </Button>
+          </div>
         </div>
 
-        <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-          <Button
-            size="md"
-            variant="outline"
-            onClick={() => navigate("/admin/students")}
-            style={{ background: "#FFFFFF", borderColor: "var(--border)", fontWeight: 600, padding: "10px 20px" }}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+            gap: "20px",
+          }}
+        >
+          <div
+            style={{
+              background: "#FFFFFF",
+              borderRadius: "16px",
+              padding: "20px 24px",
+              border: "1px solid var(--border)",
+              borderLeft: "4px solid var(--wine)",
+              boxShadow: "var(--shadow-xs)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
           >
-            Student Roster
-          </Button>
-          <Button
-            size="md"
-            variant="outline"
-            onClick={() => navigate("/admin/faculty")}
-            style={{ background: "#FFFFFF", borderColor: "var(--border)", fontWeight: 600, padding: "10px 20px" }}
+            <div>
+              <span style={{ fontSize: "12px", color: "var(--muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", display: "block" }}>
+                Enrolled Students
+              </span>
+              <span style={{ fontSize: "28px", fontWeight: 800, color: "var(--charcoal)", marginTop: "2px", display: "block" }}>
+                {summary.students}
+              </span>
+              <button
+                onClick={() => navigate("/admin/students")}
+                style={{ background: "none", border: "none", color: "var(--wine)", fontSize: "12px", fontWeight: 700, cursor: "pointer", padding: 0, marginTop: "6px", display: "inline-flex", alignItems: "center", gap: "4px" }}
+              >
+                Manage Roster <ArrowRight size={12} />
+              </button>
+            </div>
+            <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "var(--cream)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Users size={22} style={{ color: "var(--wine)" }} />
+            </div>
+          </div>
+
+          <div
+            style={{
+              background: "#FFFFFF",
+              borderRadius: "16px",
+              padding: "20px 24px",
+              border: "1px solid var(--border)",
+              borderLeft: "4px solid var(--terracotta)",
+              boxShadow: "var(--shadow-xs)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
           >
-            Faculty Directory
-          </Button>
-          <Button
-            size="md"
-            variant="primary"
-            onClick={() => navigate("/admin/companies")}
-            style={{ fontWeight: 600, padding: "10px 20px" }}
+            <div>
+              <span style={{ fontSize: "12px", color: "var(--muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", display: "block" }}>
+                Faculty Mentors
+              </span>
+              <span style={{ fontSize: "28px", fontWeight: 800, color: "var(--charcoal)", marginTop: "2px", display: "block" }}>
+                {summary.faculty}
+              </span>
+              <button
+                onClick={() => navigate("/admin/faculty")}
+                style={{ background: "none", border: "none", color: "var(--terracotta)", fontSize: "12px", fontWeight: 700, cursor: "pointer", padding: 0, marginTop: "6px", display: "inline-flex", alignItems: "center", gap: "4px" }}
+              >
+                View Directory <ArrowRight size={12} />
+              </button>
+            </div>
+            <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "var(--terracotta-subtle)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <GraduationCap size={22} style={{ color: "var(--terracotta)" }} />
+            </div>
+          </div>
+
+          <div
+            style={{
+              background: "#FFFFFF",
+              borderRadius: "16px",
+              padding: "20px 24px",
+              border: "1px solid var(--border)",
+              borderLeft: "4px solid #D97706",
+              boxShadow: "var(--shadow-xs)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
           >
-            Company Partners
-          </Button>
+            <div>
+              <span style={{ fontSize: "12px", color: "var(--muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", display: "block" }}>
+                Partner Companies
+              </span>
+              <span style={{ fontSize: "28px", fontWeight: 800, color: "var(--charcoal)", marginTop: "2px", display: "block" }}>
+                {summary.companies}
+              </span>
+              <button
+                onClick={() => navigate("/admin/companies")}
+                style={{ background: "none", border: "none", color: "#D97706", fontSize: "12px", fontWeight: 700, cursor: "pointer", padding: 0, marginTop: "6px", display: "inline-flex", alignItems: "center", gap: "4px" }}
+              >
+                Recruiter Portals <ArrowRight size={12} />
+              </button>
+            </div>
+            <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "#FEF3C7", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Building2 size={22} style={{ color: "#D97706" }} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. OPPORTUNITIES & PLACEMENT PIPELINE SECTION */}
+      <div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "10px" }}>
+          <div>
+            <h3 style={{ fontSize: "18px", fontWeight: 700, color: "var(--charcoal)", margin: 0, fontFamily: "var(--font-display)" }}>
+              Internship Opportunities & Placement Funnel
+            </h3>
+            <p style={{ fontSize: "13px", color: "var(--muted)", margin: "2px 0 0 0" }}>
+              Live institutional pipeline metrics backed by verified application records
+            </p>
+          </div>
+          <div style={{ display: "flex", gap: "8px" }}>
+            <Button size="sm" variant="outline" onClick={() => navigate("/admin/internships")}>
+              All Internships
+            </Button>
+            <Button size="sm" variant="primary" onClick={() => navigate("/admin/applications")}>
+              All Applications
+            </Button>
+          </div>
+        </div>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+            gap: "20px",
+          }}
+        >
+          <StatCard
+            title="Approved Internships"
+            value={summary.internships}
+            icon={Briefcase}
+            subtitle="Campus verified"
+            variant="cream"
+          />
+          <StatCard
+            title="Awaiting Approval"
+            value={reviewInternships.length}
+            icon={ShieldAlert}
+            subtitle="Pending admin review"
+            badgeText={reviewInternships.length > 0 ? "Action Required" : "Up to date"}
+            badgeType={reviewInternships.length > 0 ? "warning" : "positive"}
+            variant="accent"
+          />
+          <StatCard
+            title="Total Applications"
+            value={summary.applications}
+            icon={FileText}
+            subtitle={`${summary.pending} under review`}
+            variant="default"
+          />
+          <StatCard
+            title="Shortlisted"
+            value={summary.shortlisted}
+            icon={Award}
+            subtitle="In recruiter interview"
+            variant="cream"
+          />
+          <StatCard
+            title="Accepted Offers"
+            value={summary.accepted}
+            icon={CheckCircle}
+            subtitle={`${summary.applications > 0 ? Math.round((summary.accepted / summary.applications) * 100) : 0}% conversion`}
+            variant="accent"
+          />
         </div>
       </div>
 

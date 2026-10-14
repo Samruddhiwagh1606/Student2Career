@@ -27,6 +27,8 @@ router.get("/", async (req, res) => {
                 i.end_date,
                 i.application_deadline,
                 i.status,
+                i.apply_url,
+                i.is_external,
 
                 c.company_id,
                 c.name AS company_name,
@@ -115,6 +117,8 @@ router.get("/recommendations/:studentId", async (req, res) => {
                i.application_deadline,
                i.status,
                i.posted_by,
+               i.apply_url,
+               i.is_external,
                c.company_id,
                c.name AS company_name,
                c.location,

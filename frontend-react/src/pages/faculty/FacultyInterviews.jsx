@@ -171,7 +171,7 @@ export function FacultyInterviews() {
                       {item.student_name}
                     </h3>
                     <span style={{ fontSize: "13px", color: "var(--muted)" }}>
-                      {item.department || "Dept"} • GPA {item.gpa ? `${item.gpa}/4.0` : "N/A"}
+                      {item.department || "Dept"} • CGPA {item.gpa ? `${Number(item.gpa).toFixed(2)}/10.00` : "N/A"}
                     </span>
                   </div>
 

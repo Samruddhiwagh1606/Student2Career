@@ -2,11 +2,10 @@ import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
-  Briefcase,
-  PlusCircle,
+  Users,
+  Sparkles,
   FileText,
   Calendar,
-  Clock,
   Award,
   BarChart3,
   LogOut,
@@ -25,26 +24,24 @@ export function FacultySidebar({ isOpen, onClose }) {
 
   const navSections = [
     {
-      title: "OVERVIEW",
+      title: "DEPARTMENT OVERVIEW",
       items: [
         { label: "Dashboard", path: "/faculty/dashboard", icon: LayoutDashboard },
+        { label: "Department Students", path: "/faculty/students", icon: Users },
+      ],
+    },
+    {
+      title: "INSIGHTS & MONITORING",
+      items: [
+        { label: "Career Readiness", path: "/faculty/readiness", icon: Sparkles },
         { label: "Placement Reports", path: "/faculty/reports", icon: BarChart3 },
       ],
     },
     {
-      title: "INTERNSHIPS",
-      items: [
-        { label: "My Internships", path: "/faculty/internships", icon: Briefcase },
-        { label: "Post Internship", path: "/faculty/post-internship", icon: PlusCircle },
-      ],
-    },
-    {
-      title: "STUDENT SELECTION",
+      title: "CAMPUS RECORDS (READ-ONLY)",
       items: [
         { label: "Applications", path: "/faculty/applications", icon: FileText },
-        { label: "Interviews", path: "/faculty/interviews", icon: Calendar },
-        { label: "Schedule Interview", path: "/faculty/schedule-interview", icon: Clock },
-        { label: "Student Evaluations", path: "/faculty/evaluations", icon: Award },
+        { label: "Evaluations", path: "/faculty/evaluations", icon: Award },
       ],
     },
   ];

@@ -14,10 +14,13 @@ import { StudentInterviews } from "./pages/student/StudentInterviews";
 import { StudentEvaluations } from "./pages/student/StudentEvaluations";
 import { StudentFeedback } from "./pages/student/StudentFeedback";
 import { StudentProfile } from "./pages/student/StudentProfile";
+import { StudentOffCampus } from "./pages/student/StudentOffCampus";
 
 // Faculty Portal Imports
 import { FacultyLayout } from "./layouts/FacultyLayout";
 import { FacultyDashboard } from "./pages/faculty/FacultyDashboard";
+import { FacultyDepartmentStudents } from "./pages/faculty/FacultyDepartmentStudents";
+import { FacultyReadiness } from "./pages/faculty/FacultyReadiness";
 import { FacultyInternships } from "./pages/faculty/FacultyInternships";
 import { PostInternship } from "./pages/faculty/PostInternship";
 import { FacultyApplications } from "./pages/faculty/FacultyApplications";
@@ -34,9 +37,11 @@ import { AdminFaculty } from "./pages/admin/AdminFaculty";
 import { AdminCompanies } from "./pages/admin/AdminCompanies";
 import { AdminInternships } from "./pages/admin/AdminInternships";
 import { AdminApplications } from "./pages/admin/AdminApplications";
+import { AdminOffCampusQueue } from "./pages/admin/AdminOffCampusQueue";
 import { AdminInterviews } from "./pages/admin/AdminInterviews";
 import { AdminEvaluations } from "./pages/admin/AdminEvaluations";
 import { AdminReports } from "./pages/admin/AdminReports";
+import { AdminAuditTrail } from "./pages/admin/AdminAuditTrail";
 import { AdminFeedback } from "./pages/admin/AdminFeedback";
 
 // Protected Route Wrapper for Student Role
@@ -140,6 +145,7 @@ export function App() {
             <Route path="dashboard" element={<StudentDashboard />} />
             <Route path="internships" element={<FindInternships />} />
             <Route path="applications" element={<StudentApplications />} />
+            <Route path="off-campus" element={<StudentOffCampus />} />
             <Route path="interviews" element={<StudentInterviews />} />
             <Route path="evaluations" element={<StudentEvaluations />} />
             <Route path="feedback" element={<StudentFeedback />} />
@@ -156,6 +162,8 @@ export function App() {
             }
           >
             <Route path="dashboard" element={<FacultyDashboard />} />
+            <Route path="students" element={<FacultyDepartmentStudents />} />
+            <Route path="readiness" element={<FacultyReadiness />} />
             <Route path="internships" element={<FacultyInternships />} />
             <Route path="post-internship" element={<PostInternship />} />
             <Route path="applications" element={<FacultyApplications />} />
@@ -180,9 +188,11 @@ export function App() {
             <Route path="companies" element={<AdminCompanies />} />
             <Route path="internships" element={<AdminInternships />} />
             <Route path="applications" element={<AdminApplications />} />
+            <Route path="off-campus" element={<AdminOffCampusQueue />} />
             <Route path="interviews" element={<AdminInterviews />} />
             <Route path="evaluations" element={<AdminEvaluations />} />
             <Route path="reports" element={<AdminReports />} />
+            <Route path="audit" element={<AdminAuditTrail />} />
             <Route path="feedback" element={<AdminFeedback />} />
           </Route>
 

@@ -3,6 +3,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const db = require("../db");
+const { authenticate } = require("../middleware/auth");
 
 const router = express.Router();
 
@@ -107,16 +108,17 @@ router.post("/register", async (req, res) => {
             if (
                 Number.isNaN(gpaValue) ||
                 gpaValue < 0 ||
-                gpaValue > 4
+                gpaValue > 10
             ) {
 
                 return res.status(400).json({
                     success: false,
                     message:
-                        "GPA must be between 0.0 and 4.0."
+                        "CGPA must be between 0.00 and 10.00."
                 });
 
             }
+            gpaValue = Math.round(gpaValue * 100) / 100;
 
         }
 
@@ -406,12 +408,28 @@ router.post("/login", async (req, res) => {
 // STUDENT PROFILE UPDATE
 // =====================================================
 
-router.put("/:studentId", async (req, res) => {
+router.put("/:studentId", authenticate, async (req, res) => {
 
     try {
 
         const studentId =
             Number(req.params.studentId);
+
+        // Faculty is strictly read-only
+        if (req.user.role === "faculty") {
+            return res.status(403).json({
+                success: false,
+                message: "Access denied: Faculty members have read-only access and cannot modify student profiles."
+            });
+        }
+
+        // Student can only update their own record
+        if (req.user.role === "student" && req.user.student_id !== studentId) {
+            return res.status(403).json({
+                success: false,
+                message: "Access denied: You can only modify your own profile."
+            });
+        }
 
 
         const {
@@ -478,7 +496,7 @@ router.put("/:studentId", async (req, res) => {
         if (
             Number.isNaN(gpaNumber) ||
             gpaNumber < 0 ||
-            gpaNumber > 4
+            gpaNumber > 10
         ) {
 
             return res.status(400).json({
@@ -486,7 +504,7 @@ router.put("/:studentId", async (req, res) => {
                 success: false,
 
                 message:
-                    "GPA must be between 0.0 and 4.0."
+                    "CGPA must be between 0.00 and 10.00."
 
             });
 
@@ -1329,7 +1347,7 @@ router.patch(
             if (
                 Number.isNaN(gpaNumber) ||
                 gpaNumber < 0 ||
-                gpaNumber > 4
+                gpaNumber > 10
             ) {
 
                 return res.status(400).json({
@@ -1337,7 +1355,7 @@ router.patch(
                     success: false,
 
                     message:
-                        "GPA must be between 0.0 and 4.0."
+                        "CGPA must be between 0.00 and 10.00."
 
                 });
 

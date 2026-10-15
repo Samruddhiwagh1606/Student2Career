@@ -15,6 +15,18 @@ async function request(endpoint, options = {}) {
     headers["Content-Type"] = "application/json";
   }
 
+  // Automatically attach Bearer token if user is authenticated
+  const userStr = localStorage.getItem("user");
+  if (userStr) {
+    try {
+      const user = JSON.parse(userStr);
+      const token = user?.token;
+      if (token && !headers["Authorization"]) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+    } catch (e) {}
+  }
+
   const config = {
     ...options,
     headers,
@@ -248,4 +260,76 @@ export const api = {
 
   getCompanyFeedbackSummary: (companyId) =>
     request(`/feedback/company/${companyId}/summary`),
+
+  // =====================================================
+  // MODULE 2: STUDENT OFF-CAMPUS WORKFLOW
+  // =====================================================
+  submitOffCampus: (formData) =>
+    request("/off-campus", {
+      method: "POST",
+      body: formData,
+    }),
+
+  getMyOffCampus: () => request("/off-campus/my"),
+
+  resubmitOffCampus: (id, formData) =>
+    request(`/off-campus/${id}/resubmit`, {
+      method: "PUT",
+      body: formData,
+    }),
+
+  getOffCampusHistory: (id) => request(`/off-campus/${id}/history`),
+
+  getEvidenceUrl: (filename) => `${API_BASE_URL}/off-campus/evidence/${filename}`,
+
+  // =====================================================
+  // MODULE 3: ADMIN / T&P APPROVALS, AUDIT & EXPORT
+  // =====================================================
+  getOffCampusQueue: (params = {}) => {
+    const q = new URLSearchParams(params).toString();
+    return request(`/off-campus/admin/queue${q ? `?${q}` : ""}`);
+  },
+
+  decideOffCampus: (id, data) =>
+    request(`/off-campus/admin/${id}/decision`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+
+  getAdminAuditLogs: (params = {}) => {
+    const q = new URLSearchParams(params).toString();
+    return request(`/admin/audit${q ? `?${q}` : ""}`);
+  },
+
+  exportAdminReports: async () => {
+    const userStr = localStorage.getItem("user");
+    const token = userStr ? JSON.parse(userStr)?.token : null;
+    const response = await fetch(`${API_BASE_URL}/admin/reports/export`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+    if (!response.ok) {
+      throw new Error("Failed to export reconciled placement report.");
+    }
+    const blob = await response.blob();
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.download = `C2C_Reconciled_Placement_Report_${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(downloadUrl);
+  },
+
+  // =====================================================
+  // MODULE 4: FACULTY READ-ONLY DEPARTMENT SCOPE
+  // =====================================================
+  getFacultyDepartmentSummary: () => request("/faculty/department/summary"),
+
+  getFacultyDepartmentStudents: (params = {}) => {
+    const q = new URLSearchParams(params).toString();
+    return request(`/faculty/department/students${q ? `?${q}` : ""}`);
+  },
+
+  getFacultyDepartmentReadiness: () => request("/faculty/department/readiness"),
 };

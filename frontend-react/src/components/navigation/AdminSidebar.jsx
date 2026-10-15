@@ -13,6 +13,8 @@ import {
   MessageSquare,
   LogOut,
   X,
+  CheckSquare,
+  ShieldCheck,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
@@ -42,17 +44,19 @@ export function AdminSidebar({ isOpen, onClose }) {
       ],
     },
     {
-      title: "PLACEMENT",
+      title: "PLACEMENT & APPROVALS",
       items: [
         { label: "Applications", path: "/admin/applications", icon: FileText },
+        { label: "Off-Campus Queue", path: "/admin/off-campus", icon: CheckSquare },
         { label: "Interviews", path: "/admin/interviews", icon: Calendar },
         { label: "Evaluations", path: "/admin/evaluations", icon: Award },
       ],
     },
     {
-      title: "ANALYTICS",
+      title: "ANALYTICS & AUDIT",
       items: [
         { label: "Reports", path: "/admin/reports", icon: BarChart3 },
+        { label: "Audit Trail", path: "/admin/audit", icon: ShieldCheck },
       ],
     },
     {

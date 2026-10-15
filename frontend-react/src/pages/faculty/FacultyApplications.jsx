@@ -335,7 +335,7 @@ export function FacultyApplications() {
 
                     <p style={{ fontSize: "14px", color: "var(--muted)", marginTop: "4px", display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
                       <span><GraduationCap size={15} style={{ verticalAlign: "middle", marginRight: "4px" }} />{app.student_department || "Dept N/A"}</span>
-                      <span>• GPA: <strong>{app.student_gpa ? `${app.student_gpa}/4.0` : "N/A"}</strong></span>
+                      <span>• CGPA: <strong>{app.student_gpa ? `${Number(app.student_gpa).toFixed(2)}/10.00` : "N/A"}</strong></span>
                       <span>• Applied: {formatDate(app.applied_at)}</span>
                     </p>
                   </div>
@@ -475,7 +475,7 @@ export function FacultyApplications() {
                   {selectedApp.student_name}
                 </h3>
                 <span style={{ fontSize: "13px", color: "var(--muted)" }}>
-                  {selectedApp.student_department} • GPA: <strong>{selectedApp.student_gpa ? `${selectedApp.student_gpa}/4.0` : "N/A"}</strong> • {selectedApp.student_phone || "Phone N/A"}
+                  {selectedApp.student_department} • CGPA: <strong>{selectedApp.student_gpa ? `${Number(selectedApp.student_gpa).toFixed(2)}/10.00` : "N/A"}</strong> • {selectedApp.student_phone || "Phone N/A"}
                 </span>
               </div>
               <StatusBadge status={selectedApp.status} />

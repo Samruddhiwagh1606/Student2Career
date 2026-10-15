@@ -10,6 +10,7 @@ import {
   User,
   LogOut,
   X,
+  Briefcase,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
@@ -34,6 +35,7 @@ export function Sidebar({ isOpen, onClose }) {
       title: "MY CAREER",
       items: [
         { label: "My Applications", path: "/student/applications", icon: FileText },
+        { label: "Off-Campus Records", path: "/student/off-campus", icon: Briefcase },
         { label: "Interviews", path: "/student/interviews", icon: Calendar },
         { label: "Evaluations", path: "/student/evaluations", icon: Award },
         { label: "Feedback", path: "/student/feedback", icon: MessageSquare },

@@ -172,7 +172,7 @@ export function StudentDashboard() {
           </h2>
 
           <p style={{ fontSize: "14.5px", color: "#FFF7ED", marginTop: "10px", opacity: 0.92, lineHeight: 1.5 }}>
-            Department: <strong>{student?.department || "N/A"}</strong> • GPA: <strong>{student?.gpa ? `${student.gpa}/4.0` : "N/A"}</strong> • Roll: <strong>{student?.roll_number || "N/A"}</strong>
+            Department: <strong>{student?.department || "N/A"}</strong> • CGPA: <strong>{student?.gpa ? `${Number(student.gpa).toFixed(2)}/10.00` : "N/A"}</strong> • Roll: <strong>{student?.roll_number || "N/A"}</strong>
           </p>
         </div>
 

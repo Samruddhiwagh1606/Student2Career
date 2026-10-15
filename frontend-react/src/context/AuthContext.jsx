@@ -35,7 +35,10 @@ export function AuthProvider({ children }) {
         throw new Error(data.message || "Login failed.");
       }
 
-      const userData = data.user;
+      const userData = {
+        ...data.user,
+        token: data.token || data.user.token,
+      };
       setUser(userData);
       localStorage.setItem("user", JSON.stringify(userData));
 

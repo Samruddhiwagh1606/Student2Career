@@ -152,12 +152,12 @@ export function StudentProfile() {
           />
 
           <Input
-            label="GPA (0.0 to 4.0)"
+            label="CGPA (0.00 to 10.00)"
             icon={Award}
             type="number"
             step="0.01"
             min="0"
-            max="4"
+            max="10"
             value={gpa}
             onChange={(e) => setGpa(e.target.value)}
           />

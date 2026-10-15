@@ -189,7 +189,7 @@ export function AdminStudents() {
                   <th style={{ padding: "14px 18px", fontWeight: 700, color: "var(--charcoal)", fontFamily: "var(--font-display)" }}>Student Name</th>
                   <th style={{ padding: "14px 18px", fontWeight: 700, color: "var(--charcoal)", fontFamily: "var(--font-display)" }}>Email</th>
                   <th style={{ padding: "14px 18px", fontWeight: 700, color: "var(--charcoal)", fontFamily: "var(--font-display)" }}>Department</th>
-                  <th style={{ padding: "14px 18px", fontWeight: 700, color: "var(--charcoal)", fontFamily: "var(--font-display)" }}>GPA</th>
+                  <th style={{ padding: "14px 18px", fontWeight: 700, color: "var(--charcoal)", fontFamily: "var(--font-display)" }}>CGPA</th>
                   <th style={{ padding: "14px 18px", fontWeight: 700, color: "var(--charcoal)", fontFamily: "var(--font-display)" }}>Resume</th>
                   <th style={{ padding: "14px 18px", fontWeight: 700, color: "var(--charcoal)", fontFamily: "var(--font-display)" }}>Applications</th>
                   <th style={{ padding: "14px 18px", fontWeight: 700, color: "var(--charcoal)", fontFamily: "var(--font-display)", textAlign: "right" }}>Actions</th>
@@ -205,7 +205,7 @@ export function AdminStudents() {
                     <td style={{ padding: "14px 18px", color: "var(--muted)" }}>{item.email}</td>
                     <td style={{ padding: "14px 18px" }}>{item.department || "N/A"}</td>
                     <td style={{ padding: "14px 18px", fontWeight: 700, color: "var(--wine)" }}>
-                      {item.gpa ? `${item.gpa} / 4.0` : "N/A"}
+                      {item.gpa ? `${Number(item.gpa).toFixed(2)} / 10.00` : "N/A"}
                     </td>
                     <td style={{ padding: "14px 18px" }}>
                       {item.resume ? (
@@ -275,11 +275,11 @@ export function AdminStudents() {
             />
 
             <Input
-              label="GPA (0.0 to 4.0)"
+              label="CGPA (0.00 to 10.00)"
               type="number"
               step="0.01"
               min="0"
-              max="4"
+              max="10"
               value={editGpa}
               onChange={(e) => setEditGpa(e.target.value)}
             />

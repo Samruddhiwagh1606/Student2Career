@@ -3,102 +3,85 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { api } from "../../services/api";
 import { StatCard } from "../../components/common/StatCard";
-import { StatusBadge } from "../../components/common/StatusBadge";
 import { Button } from "../../components/common/Button";
 import { LoadingState, ErrorState } from "../../components/common/FeedbackStates";
 import {
-  Briefcase,
-  FileText,
-  Calendar,
+  Users,
+  GraduationCap,
   Award,
-  PlusCircle,
-  Clock,
-  CheckCircle,
-  Building2,
-  ArrowRight,
+  CheckCircle2,
   TrendingUp,
   BarChart3,
-  UserCheck,
+  Sparkles,
+  ArrowRight,
+  ShieldCheck,
+  Building2,
+  Clock,
 } from "lucide-react";
 
 export function FacultyDashboard() {
   const { faculty, user } = useAuth();
   const navigate = useNavigate();
 
-  const [reports, setReports] = useState(null);
-  const [recentApplications, setRecentApplications] = useState([]);
-  const [upcomingInterviews, setUpcomingInterviews] = useState([]);
+  const [deptSummary, setDeptSummary] = useState(null);
+  const [deptStudents, setDeptStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const facultyId = faculty?.faculty_id || user?.profile?.faculty_id;
-
   useEffect(() => {
-    if (!facultyId) {
-      setLoading(false);
-      return;
-    }
-
-    async function fetchDashboardData() {
+    async function loadDashboard() {
       try {
         setLoading(true);
         setError(null);
 
-        // Fetch faculty report summary
-        const repRes = await api.getFacultyReports(facultyId).catch(() => null);
-        if (repRes?.summary) {
-          setReports(repRes);
+        // Fetch department summary (server enforces faculty department scope)
+        const sumRes = await api.getFacultyDepartmentSummary().catch(() => null);
+        if (sumRes?.summary) {
+          setDeptSummary(sumRes);
         }
 
-        // Fetch recent applications for faculty internships
-        const appRes = await api.getFacultyApplications(facultyId).catch(() => ({ applications: [] }));
-        const apps = appRes?.applications || [];
-        setRecentApplications(apps.slice(0, 5));
-
-        // Fetch upcoming interviews
-        const intvRes = await api.getFacultyInterviews(facultyId).catch(() => ({ interviews: [] }));
-        const intvs = intvRes?.interviews || [];
-        setUpcomingInterviews(intvs.slice(0, 4));
+        // Fetch first few department students
+        const stRes = await api.getFacultyDepartmentStudents({ limit: 5 }).catch(() => null);
+        if (stRes?.students) {
+          setDeptStudents(stRes.students.slice(0, 5));
+        }
       } catch (err) {
         console.error("Faculty dashboard fetch error:", err);
-        setError("Unable to load faculty placement dashboard metrics.");
+        setError("Unable to load department dashboard metrics.");
       } finally {
         setLoading(false);
       }
     }
 
-    fetchDashboardData();
-  }, [facultyId]);
+    loadDashboard();
+  }, []);
 
   if (loading) {
-    return <LoadingState message="Loading Faculty Placement Portal..." />;
+    return <LoadingState message="Loading Department Faculty Portal..." />;
   }
 
   if (error) {
     return <ErrorState message={error} onRetry={() => window.location.reload()} />;
   }
 
-  const summary = reports?.summary || {
-    internships: 0,
-    applications: 0,
-    pending: 0,
-    shortlisted: 0,
-    accepted: 0,
-    rejected: 0,
-    interviews: 0,
-    evaluations: 0,
-    averageEvaluation: 0,
+  const facultyName = deptSummary?.faculty_name || faculty?.name || user?.profile?.name || "Faculty Advisor";
+  const department = deptSummary?.department || faculty?.department || user?.profile?.department || "Academic Department";
+  const stats = deptSummary?.summary || {
+    total_students: 0,
+    unique_placed: 0,
+    campus_placed: 0,
+    off_campus_placed: 0,
+    pending_off_campus: 0,
+    average_cgpa: "N/A",
+    placement_rate: "0%",
   };
-
-  const facultyName = faculty?.name || user?.profile?.name || "Faculty Advisor";
-  const department = faculty?.department || user?.profile?.department || "Academic Dept";
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "32px" }} className="animate-fade-in">
       {/* Welcome Banner */}
       <div
         style={{
-          background: "linear-gradient(135deg, var(--wine) 0%, #5B1730 65%, #3e1020 100%)",
+          background: "linear-gradient(135deg, var(--wine) 0%, #5B1730 65%, #3E1020 100%)",
           color: "#FFF7ED",
           borderRadius: "24px",
           padding: "36px 40px",
@@ -112,390 +95,254 @@ export function FacultyDashboard() {
           overflow: "hidden",
         }}
       >
-        <div
-          style={{
-            position: "absolute",
-            top: "-60px",
-            right: "-60px",
-            width: "280px",
-            height: "280px",
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(231, 111, 81, 0.22) 0%, rgba(122, 31, 61, 0) 70%)",
-            pointerEvents: "none",
-          }}
-        />
-
         <div style={{ position: "relative", zIndex: 2 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
             <span
               style={{
                 fontSize: "11px",
                 fontWeight: 700,
                 letterSpacing: "1.5px",
                 color: "#D6A84F",
-                background: "rgba(214, 168, 79, 0.15)",
-                border: "1px solid rgba(214, 168, 79, 0.3)",
-                padding: "4px 12px",
+                background: "rgba(214, 168, 79, 0.18)",
+                padding: "6px 14px",
                 borderRadius: "20px",
                 textTransform: "uppercase",
               }}
             >
-              FACULTY PLACEMENT MANAGEMENT
+              MODULE 4: FACULTY PORTAL
             </span>
-            <span style={{ fontSize: "13px", color: "#FFF7ED", opacity: 0.9, fontWeight: 500 }}>
-              {department} Department
+            <span style={{ fontSize: "12px", color: "#FFF7ED", opacity: 0.85 }}>
+              DEPARTMENT OF {department.toUpperCase()}
             </span>
           </div>
 
-          <h2 style={{ fontSize: "32px", fontWeight: 800, margin: 0, color: "#FFF7ED", fontFamily: "var(--font-display)", lineHeight: 1.15 }}>
-            Welcome back, Prof. {facultyName}! 🎓
+          <h2 style={{ fontSize: "30px", fontWeight: 700, color: "#FFF7ED", margin: 0, fontFamily: "var(--font-display)" }}>
+            Welcome, Prof. {facultyName}
           </h2>
 
-          <p style={{ fontSize: "14px", color: "rgba(255, 247, 237, 0.92)", marginTop: "10px", maxWidth: "580px", lineHeight: 1.6 }}>
-            Review student applications, schedule interviews, evaluate academic suitability, and post new placement opportunities.
+          <p style={{ fontSize: "14.5px", color: "#FFF7ED", marginTop: "10px", opacity: 0.92, maxWidth: "600px", lineHeight: 1.5 }}>
+            Department coordinator advisory dashboard. Monitor student career readiness, CGPA compliance, verified internship outcomes, and placement progress for <strong>{department}</strong>.
           </p>
         </div>
 
-        <div style={{ display: "flex", gap: "14px", position: "relative", zIndex: 2, flexWrap: "wrap", alignItems: "center" }}>
+        <div style={{ display: "flex", gap: "14px", position: "relative", zIndex: 2, flexWrap: "wrap" }}>
           <Button
             variant="secondary"
-            icon={PlusCircle}
-            onClick={() => navigate("/faculty/post-internship")}
+            icon={Users}
+            onClick={() => navigate("/faculty/students")}
             style={{
               background: "#FFFFFF",
               color: "var(--wine)",
-              fontWeight: 800,
-              fontSize: "14px",
+              border: "none",
               padding: "12px 24px",
               borderRadius: "12px",
-              boxShadow: "0 4px 16px rgba(0, 0, 0, 0.18)",
-              border: "none",
-              cursor: "pointer",
+              fontWeight: 700,
+              fontSize: "14px",
+              boxShadow: "0 4px 16px rgba(0,0,0,0.18)",
             }}
           >
-            Post New Internship
+            Department Students Directory
           </Button>
 
           <Button
             variant="outline"
-            onClick={() => navigate("/faculty/applications")}
+            icon={Sparkles}
+            onClick={() => navigate("/faculty/readiness")}
             style={{
-              background: "rgba(255, 255, 255, 0.12)",
-              borderColor: "rgba(255, 255, 255, 0.4)",
-              color: "#FFF7ED",
-              fontWeight: 700,
-              fontSize: "14px",
+              borderColor: "rgba(255, 255, 255, 0.5)",
+              color: "#FFFFFF",
               padding: "12px 24px",
               borderRadius: "12px",
-              cursor: "pointer",
+              fontWeight: 600,
+              fontSize: "14px",
+              background: "rgba(255, 255, 255, 0.08)",
             }}
           >
-            Review Applications ({summary.pending})
+            Career Readiness & Gaps
           </Button>
         </div>
       </div>
 
-      {/* Primary Metrics Grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-          gap: "16px",
-        }}
-      >
-        <StatCard
-          title="Posted Internships"
-          value={summary.internships}
-          icon={Briefcase}
-          subtitle="Opportunities verified"
-          variant="default"
-        />
-        <StatCard
-          title="Applications Received"
-          value={summary.applications}
-          icon={FileText}
-          subtitle="Total submissions"
-          variant="default"
-        />
-        <StatCard
-          title="Awaiting Review"
-          value={summary.pending}
-          icon={Clock}
-          badgeText={summary.pending > 0 ? `${summary.pending} pending` : "Up to date"}
-          badgeType={summary.pending > 0 ? "warning" : "positive"}
-          subtitle="Requires attention"
-          variant="accent"
-        />
-        <StatCard
-          title="Shortlisted"
-          value={summary.shortlisted}
-          icon={CheckCircle}
-          subtitle="Ready for interview"
-          variant="cream"
-        />
-        <StatCard
-          title="Interviews Scheduled"
-          value={summary.interviews}
-          icon={Calendar}
-          subtitle="Recruiter interactions"
-          variant="cream"
-        />
-        <StatCard
-          title="Student Placements"
-          value={summary.accepted}
-          icon={UserCheck}
-          badgeText={`${summary.accepted} accepted`}
-          badgeType="positive"
-          subtitle="Successful offers"
-          variant="cream"
-        />
-      </div>
-
-      {/* Academic Mentorship & Quick Actions Summary */}
+      {/* Faculty Restrictions Notice */}
       <div
         style={{
           background: "var(--cream)",
-          borderRadius: "20px",
-          padding: "24px 32px",
-          border: "1px solid rgba(122, 31, 61, 0.15)",
+          border: "1px solid var(--border)",
+          borderLeft: "5px solid var(--wine)",
+          borderRadius: "14px",
+          padding: "16px 20px",
+          fontSize: "13px",
+          color: "var(--charcoal)",
           display: "flex",
-          justifyContent: "space-between",
+          gap: "12px",
           alignItems: "center",
-          flexWrap: "wrap",
-          gap: "16px",
-          boxShadow: "var(--shadow-sm)",
         }}
       >
-        <div>
-          <h3 style={{ fontSize: "18px", fontWeight: 800, color: "var(--charcoal)", margin: 0, fontFamily: "var(--font-display)" }}>
-            Academic Evaluation & Placement Supervision
-          </h3>
-          <p style={{ fontSize: "13px", color: "var(--muted)", marginTop: "4px", margin: 0 }}>
-            {summary.pending} student applications awaiting faculty review • {summary.evaluations || 0} academic performance evaluations logged
-          </p>
-        </div>
-
-        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-         <Button
-  size="sm"
-  variant="primary"
-  onClick={() => navigate("/faculty/evaluations")}
->
-  Student Evaluations
-</Button>
-
-          <Button size="sm" variant="primary" onClick={() => navigate("/faculty/reports")}>
-            View Department Reports
-          </Button>
-        </div>
+        <ShieldCheck size={22} color="var(--wine)" style={{ flexShrink: 0 }} />
+        <span>
+          <strong>Faculty Advisory Scope:</strong> As academic faculty for <strong>{department}</strong>, you have read-only visibility into your department's students and placement outcomes. Institutional opportunity management, student account editing, and official approval decisions are exclusively administered by the T&P Cell.
+        </span>
       </div>
 
-      {/* Two Column Layout: Applications Review & Upcoming Interviews (NO BLACK BLOCK) */}
+      {/* Metrics Grid */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
-          gap: "24px",
+          gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))",
+          gap: "18px",
         }}
       >
-        {/* Recent Applications Card */}
+        <StatCard
+          title="Department Students"
+          value={stats.total_students}
+          icon={Users}
+          subtitle={`Enrolled in ${department}`}
+          variant="default"
+        />
+        <StatCard
+          title="Unique Placed Students"
+          value={stats.unique_placed}
+          icon={CheckCircle2}
+          badgeText={stats.placement_rate}
+          badgeType="positive"
+          subtitle="Campus + verified off-campus"
+          variant="cream"
+        />
+        <StatCard
+          title="Average Student CGPA"
+          value={stats.average_cgpa !== "N/A" ? `${stats.average_cgpa} / 10.00` : "N/A"}
+          icon={Award}
+          subtitle="Department academic index"
+          variant="default"
+        />
+        <StatCard
+          title="Placement Pathways"
+          value={`${stats.campus_placed} C / ${stats.off_campus_placed} O`}
+          icon={TrendingUp}
+          subtitle="Campus offers / Off-campus"
+          variant="accent"
+        />
+      </div>
+
+      {/* Two Columns: Recent Department Students & Placement Pathway Breakdown */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))", gap: "24px" }}>
+        {/* Department Students Preview */}
         <div
           style={{
-            background: "var(--warm-white)",
+            background: "#FFFFFF",
             borderRadius: "20px",
-            border: "1px solid var(--border)",
-            borderLeft: "5px solid var(--wine)",
             padding: "28px",
+            border: "1px solid var(--border)",
             boxShadow: "var(--shadow-sm)",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "20px",
-            }}
-          >
-            <div>
-              <h3 style={{ fontSize: "18px", fontWeight: 700, color: "var(--charcoal)", margin: 0, fontFamily: "var(--font-display)" }}>
-                Recent Student Applications
-              </h3>
-              <span style={{ fontSize: "13px", color: "var(--muted)" }}>
-                Applications requiring faculty review
-              </span>
-            </div>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => navigate("/faculty/applications")}
-              icon={ArrowRight}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+            <h3 style={{ fontSize: "18px", fontWeight: 700, color: "var(--charcoal)", margin: 0, fontFamily: "var(--font-display)" }}>
+              {department} Students Overview
+            </h3>
+            <button
+              onClick={() => navigate("/faculty/students")}
+              style={{ fontSize: "13px", fontWeight: 700, color: "var(--wine)", display: "flex", alignItems: "center", gap: "4px" }}
             >
-              View All
-            </Button>
+              View Full Directory <ArrowRight size={14} />
+            </button>
           </div>
 
-          {recentApplications.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "36px 16px", color: "var(--muted)" }}>
-              <FileText size={40} style={{ color: "var(--border)", marginBottom: "12px" }} />
-              <p style={{ fontWeight: 600, color: "var(--charcoal)", fontSize: "15px" }}>No applications received yet</p>
-              <p style={{ fontSize: "13px", marginTop: "4px" }}>
-                Posted internships will collect candidate submissions here.
-              </p>
-            </div>
+          {deptStudents.length === 0 ? (
+            <p style={{ color: "var(--muted)", fontSize: "14px" }}>No students currently enrolled in this department.</p>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              {recentApplications.map((app) => (
+              {deptStudents.map((st) => (
                 <div
-                  key={app.application_id}
+                  key={st.student_id}
                   style={{
-                    padding: "16px",
-                    borderRadius: "14px",
-                    border: "1px solid var(--border-light)",
-                    background: "var(--cream)",
                     display: "flex",
-                    alignItems: "center",
                     justifyContent: "space-between",
-                    gap: "12px",
+                    alignItems: "center",
+                    padding: "12px 16px",
+                    background: "var(--warm-white)",
+                    borderRadius: "10px",
+                    border: "1px solid var(--border-light)",
                   }}
                 >
                   <div>
-                    <strong style={{ fontSize: "14px", color: "var(--charcoal)", display: "block" }}>
-                      {app.student_name} ({app.student_department || "Student"})
+                    <strong style={{ color: "var(--charcoal)", fontSize: "14px", display: "block" }}>
+                      {st.name}
                     </strong>
                     <span style={{ fontSize: "12px", color: "var(--muted)" }}>
-                      {app.internship_title} • GPA: {app.student_gpa ? `${app.student_gpa}/4.0` : "N/A"}
+                      CGPA: <strong style={{ color: "var(--wine)" }}>{st.cgpa} / 10.00</strong> • {st.skills?.slice(0, 2).join(", ") || "No skills logged"}
                     </span>
-                  </div>
-
-                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <StatusBadge status={app.status} />
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => navigate("/faculty/applications")}
-                      style={{ background: "#FFFFFF" }}
-                    >
-                      Review
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Scheduled Interviews Widget — WARM EDITORIAL PANEL (NO BLACK BLOCK) */}
-        <div
-          style={{
-            background: "var(--warm-white)",
-            borderRadius: "20px",
-            border: "1px solid var(--border)",
-            borderLeft: "5px solid var(--terracotta)",
-            padding: "28px",
-            boxShadow: "var(--shadow-sm)",
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "20px",
-            }}
-          >
-            <div>
-              <h3 style={{ fontSize: "18px", fontWeight: 700, color: "var(--charcoal)", margin: 0, fontFamily: "var(--font-display)" }}>
-                Scheduled Interviews
-              </h3>
-              <span style={{ fontSize: "13px", color: "var(--muted)" }}>
-                Upcoming technical & HR rounds
-              </span>
-            </div>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => navigate("/faculty/interviews")}
-            >
-              All Interviews
-            </Button>
-          </div>
-
-          {upcomingInterviews.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "36px 16px", color: "var(--muted)", flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-              <Calendar size={40} style={{ color: "var(--border)", marginBottom: "12px" }} />
-              <p style={{ fontWeight: 600, color: "var(--charcoal)", fontSize: "15px" }}>No interviews scheduled</p>
-              <p style={{ fontSize: "13px", marginTop: "4px", marginBottom: "16px" }}>
-                Schedule interviews for shortlisted applicants.
-              </p>
-              <Button size="sm" variant="primary" onClick={() => navigate("/faculty/schedule-interview")}>
-                Schedule Interview
-              </Button>
-            </div>
-          ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              {upcomingInterviews.map((intv) => (
-                <div
-                  key={intv.interview_id}
-                  style={{
-                    padding: "16px",
-                    borderRadius: "14px",
-                    border: "1px solid var(--border-light)",
-                    background: "var(--cream)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: "12px",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                    <div
-                      style={{
-                        width: "38px",
-                        height: "38px",
-                        borderRadius: "10px",
-                        background: "rgba(231, 111, 81, 0.12)",
-                        color: "var(--terracotta)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexShrink: 0,
-                      }}
-                    >
-                      <Clock size={18} />
-                    </div>
-                    <div>
-                      <strong style={{ fontSize: "14px", color: "var(--charcoal)", display: "block" }}>
-                        {intv.student_name} • {intv.internship_title}
-                      </strong>
-                      <span style={{ fontSize: "12px", color: "var(--muted)" }}>
-                        {intv.interview_date} at {intv.interview_time} ({intv.interviewer_name || "Faculty"})
-                      </span>
-                    </div>
                   </div>
 
                   <span
                     style={{
-                      fontSize: "12px",
+                      fontSize: "11.5px",
                       fontWeight: 700,
                       padding: "4px 10px",
                       borderRadius: "12px",
-                      background: "rgba(122, 31, 61, 0.08)",
-                      color: "var(--wine)",
+                      background: st.placement_status.startsWith("Placed")
+                        ? "var(--green-bg)"
+                        : "var(--cream)",
+                      color: st.placement_status.startsWith("Placed")
+                        ? "var(--green)"
+                        : "var(--muted)",
                     }}
                   >
-                    Scheduled
+                    {st.placement_status}
                   </span>
                 </div>
               ))}
             </div>
           )}
         </div>
+
+        {/* Verification & Placement Pathway Breakdown */}
+        <div
+          style={{
+            background: "#FFFFFF",
+            borderRadius: "20px",
+            padding: "28px",
+            border: "1px solid var(--border)",
+            boxShadow: "var(--shadow-sm)",
+            display: "flex",
+            flexDirection: "column",
+            gap: "18px",
+          }}
+        >
+          <h3 style={{ fontSize: "18px", fontWeight: 700, color: "var(--charcoal)", margin: 0, fontFamily: "var(--font-display)" }}>
+            Department Placement Pathway Summary
+          </h3>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", padding: "12px 16px", background: "var(--green-bg)", borderRadius: "10px" }}>
+              <span style={{ color: "var(--green)", fontWeight: 600 }}>Campus Drive Placements</span>
+              <strong style={{ color: "var(--green)", fontSize: "16px" }}>{stats.campus_placed} Students</strong>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "space-between", padding: "12px 16px", background: "var(--warm-white)", borderRadius: "10px", border: "1px solid var(--border-light)" }}>
+              <span style={{ color: "var(--charcoal)", fontWeight: 600 }}>Verified Off-Campus Offers</span>
+              <strong style={{ color: "var(--wine)", fontSize: "16px" }}>{stats.off_campus_placed} Students</strong>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "space-between", padding: "12px 16px", background: "var(--yellow-bg)", borderRadius: "10px" }}>
+              <span style={{ color: "var(--yellow)", fontWeight: 600 }}>Off-Campus Pending T&P Review</span>
+              <strong style={{ color: "var(--yellow)", fontSize: "16px" }}>{stats.pending_off_campus} Submissions</strong>
+            </div>
+          </div>
+
+          <div style={{ paddingTop: "12px", borderTop: "1px solid var(--border-light)" }}>
+            <Button
+              variant="outline"
+              icon={BarChart3}
+              onClick={() => navigate("/faculty/reports")}
+              style={{ width: "100%", justifyContent: "center" }}
+            >
+              View Department Placement Reports
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
+export default FacultyDashboard;

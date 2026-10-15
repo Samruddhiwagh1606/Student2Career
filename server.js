@@ -17,6 +17,9 @@ const facultyRoutes = require("./routes/facultyRoutes");
 const companyRoutes = require("./routes/companyRoutes");
 const feedbackRoutes = require("./routes/feedbackRoutes");
 const companyFeedbackRoutes = require("./routes/companyFeedbackRoutes");
+const offCampusRoutes = require("./routes/offCampusRoutes");
+const auditRoutes = require("./routes/auditRoutes");
+const { generateToken, authenticate, authorizeRoles } = require("./middleware/auth");
 
 // ================================
 // CREATE APP
@@ -299,6 +302,8 @@ app.use("/api/faculty", facultyRoutes);
 app.use("/api/companies", companyRoutes);
 app.use("/api/feedback", feedbackRoutes);
 app.use("/api/company-feedback", companyFeedbackRoutes);
+app.use("/api/off-campus", offCampusRoutes);
+app.use("/api/admin/audit", auditRoutes);
 
 
 // ================================
@@ -511,8 +516,19 @@ app.post("/api/login", async (req, res) => {
 
 
         // ---------------------------------------------
-        // LOGIN RESPONSE
+        // TOKEN GENERATION & LOGIN RESPONSE
         // ---------------------------------------------
+
+        const tokenPayload = {
+            user_id: user.user_id,
+            email: user.email,
+            role: user.role,
+            student_id: profile?.student_id || null,
+            faculty_id: profile?.faculty_id || null,
+            department: profile?.department || null
+        };
+
+        const token = generateToken(tokenPayload);
 
         res.json({
 
@@ -520,6 +536,9 @@ app.post("/api/login", async (req, res) => {
 
             message:
                 "Login successful.",
+
+            token:
+                token,
 
             user: {
 
@@ -531,6 +550,18 @@ app.post("/api/login", async (req, res) => {
 
                 role:
                     user.role,
+
+                student_id:
+                    profile?.student_id || null,
+
+                faculty_id:
+                    profile?.faculty_id || null,
+
+                department:
+                    profile?.department || null,
+
+                token:
+                    token,
 
                 profile:
                     profile
@@ -565,16 +596,15 @@ app.post("/api/login", async (req, res) => {
 
 
 // =====================================================
-// ADMIN REPORTS
+// ADMIN REPORTS (RECONCILED PLACEMENT & SYSTEM ANALYTICS)
 // =====================================================
 
-// MAIN ADMIN REPORT
-app.get("/api/admin/reports", async (req, res) => {
+app.get("/api/admin/reports", authenticate, authorizeRoles("admin"), async (req, res) => {
 
     try {
 
         // -----------------------------
-        // BASIC COUNTS
+        // BASIC INSTITUTIONAL COUNTS
         // -----------------------------
 
         const [[students]] = await db.query(`
@@ -582,33 +612,28 @@ app.get("/api/admin/reports", async (req, res) => {
             FROM students
         `);
 
-
         const [[faculty]] = await db.query(`
             SELECT COUNT(*) AS total
             FROM faculty
         `);
-
 
         const [[companies]] = await db.query(`
             SELECT COUNT(*) AS total
             FROM companies
         `);
 
-
         const [[internships]] = await db.query(`
             SELECT COUNT(*) AS total
             FROM internships
         `);
-
 
         const [[applications]] = await db.query(`
             SELECT COUNT(*) AS total
             FROM applications
         `);
 
-
         // -----------------------------
-        // ACCEPTED APPLICATIONS
+        // APPLICATION STATUSES (RAW)
         // -----------------------------
 
         const [[accepted]] = await db.query(`
@@ -617,21 +642,11 @@ app.get("/api/admin/reports", async (req, res) => {
             WHERE status = 'accepted'
         `);
 
-
-        // -----------------------------
-        // SHORTLISTED APPLICATIONS
-        // -----------------------------
-
         const [[shortlisted]] = await db.query(`
             SELECT COUNT(*) AS total
             FROM applications
             WHERE status = 'shortlisted'
         `);
-
-
-        // -----------------------------
-        // REJECTED APPLICATIONS
-        // -----------------------------
 
         const [[rejected]] = await db.query(`
             SELECT COUNT(*) AS total
@@ -639,21 +654,11 @@ app.get("/api/admin/reports", async (req, res) => {
             WHERE status = 'rejected'
         `);
 
-
-        // -----------------------------
-        // PENDING APPLICATIONS
-        // -----------------------------
-
         const [[pending]] = await db.query(`
             SELECT COUNT(*) AS total
             FROM applications
             WHERE status = 'pending'
         `);
-
-
-        // -----------------------------
-        // WITHDRAWN APPLICATIONS
-        // -----------------------------
 
         const [[withdrawn]] = await db.query(`
             SELECT COUNT(*) AS total
@@ -661,23 +666,93 @@ app.get("/api/admin/reports", async (req, res) => {
             WHERE status = 'withdrawn'
         `);
 
+        // -----------------------------
+        // OFF-CAMPUS OUTCOMES
+        // -----------------------------
+
+        const [[offCampusApproved]] = await db.query(`
+            SELECT COUNT(*) AS total
+            FROM off_campus_submissions
+            WHERE status = 'approved'
+        `);
+
+        const [[offCampusPending]] = await db.query(`
+            SELECT COUNT(*) AS total
+            FROM off_campus_submissions
+            WHERE status = 'pending'
+        `);
+
+        const [[offCampusNeedsInfo]] = await db.query(`
+            SELECT COUNT(*) AS total
+            FROM off_campus_submissions
+            WHERE status = 'needs_more_info'
+        `);
+
+        const [[offCampusRejected]] = await db.query(`
+            SELECT COUNT(*) AS total
+            FROM off_campus_submissions
+            WHERE status = 'rejected'
+        `);
+
+        const [[offCampusTotal]] = await db.query(`
+            SELECT COUNT(*) AS total
+            FROM off_campus_submissions
+        `);
 
         // -----------------------------
-        // DEPARTMENT-WISE STUDENTS
+        // RECONCILED UNIQUE PLACED STUDENTS
+        // (A student with multiple offers or both campus & off-campus is counted ONCE)
+        // -----------------------------
+
+        const [[uniquePlacedResult]] = await db.query(`
+            SELECT COUNT(DISTINCT student_id) AS total
+            FROM (
+                SELECT student_id FROM applications WHERE status = 'accepted'
+                UNION
+                SELECT student_id FROM off_campus_submissions WHERE status = 'approved'
+            ) AS placed_students
+        `);
+        const uniquePlaced = Number(uniquePlacedResult.total);
+
+        const [[campusUniquePlaced]] = await db.query(`
+            SELECT COUNT(DISTINCT student_id) AS total
+            FROM applications WHERE status = 'accepted'
+        `);
+
+        const [[offCampusUniquePlaced]] = await db.query(`
+            SELECT COUNT(DISTINCT student_id) AS total
+            FROM off_campus_submissions WHERE status = 'approved'
+        `);
+
+        const placementRate = students.total > 0
+            ? Number(((uniquePlaced / students.total) * 100).toFixed(1))
+            : 0;
+
+        // -----------------------------
+        // RECONCILED DEPARTMENT-WISE PLACEMENT BREAKDOWN
         // -----------------------------
 
         const [departmentStats] = await db.query(`
-            SELECT
-                COALESCE(
-                    department,
-                    'Not Specified'
-                ) AS department,
-                COUNT(*) AS total_students
-            FROM students
-            GROUP BY department
+            SELECT 
+                COALESCE(s.department, 'Not Specified') AS department,
+                COUNT(DISTINCT s.student_id) AS total_students,
+                COUNT(DISTINCT CASE WHEN a.status = 'accepted' THEN s.student_id END) AS campus_placed_students,
+                COUNT(DISTINCT CASE WHEN sub.status = 'approved' THEN s.student_id END) AS off_campus_placed_students,
+                COUNT(DISTINCT CASE WHEN a.status = 'accepted' OR sub.status = 'approved' THEN s.student_id END) AS unique_placed_students,
+                COUNT(DISTINCT a.application_id) AS total_applications
+            FROM students s
+            LEFT JOIN applications a ON s.student_id = a.student_id
+            LEFT JOIN off_campus_submissions sub ON s.student_id = sub.student_id
+            GROUP BY COALESCE(s.department, 'Not Specified')
             ORDER BY total_students DESC
         `);
 
+        const enrichedDeptStats = departmentStats.map(d => ({
+            ...d,
+            placement_percentage: d.total_students > 0
+                ? Number(((d.unique_placed_students / d.total_students) * 100).toFixed(1))
+                : 0
+        }));
 
         // -----------------------------
         // COMPANY-WISE INTERNSHIPS
@@ -686,8 +761,7 @@ app.get("/api/admin/reports", async (req, res) => {
         const [companyStats] = await db.query(`
             SELECT
                 c.name AS company_name,
-                COUNT(i.internship_id)
-                    AS total_internships
+                COUNT(i.internship_id) AS total_internships
             FROM companies c
             LEFT JOIN internships i
                 ON c.company_id = i.company_id
@@ -697,9 +771,8 @@ app.get("/api/admin/reports", async (req, res) => {
             ORDER BY total_internships DESC
         `);
 
-
         // -----------------------------
-        // INTERNSHIP STATUS
+        // STATUS ARRAYS & COUNTS
         // -----------------------------
 
         const [internshipStatus] = await db.query(`
@@ -711,11 +784,6 @@ app.get("/api/admin/reports", async (req, res) => {
             ORDER BY total DESC
         `);
 
-
-        // -----------------------------
-        // APPLICATION STATUS
-        // -----------------------------
-
         const [applicationStatus] = await db.query(`
             SELECT
                 status,
@@ -725,105 +793,180 @@ app.get("/api/admin/reports", async (req, res) => {
             ORDER BY total DESC
         `);
 
-
-        // -----------------------------
-        // INTERVIEW COUNT
-        // -----------------------------
-
         const [[interviews]] = await db.query(`
             SELECT COUNT(*) AS total
             FROM interviews
         `);
-
-
-        // -----------------------------
-        // EVALUATION COUNT
-        // -----------------------------
 
         const [[evaluations]] = await db.query(`
             SELECT COUNT(*) AS total
             FROM evaluations
         `);
 
-
         // -----------------------------
-        // FINAL RESPONSE
+        // FINAL RECONCILED RESPONSE
         // -----------------------------
 
         res.json({
-
             success: true,
-
             summary: {
-
-                students:
-                    students.total,
-
-                faculty:
-                    faculty.total,
-
-                companies:
-                    companies.total,
-
-                internships:
-                    internships.total,
-
-                applications:
-                    applications.total,
-
-                accepted:
-                    accepted.total,
-
-                shortlisted:
-                    shortlisted.total,
-
-                rejected:
-                    rejected.total,
-
-                pending:
-                    pending.total,
-
-                withdrawn:
-                    withdrawn.total,
-
-                interviews:
-                    interviews.total,
-
-                evaluations:
-                    evaluations.total
-
+                students: students.total,
+                faculty: faculty.total,
+                companies: companies.total,
+                internships: internships.total,
+                applications: applications.total,
+                accepted: accepted.total,
+                shortlisted: shortlisted.total,
+                rejected: rejected.total,
+                pending: pending.total,
+                withdrawn: withdrawn.total,
+                interviews: interviews.total,
+                evaluations: evaluations.total,
+                // Reconciled Placement Metrics
+                unique_placed_students: uniquePlaced,
+                campus_unique_placed: Number(campusUniquePlaced.total),
+                off_campus_unique_placed: Number(offCampusUniquePlaced.total),
+                placement_rate: placementRate,
+                // Off-Campus Breakdown
+                off_campus_total: offCampusTotal.total,
+                off_campus_approved: offCampusApproved.total,
+                off_campus_pending: offCampusPending.total,
+                off_campus_needs_info: offCampusNeedsInfo.total,
+                off_campus_rejected: offCampusRejected.total,
+                // Verification distinction
+                verified_outcomes: uniquePlaced,
+                unverified_pending_or_rejected: offCampusPending.total + offCampusNeedsInfo.total + offCampusRejected.total
             },
-
-            departmentStats,
-
+            departmentStats: enrichedDeptStats,
             companyStats,
-
             internshipStatus,
-
             applicationStatus
-
         });
-
 
     } catch (error) {
-
-        console.error(
-            "Admin reports error:",
-            error
-        );
-
+        console.error("Admin reports error:", error);
         res.status(500).json({
-
             success: false,
-
-            message:
-                "Unable to generate admin reports.",
-
-            error:
-                error.message
-
+            message: "Unable to generate admin reports.",
+            error: error.message
         });
+    }
 
+});
+
+
+// =====================================================
+// EXCEL / CSV REPORT EXPORT (AUTHORIZED T&P / ADMIN)
+// =====================================================
+
+app.get("/api/admin/reports/export", authenticate, authorizeRoles("admin"), async (req, res) => {
+
+    try {
+
+        const [[students]] = await db.query("SELECT COUNT(*) AS total FROM students");
+        const [[applications]] = await db.query("SELECT COUNT(*) AS total FROM applications");
+
+        const [[uniquePlacedResult]] = await db.query(`
+            SELECT COUNT(DISTINCT student_id) AS total
+            FROM (
+                SELECT student_id FROM applications WHERE status = 'accepted'
+                UNION
+                SELECT student_id FROM off_campus_submissions WHERE status = 'approved'
+            ) AS placed
+        `);
+        const uniquePlaced = Number(uniquePlacedResult.total);
+
+        const [[campusOffers]] = await db.query("SELECT COUNT(*) AS total FROM applications WHERE status = 'accepted'");
+        const [[offCampusApproved]] = await db.query("SELECT COUNT(*) AS total FROM off_campus_submissions WHERE status = 'approved'");
+        const [[offCampusPending]] = await db.query("SELECT COUNT(*) AS total FROM off_campus_submissions WHERE status = 'pending'");
+        const [[offCampusNeedsInfo]] = await db.query("SELECT COUNT(*) AS total FROM off_campus_submissions WHERE status = 'needs_more_info'");
+        const [[offCampusRejected]] = await db.query("SELECT COUNT(*) AS total FROM off_campus_submissions WHERE status = 'rejected'");
+
+        const placementRate = students.total > 0 ? ((uniquePlaced / students.total) * 100).toFixed(1) : 0;
+
+        let csv = "COLLEGE2CAREER - INSTITUTIONAL RECONCILED PLACEMENT & INTERNSHIP REPORT\r\n";
+        csv += `Export Timestamp,${new Date().toISOString()}\r\n`;
+        csv += `Authorized By,Training & Placement Cell (T&P Admin)\r\n\r\n`;
+
+        csv += "1. INSTITUTION-WIDE RECONCILED SUMMARY\r\n";
+        csv += "Metric,Count,Audit Note / Verification Rule\r\n";
+        csv += `Total Registered Students,${students.total},Total student records enrolled\r\n`;
+        csv += `Unique Placed Students,${uniquePlaced},Distinct students with verified placement (no double-counting)\r\n`;
+        csv += `Overall Placement Rate,${placementRate}%,(Unique Placed Students / Total Registered Students) * 100\r\n`;
+        csv += `Campus Accepted Offers,${campusOffers.total},Direct college-managed recruitment offers\r\n`;
+        csv += `Approved Off-Campus Placements,${offCampusApproved.total},Institutionally verified independent placement outcomes\r\n`;
+        csv += `Total Applications Submitted,${applications.total},Total applications tracked (distinct from placed students)\r\n`;
+        csv += `Pending Off-Campus Submissions,${offCampusPending.total},Awaiting T&P review (excluded from verified placements)\r\n`;
+        csv += `Needs More Info Submissions,${offCampusNeedsInfo.total},Returned to students for evidence\r\n`;
+        csv += `Rejected Submissions,${offCampusRejected.total},Denied by T&P cell with audit reason\r\n\r\n`;
+
+        csv += "2. DEPARTMENT-WISE PLACEMENT BREAKDOWN\r\n";
+        csv += "Department,Total Students,Unique Placed Students,Campus Offers,Approved Off-Campus,Total Applications,Placement Rate (%)\r\n";
+
+        const [depts] = await db.query(`
+            SELECT 
+                COALESCE(s.department, 'Not Specified') AS department,
+                COUNT(DISTINCT s.student_id) AS total_students,
+                COUNT(DISTINCT CASE WHEN a.status = 'accepted' THEN s.student_id END) AS campus_placed_students,
+                COUNT(DISTINCT CASE WHEN sub.status = 'approved' THEN s.student_id END) AS off_campus_placed_students,
+                COUNT(DISTINCT CASE WHEN a.status = 'accepted' OR sub.status = 'approved' THEN s.student_id END) AS unique_placed_students,
+                COUNT(DISTINCT a.application_id) AS total_applications
+            FROM students s
+            LEFT JOIN applications a ON s.student_id = a.student_id
+            LEFT JOIN off_campus_submissions sub ON s.student_id = sub.student_id
+            GROUP BY COALESCE(s.department, 'Not Specified')
+            ORDER BY total_students DESC
+        `);
+
+        for (const d of depts) {
+            const dRate = d.total_students > 0 ? ((d.unique_placed_students / d.total_students) * 100).toFixed(1) : 0;
+            csv += `"${d.department}",${d.total_students},${d.unique_placed_students},${d.campus_placed_students},${d.off_campus_placed_students},${d.total_applications},${dRate}%\r\n`;
+        }
+
+        csv += "\r\n3. VERIFIED PLACED STUDENTS REGISTER\r\n";
+        csv += "Student ID,Student Name,Department,CGPA (0.00-10.00),Placement Pathway,Company / Partner,Role / Designation\r\n";
+
+        const [placedRecords] = await db.query(`
+            SELECT 
+                s.student_id,
+                s.name,
+                s.department,
+                s.gpa,
+                'On-Campus' AS source,
+                c.name AS company,
+                i.title AS role_title
+            FROM students s
+            JOIN applications a ON s.student_id = a.student_id
+            JOIN internships i ON a.internship_id = i.internship_id
+            JOIN companies c ON i.company_id = c.company_id
+            WHERE a.status = 'accepted'
+            UNION ALL
+            SELECT 
+                s.student_id,
+                s.name,
+                s.department,
+                s.gpa,
+                'Off-Campus (Approved)' AS source,
+                sub.company_name AS company,
+                sub.job_title AS role_title
+            FROM students s
+            JOIN off_campus_submissions sub ON s.student_id = sub.student_id
+            WHERE sub.status = 'approved'
+            ORDER BY student_id ASC
+        `);
+
+        for (const p of placedRecords) {
+            const cgpaFormatted = p.gpa ? Number(p.gpa).toFixed(2) : "N/A";
+            csv += `${p.student_id},"${p.name}","${p.department}",${cgpaFormatted},"${p.source}","${p.company}","${p.role_title}"\r\n`;
+        }
+
+        res.setHeader("Content-Type", "text/csv; charset=utf-8");
+        res.setHeader("Content-Disposition", 'attachment; filename="C2C_Reconciled_Placement_Report.csv"');
+        res.send(csv);
+
+    } catch (err) {
+        console.error("Export error:", err);
+        res.status(500).json({ success: false, message: "Export failed.", error: err.message });
     }
 
 });

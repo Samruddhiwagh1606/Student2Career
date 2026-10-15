@@ -658,12 +658,12 @@ export function LoginPage() {
                 />
 
                 <Input
-                  label="Current GPA (0.0 - 4.0)"
+                  label="Current CGPA (0.00 - 10.00)"
                   type="number"
                   step="0.01"
                   min="0"
-                  max="4"
-                  placeholder="e.g. 3.75"
+                  max="10"
+                  placeholder="e.g. 8.50"
                   icon={Award}
                   value={regGpa}
                   onChange={(e) => setRegGpa(e.target.value)}
